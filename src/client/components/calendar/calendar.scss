@@ -41,5 +41,35 @@
   margin-bottom: 2px;
   padding: 5px;
   border-radius: 10px;
-  font-size: 12px;
+}
+
+.tip {
+  text-decoration: none;
+  color: black;
+}
+
+.tip:hover {
+  text-decoration: none;
+  color: black;
+  cursor: default;
+}
+
+.tip div:nth-child(2) {
+  display: none;
+  position: absolute;
+}
+
+.tip:hover div:nth-child(2) {
+  background-color: grey;
+  color: black;
+  padding: 5px;
+  display: block;
+  z-index: 100;
+  left: 0px;
+  margin: 10px;
+  width: 200px;
+  height: 200px;
+  position: absolute;
+  top: -120px;
+  text-decoration: none;
 }

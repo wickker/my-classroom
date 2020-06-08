@@ -187,7 +187,12 @@ export default class CalendarGrid extends React.Component {
               return (
                 <div className="row" key={index}>
                   <div className={sessionBox}>
-                    {classObj.title} | {startTime}
+                    <a href="#" className={styles.tip}>
+                      <div>
+                        {classObj.title} | {startTime}
+                      </div>
+                      <div>Hello</div>
+                    </a>
                   </div>
                 </div>
               );
