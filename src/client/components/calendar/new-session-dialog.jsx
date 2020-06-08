@@ -18,6 +18,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
+import Icon from '@material-ui/core/Icon';
 
 var moment = require("moment");
 
@@ -165,9 +166,10 @@ export default function FormDialog({ classes, dateStr }) {
 
   return (
     <div>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+      <i class="fas fa-plus-circle"></i>
+      {/* <Button variant="outlined" color="primary" onClick={handleClickOpen}>
         Add
-      </Button>
+      </Button> */}
       <Dialog
         open={open}
         onClose={handleClose}

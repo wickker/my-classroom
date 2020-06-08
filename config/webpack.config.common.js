@@ -23,6 +23,10 @@ module.exports = {
         test: /\.html$/,
         loader: 'html-loader'
       },
+      // {
+      //   test: /\.css$/,
+      //   use: ['style-loader', 'css-loader']
+      // },
       {
         test: /\.s?css$/,
         // test: /\.(scss)$/,
@@ -57,10 +61,6 @@ module.exports = {
           ]
         })
       },
-      // {
-      //   test: /\.css$/,
-      //   use: ['style-loader', 'css-loader']
-      // },
       {
         test: /\.(eot|svg|ttf|woff|woff2)$/,
         loader: 'file-loader'
