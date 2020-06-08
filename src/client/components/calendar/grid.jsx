@@ -160,6 +160,8 @@ export default class CalendarGrid extends React.Component {
 
     const boxAround = cx(styles.calendar_box_around, "col-sm");
 
+    const sessionBox = cx(styles.session_box, "col-sm");
+
     // render calendar grid
     let calendar = this.state.datesInMonth.map((row, rowIndex) => {
       const rows = row.map((col, colIndex) => {
@@ -184,7 +186,7 @@ export default class CalendarGrid extends React.Component {
               });
               return (
                 <div className="row" key={index}>
-                  <div className="col">
+                  <div className={sessionBox}>
                     {classObj.title} | {startTime}
                   </div>
                 </div>
@@ -195,8 +197,7 @@ export default class CalendarGrid extends React.Component {
         return (
           <div key={colIndex} className={box}>
             <div>
-              {col}
-              <NewSessionDialog classes={this.state.classes} dateStr={col} />
+              <span>{col} </span><NewSessionDialog classes={this.state.classes} dateStr={col} />
             </div>
             {sessionsHTML}
           </div>

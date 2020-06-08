@@ -23,6 +23,23 @@
   width: 100%;
 }
 
-.calendar_box:hover {
+.svg_icon {
+  height: 15px;
+  width: 15px;
+}
+
+.svg_icon:hover {
   cursor: pointer;
+}
+
+.session_box {
+  background: lightsteelblue;
+  padding-left: 0px;
+  padding-right: 0px;
+  margin-right: 15px;
+  margin-left: 10px;
+  margin-bottom: 5px;
+  padding: 5px;
+  border-radius: 10px;
+  font-size: 12px;
 }
