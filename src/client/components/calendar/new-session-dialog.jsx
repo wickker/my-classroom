@@ -32,52 +32,129 @@ export default function FormDialog({ classes, dateStr }) {
     setOpen(false);
   };
 
-  const submit = () => {
-    setOpen(false);
-  };
-
   let dateFormatted = moment(dateStr, "D-M-YYYY").format();
+  let dateBigInt = moment(dateStr, "D-M-YYYY").valueOf();
   const [selectedDate, setSelectedDate] = React.useState(dateFormatted);
 
-  // const [selectedStartTime, setSelectedStartTime] = React.useState(new Date(startTime));
+  function roundTimeQuarterHour(time) {
+    var timeToReturn = new Date(time);
+    timeToReturn.setMilliseconds(
+      Math.round(timeToReturn.getMilliseconds() / 1000) * 1000
+    );
+    timeToReturn.setSeconds(Math.round(timeToReturn.getSeconds() / 60) * 60);
+    timeToReturn.setMinutes(Math.round(timeToReturn.getMinutes() / 15) * 15);
+    return timeToReturn;
+  }
 
-  // const [selectedEndTime, setSelectedEndTime] = React.useState(new Date(endTime));
+  let d = new Date();
+  let roundedTime = roundTimeQuarterHour(d);
+  let timeString = moment(roundedTime).format('HH:mm');
+  let datetimeStr = dateStr + " " + timeString;
+  let millisec = moment(datetimeStr, "D-M-YYYY HH:mm").valueOf();
 
-  // const [selectedName, setSelectedName] = React.useState(name);
+  const [selectedStartTime, setSelectedStartTime] = React.useState(roundedTime);
 
-  // const [selectedDescription, setSelectedDescription] = React.useState(description);
+  const [selectedEndTime, setSelectedEndTime] = React.useState(roundedTime);
 
-  // const handleDateChange = (date) => {
-  //   setSelectedDate(date);
-  // };
+  // to post 
+  const [classId, setClassId] = React.useState("");
+  const [startDateTime, setStartDateTime] = React.useState(millisec);
+  const [endDateTime, setEndDateTime] = React.useState(millisec);
+  const [location, setLocation] = React.useState("");
+  const [frequency, setFrequency] = React.useState("");
+  const [upTillDate, setUpTillDate] = React.useState(dateBigInt);
+  const [upTillDateDisplay, setUpTillDateDisplay] = React.useState(dateFormatted);
 
-  // const handleStartTimeChange = (startTime) => {
-  //   setSelectedStartTime(startTime);
-  // };
+  const selectClassId = (event) => {
+    setClassId(event.target.value);
+  }
 
-  // const handleEndTimeChange = (endTime) => {
-  //   setSelectedEndTime(endTime);
-  // };
+  const selectStartDateTime = (event) => {
+    let rounded = roundTimeQuarterHour(event);
+    setSelectedStartTime(rounded);
+    let timeStr = moment(rounded).format('HH:mm');
+    console.log(timeStr);
+    let dtStr = dateStr + " " + timeStr;
+    let mS = moment(dtStr, "D-M-YYYY HH:mm").valueOf();
+    console.log(mS);
+    setStartDateTime(mS);
+  }
 
-  // const handleNameChange = (event) => {
-  //   console.log(event.target.value);
-  //   setSelectedName(event.target.value);
-  // };
+  const selectEndDateTime = (event) => {
+    let rounded = roundTimeQuarterHour(event);
+    setSelectedEndTime(rounded);
+    let timeStr = moment(rounded).format('HH:mm');
+    console.log(timeStr);
+    let dtStr = dateStr + " " + timeStr;
+    let mS = moment(dtStr, "D-M-YYYY HH:mm").valueOf();
+    console.log(mS);
+    setEndDateTime(mS);
+  }
 
-  // const handleDescriptionChange = (event) => {
-  //   console.log(event.target.value);
-  //   setSelectedDescription(event.target.value);
-  // };
+  const selectLocation = (event) => {
+    console.log(event.target.value);
+    setLocation(event.target.value);
+  }
+
+  const selectFreq = (event) => {
+    console.log(event.target.value);
+    setFrequency(event.target.value);
+  }
+
+  const selectUpTill = (event) => {
+    console.log(event);
+    setUpTillDateDisplay(event);
+    let mS = moment(event).valueOf();
+    mS = mS + 82800000 + 3540000;
+    console.log(mS);
+    setUpTillDate(mS);
+  }
+
+  const submit = () => {
+    setOpen(false);
+    let data = {
+      classId: classId,
+      startDateTime: startDateTime,
+      endDateTime: endDateTime,
+      location: location,
+      frequency: frequency,
+      upTillDate: upTillDate,
+    }
+    console.log(data);
+    let url = '/sessions/post';
+    fetch(url, {
+      method: 'POST', // or 'PUT'
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('Success:', data);
+        location.reload();
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        location.reload();
+      });
+  };
 
   const renderClassDropdown = () => {
     let classesHTML = classes.map((element, index) => {
-      return <MenuItem value={element.id} key={index}>{element.title}</MenuItem>;
+      return (
+        <MenuItem value={element.id} key={index}>
+          {element.title}
+        </MenuItem>
+      );
     });
     return (
       <FormControl fullWidth>
         <InputLabel>Select Class</InputLabel>
-        <Select onChange="">
-          <MenuItem value="">Select Class</MenuItem>
+        <Select onChange={selectClassId}>
+          <MenuItem value="" disabled>
+            Select Class
+          </MenuItem>
           {classesHTML}
         </Select>
       </FormControl>
@@ -102,17 +179,16 @@ export default function FormDialog({ classes, dateStr }) {
             <DialogTitle>Add New Session</DialogTitle>
             <DialogContent>
               {selectClass}
-              
+
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <KeyboardDatePicker
-                  disableToolbar
+                  disabled
                   fullWidth
                   variant="inline"
                   format="dd/MM/yyyy"
                   margin="normal"
-                  label="Date"
+                  label="Start Date"
                   value={selectedDate}
-                  onChange=""
                   KeyboardButtonProps={{
                     "aria-label": "change date",
                   }}
@@ -120,10 +196,9 @@ export default function FormDialog({ classes, dateStr }) {
                 <div className="row">
                   <div className="col-sm">
                     <KeyboardTimePicker
-                      // margin="normal"
-                      label="Time picker"
-                      // value={selectedStartTime}
-                      // onChange={handleStartTimeChange}
+                      label="Start Time"
+                      value={selectedStartTime}
+                      onChange={selectStartDateTime}
                       KeyboardButtonProps={{
                         "aria-label": "change time",
                       }}
@@ -131,10 +206,9 @@ export default function FormDialog({ classes, dateStr }) {
                   </div>
                   <div className="col-sm">
                     <KeyboardTimePicker
-                      // margin="normal"
                       label="Time picker"
-                      // value={selectedEndTime}
-                      // onChange={handleEndTimeChange}
+                      value={selectedEndTime}
+                      onChange={selectEndDateTime}
                       KeyboardButtonProps={{
                         "aria-label": "change time",
                       }}
@@ -146,14 +220,46 @@ export default function FormDialog({ classes, dateStr }) {
                 // autoFocus
                 margin="dense"
                 label="Location"
-                onChange=""
+                onChange={selectLocation}
                 fullWidth
               />
+              <div className="row">
+                <div className="col-sm mt-3">
+                  <FormControl fullWidth>
+                    <InputLabel>Select Frequency</InputLabel>
+                    <Select onChange={selectFreq}>
+                      <MenuItem value="" disabled>
+                        Select Frequency
+                      </MenuItem>
+                      <MenuItem value="1">Ad Hoc (i.e. once off)</MenuItem>
+                      <MenuItem value="2">Daily</MenuItem>
+                      <MenuItem value="3">Weekly</MenuItem>
+                    </Select>
+                  </FormControl>
+                </div>
+                <div className="col-sm">
+                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <KeyboardDatePicker
+                      disableToolbar
+                      fullWidth
+                      variant="inline"
+                      format="dd/MM/yyyy"
+                      margin="normal"
+                      label="Up Till"
+                      value={upTillDateDisplay}
+                      onChange={selectUpTill}
+                      KeyboardButtonProps={{
+                        "aria-label": "change date",
+                      }}
+                    />
+                  </MuiPickersUtilsProvider>
+                </div>
+              </div>
             </DialogContent>
           </div>
         </div>
         <DialogActions>
-          <Button color="primary">Submit</Button>
+          <Button color="primary" onClick={submit}>Submit</Button>
         </DialogActions>
       </Dialog>
     </div>
@@ -163,6 +269,4 @@ export default function FormDialog({ classes, dateStr }) {
 FormDialog.propTypes = {
   classes: PropTypes.array,
   dateStr: PropTypes.string,
-
-  // id: PropTypes.number
 };
