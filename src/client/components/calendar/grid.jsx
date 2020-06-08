@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./calendar.scss";
 import MonthSelector from "./month-selector";
 import YearSelector from "./year-selector";
+import NewSessionDialog from "./new-session-dialog";
 
 var classNames = require("classnames");
 const cx = classNames.bind(styles);
@@ -23,6 +24,7 @@ export default class CalendarGrid extends React.Component {
       selectedMonth: m,
       selectedYear: y,
       sessions: [],
+      classes: []
     };
   }
 
@@ -125,8 +127,19 @@ export default class CalendarGrid extends React.Component {
       });
   };
 
+  getClasses = () => {
+    let url = '/classes';
+    fetch(url)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('data: ', data);
+        // this.setState({classes: data});
+      });
+  }
+
   componentDidMount = () => {
     this.initCalendarArray(this.state.selectedMonth, this.state.selectedYear);
+    this.getClasses();
   };
 
   selectMonth = (event) => {
@@ -138,10 +151,6 @@ export default class CalendarGrid extends React.Component {
     console.log(event.target.value);
     this.initCalendarArray(this.state.selectedMonth, event.target.value);
   };
-
-  newSession = (event) => {
-    console.log(event.target.id);
-  }
 
   render() {
     const box = cx(styles.calendar_box, "col-sm");
@@ -179,8 +188,11 @@ export default class CalendarGrid extends React.Component {
           });
         }
         return (
-          <div key={colIndex} className={box} onClick={this.newSession} id={col}>
-            {col}
+          <div key={colIndex} className={box}>
+            <div>
+              {col}
+              <NewSessionDialog />
+            </div>
             {sessionsHTML}
           </div>
         );

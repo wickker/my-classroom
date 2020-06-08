@@ -13,7 +13,8 @@ module.exports = (app, allModels) => {
 
   // require the controller
   const sessions = require('./controllers/sessions')(allModels);
+  const classes = require('./controllers/classes')(allModels);
 
-  // app.get('/XXX', sessions.index);
+  app.get('/classes', classes.getAllClasses);
   
 };
