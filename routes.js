@@ -1,6 +1,5 @@
 module.exports = (app, allModels) => {
 
-
   /*
    *  =========================================
    *  =========================================
@@ -13,8 +12,8 @@ module.exports = (app, allModels) => {
    */
 
   // require the controller
-  const pokemonControllerCallbacks = require('./controllers/pokemon')(allModels);
+  const sessions = require('./controllers/sessions')(allModels);
 
-  app.get('/pokemons', pokemonControllerCallbacks.index);
-  //app.get('/pokemons/:id', pokemons.getPokemon);
+  // app.get('/XXX', sessions.index);
+  
 };

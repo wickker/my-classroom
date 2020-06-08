@@ -33,9 +33,9 @@ if( process.env.DATABASE_URL ){
 
 }else{
   configs = {
-    user: 'akira',
+    user: 'postgres',
     host: '127.0.0.1',
-    database: 'pokemons',
+    database: 'proj4',
     port: 5432
   };
 }
@@ -62,9 +62,9 @@ pool.on('error', function (err) {
  */
 
 
-const allPokemonModelsFunction = require('./models/pokemon');
+const allSessionsModelsFunction = require('./models/sessions');
 
-const pokemonModelsObject = allPokemonModelsFunction( pool );
+const sessionsModelsObject = allSessionsModelsFunction( pool );
 
 
 
@@ -95,5 +95,5 @@ module.exports = {
    */
 
   // users: userModelsObject,
-  pokemon: pokemonModelsObject
+  sessions: sessionsModelsObject
 };

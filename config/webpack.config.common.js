@@ -25,6 +25,7 @@ module.exports = {
       },
       {
         test: /\.s?css$/,
+        // test: /\.(scss)$/,
         use: ExtractTextPlugin.extract({
           fallback: {
             loader: 'style-loader',
@@ -43,11 +44,23 @@ module.exports = {
             },
             {
               loader: 'postcss-loader',
-              options: {sourceMap: IS_DEV}
+              options: {
+                sourceMap: IS_DEV,
+                plugins: function () {
+                  return [
+                    // require('precss'),
+                    require('autoprefixer')
+                  ];
+                }
+              }
             }
           ]
         })
       },
+      // {
+      //   test: /\.css$/,
+      //   use: ['style-loader', 'css-loader']
+      // },
       {
         test: /\.(eot|svg|ttf|woff|woff2)$/,
         loader: 'file-loader'
