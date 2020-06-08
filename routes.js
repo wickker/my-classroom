@@ -17,6 +17,8 @@ module.exports = (app, allModels) => {
 
   app.get('/classes', classes.getAllClasses);
 
+  app.get('/sessions', sessions.getSessions);
+
   app.post('/sessions/post', sessions.newSession);
   
 };

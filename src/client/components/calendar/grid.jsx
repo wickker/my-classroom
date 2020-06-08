@@ -102,10 +102,12 @@ export default class CalendarGrid extends React.Component {
     }
     console.log(array);
 
+    this.getClasses();
+
     let startDate = moment(array[0][0], "D-M-YYYY").valueOf();
     let endDate = moment(array[5][6], "D-M-YYYY").valueOf();
 
-    // this.getSessions(startDate, endDate);
+    this.getSessions(startDate, endDate);
 
     this.setState({
       datesInMonth: array,
@@ -139,7 +141,6 @@ export default class CalendarGrid extends React.Component {
 
   componentDidMount = () => {
     this.initCalendarArray(this.state.selectedMonth, this.state.selectedYear);
-    this.getClasses();
   };
 
   selectMonth = (event) => {
@@ -172,20 +173,24 @@ export default class CalendarGrid extends React.Component {
             );
             return sessionDate === col;
           });
-          sessionsHTML = matchingSessions.map((element, index) => {
-            let startTime = moment(element.start_datetime, "x").format(
-              "hh:mm A"
-            );
-            return (
-              <div className="row" key={index}>
-                <div className="col">
-                  <div>
-                    {element.name} | {startTime}
+          if (matchingSessions.length > 0) {
+            sessionsHTML = matchingSessions.map((element, index) => {
+              let startTime = moment(element.start_datetime, "x").format(
+                "hh:mm A"
+              );
+              // let endTime = moment(element.end_datetime, "x").format("hh:mm A");
+              let classObj = this.state.classes.find((classEle) => {
+                return classEle.id == element.class_id;
+              });
+              return (
+                <div className="row" key={index}>
+                  <div className="col">
+                    {classObj.title} | {startTime}
                   </div>
                 </div>
-              </div>
-            );
-          });
+              );
+            });
+          }
         }
         return (
           <div key={colIndex} className={box}>

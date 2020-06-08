@@ -22,7 +22,22 @@ module.exports = (db) => {
     );
   };
 
+  const getSessions = (request, response) => {
+    console.log("query: ", request.query);
+    let startDate = parseInt(request.query.startDate);
+    let endDate = parseInt(request.query.endDate);
+    let callback = (result) => {
+      console.log(result);
+      let data = {
+        sessions: result
+      };
+      response.send(data);
+    }
+    db.sessions.querySessionsByDateRange(callback, startDate, endDate);
+  }
+
   return {
     newSession,
+    getSessions,
   };
 };

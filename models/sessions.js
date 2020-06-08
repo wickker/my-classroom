@@ -41,8 +41,20 @@ module.exports = (pool) => {
       }
     }
   }
-  
+
+  const querySessionsByDateRange = (callback, startDate, endDate) => {
+    let queryText = `select * from sessions where start_datetime >= ${startDate} and start_datetime <= ${endDate} order by start_datetime asc`;
+    pool.query(queryText, (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        callback(result.rows);
+      }
+    });
+  }
+
   return {
-    writeNewSession
+    writeNewSession,
+    querySessionsByDateRange
   };
 };
