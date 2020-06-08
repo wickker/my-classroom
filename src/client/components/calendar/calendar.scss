@@ -1,0 +1,28 @@
+@import '../../bootstrap.scss';
+
+.calendar_box {
+  border: solid 0.5px lightgrey;
+  min-height: 100px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.calendar_box_head {
+  border: solid 0.5px lightgrey;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.calendar_box_around {
+  border: solid 1px lightgrey;
+  margin-right: 15px;
+  margin-left: 15px;
+}
+
+.calendar_form {
+  width: 100%;
+}
+
+.calendar_box:hover {
+  cursor: pointer;
+}
