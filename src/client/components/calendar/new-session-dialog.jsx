@@ -135,11 +135,13 @@ export default function FormDialog({ classes, dateStr }) {
       .then((response) => response.json())
       .then((data) => {
         console.log('Success:', data);
-        location.reload();
+        window.location.reload(false);
+
       })
       .catch((error) => {
         console.error('Error:', error);
-        location.reload();
+        window.location.reload(false);
+
       });
   };
 

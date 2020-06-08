@@ -197,7 +197,8 @@ export default class CalendarGrid extends React.Component {
         return (
           <div key={colIndex} className={box}>
             <div>
-              <span>{col} </span><NewSessionDialog classes={this.state.classes} dateStr={col} />
+              <span>{col} </span>
+              <NewSessionDialog classes={this.state.classes} dateStr={col} />
             </div>
             {sessionsHTML}
           </div>

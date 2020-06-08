@@ -10,6 +10,7 @@ module.exports = (db) => {
     let upTillDate = data.upTillDate;
     let callback = (result) => {
       console.log(result);
+      response.send("new session(s) added");
     };
     db.sessions.writeNewSession(
       callback,
