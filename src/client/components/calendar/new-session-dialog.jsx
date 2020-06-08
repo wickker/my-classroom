@@ -1,18 +1,27 @@
-import React from 'react';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import PropTypes from 'prop-types';
-import 'date-fns';
-import DateFnsUtils from '@date-io/date-fns';
-import {MuiPickersUtilsProvider, KeyboardTimePicker, KeyboardDatePicker} from '@material-ui/pickers';
+import React from "react";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import PropTypes from "prop-types";
+import "date-fns";
+import DateFnsUtils from "@date-io/date-fns";
+import {
+  MuiPickersUtilsProvider,
+  KeyboardTimePicker,
+  KeyboardDatePicker,
+} from "@material-ui/pickers";
 
-var moment = require('moment'); 
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
 
-export default function FormDialog() {
+var moment = require("moment");
+
+export default function FormDialog({ classes, dateStr }) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -21,14 +30,14 @@ export default function FormDialog() {
 
   const handleClose = () => {
     setOpen(false);
-  }
-
-  const submitEdit = () => {
-    setOpen(false);
-    
   };
 
-  // const [selectedDate, setSelectedDate] = React.useState(new Date(date));
+  const submit = () => {
+    setOpen(false);
+  };
+
+  let dateFormatted = moment(dateStr, "D-M-YYYY").format();
+  const [selectedDate, setSelectedDate] = React.useState(dateFormatted);
 
   // const [selectedStartTime, setSelectedStartTime] = React.useState(new Date(startTime));
 
@@ -60,32 +69,40 @@ export default function FormDialog() {
   //   setSelectedDescription(event.target.value);
   // };
 
+  const renderClassDropdown = () => {
+    let classesHTML = classes.map((element, index) => {
+      return <MenuItem value={element.id} key={index}>{element.title}</MenuItem>;
+    });
+    return (
+      <FormControl fullWidth>
+        <InputLabel>Select Class</InputLabel>
+        <Select onChange="">
+          <MenuItem value="">Select Class</MenuItem>
+          {classesHTML}
+        </Select>
+      </FormControl>
+    );
+  };
+
+  let selectClass = renderClassDropdown();
+
   return (
     <div>
       <Button variant="outlined" color="primary" onClick={handleClickOpen}>
         Add
       </Button>
-      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title" fullWidth>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="form-dialog-title"
+        fullWidth
+      >
         <div className="row">
           <div className="col-sm">
-            <DialogTitle id="form-dialog-title">New Session</DialogTitle>
+            <DialogTitle>Add New Session</DialogTitle>
             <DialogContent>
-              <TextField
-                // autoFocus
-                margin="dense"
-                label="Name"
-                // onChange={handleNameChange}
-                // defaultValue={name}
-                fullWidth
-              />
-              <TextField
-                // autoFocus
-                margin="dense"
-                label="Description"
-                // defaultValue={description}
-                // onChange={handleDescriptionChange}
-                fullWidth
-              />
+              {selectClass}
+              
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <KeyboardDatePicker
                   disableToolbar
@@ -94,10 +111,10 @@ export default function FormDialog() {
                   format="dd/MM/yyyy"
                   margin="normal"
                   label="Date"
-                  // value={selectedDate}
-                  // onChange={handleDateChange}
+                  value={selectedDate}
+                  onChange=""
                   KeyboardButtonProps={{
-                    'aria-label': 'change date'
+                    "aria-label": "change date",
                   }}
                 />
                 <div className="row">
@@ -108,7 +125,7 @@ export default function FormDialog() {
                       // value={selectedStartTime}
                       // onChange={handleStartTimeChange}
                       KeyboardButtonProps={{
-                        'aria-label': 'change time'
+                        "aria-label": "change time",
                       }}
                     />
                   </div>
@@ -119,30 +136,33 @@ export default function FormDialog() {
                       // value={selectedEndTime}
                       // onChange={handleEndTimeChange}
                       KeyboardButtonProps={{
-                        'aria-label': 'change time'
+                        "aria-label": "change time",
                       }}
                     />
                   </div>
                 </div>
               </MuiPickersUtilsProvider>
+              <TextField
+                // autoFocus
+                margin="dense"
+                label="Location"
+                onChange=""
+                fullWidth
+              />
             </DialogContent>
           </div>
         </div>
         <DialogActions>
-          <Button  color="primary">
-            Submit
-          </Button>
+          <Button color="primary">Submit</Button>
         </DialogActions>
       </Dialog>
     </div>
   );
 }
 
-// FormDialog.propTypes = {
-//   name: PropTypes.string,
-//   description: PropTypes.string,
-//   date: PropTypes.string,
-//   startTime: PropTypes.string,
-//   endTime: PropTypes.string,
-//   id: PropTypes.number
-// };
+FormDialog.propTypes = {
+  classes: PropTypes.array,
+  dateStr: PropTypes.string,
+
+  // id: PropTypes.number
+};

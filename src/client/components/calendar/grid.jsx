@@ -24,7 +24,7 @@ export default class CalendarGrid extends React.Component {
       selectedMonth: m,
       selectedYear: y,
       sessions: [],
-      classes: []
+      classes: [],
     };
   }
 
@@ -105,7 +105,7 @@ export default class CalendarGrid extends React.Component {
     let startDate = moment(array[0][0], "D-M-YYYY").valueOf();
     let endDate = moment(array[5][6], "D-M-YYYY").valueOf();
 
-    // this.getData(startDate, endDate);
+    // this.getSessions(startDate, endDate);
 
     this.setState({
       datesInMonth: array,
@@ -114,7 +114,7 @@ export default class CalendarGrid extends React.Component {
     });
   };
 
-  getData = (startDate, endDate) => {
+  getSessions = (startDate, endDate) => {
     const params = { startDate: startDate, endDate: endDate };
     console.log(params);
     let url = new URL("http://localhost:3000/sessions");
@@ -128,14 +128,14 @@ export default class CalendarGrid extends React.Component {
   };
 
   getClasses = () => {
-    let url = '/classes';
+    let url = "/classes";
     fetch(url)
       .then((response) => response.json())
       .then((data) => {
-        console.log('data: ', data);
-        // this.setState({classes: data});
+        console.log("data: ", data);
+        this.setState({ classes: data });
       });
-  }
+  };
 
   componentDidMount = () => {
     this.initCalendarArray(this.state.selectedMonth, this.state.selectedYear);
@@ -191,7 +191,7 @@ export default class CalendarGrid extends React.Component {
           <div key={colIndex} className={box}>
             <div>
               {col}
-              <NewSessionDialog />
+              <NewSessionDialog classes={this.state.classes} dateStr={col} />
             </div>
             {sessionsHTML}
           </div>
