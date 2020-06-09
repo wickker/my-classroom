@@ -2,6 +2,7 @@ import React from "react";
 
 import styles from "./calendar.scss";
 var moment = require("moment");
+import MarkAttendance from "./mark-attendance";
 
 export default class SessionDetails extends React.Component {
   render() {
@@ -43,7 +44,7 @@ export default class SessionDetails extends React.Component {
           <div className="col-sm">
             <h5>{title}</h5>
             <div>
-              <button>Mark Attendance</button>
+              <MarkAttendance obj={obj}/>
             </div>
             <div className="row">
               <div className="col-sm">

@@ -139,7 +139,7 @@ export default class CalendarGrid extends React.Component {
       .then((response) => response.json())
       .then((data) => {
         console.log("data: ", data);
-        this.setState({ classes: data });
+        this.setState({ classes: data.classes });
       });
   };
 
@@ -198,6 +198,7 @@ export default class CalendarGrid extends React.Component {
                 "hh:mm A"
               );
               // let endTime = moment(element.end_datetime, "x").format("hh:mm A");
+              
               let classObj = this.state.classes.find((classEle) => {
                 return classEle.id == element.class_id;
               });
