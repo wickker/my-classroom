@@ -15,6 +15,10 @@ import Slide from "@material-ui/core/Slide";
 // import PropTypes from "prop-types";
 var moment = require("moment");
 import styles from "./calendar.scss";
+import FileUpload from "./file-upload";
+
+var classNames = require("classnames");
+const cx = classNames.bind(styles);
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -59,17 +63,23 @@ export default function MarkAttendance({ obj }) {
     alert("Attendance submitted");
   };
 
+  const attenRow = cx(styles.attenRow, "col-sm", "mb-4", "mt-2");
+
+  const attenHead = cx(styles.attenHead, "col-sm", "mb-4", "mt-2");
+
   const renderTable = () => {
     if (obj !== "" && obj.class.students.length > 0) {
       let studentsHTML = obj.class.students.map((element, index) => {
         let isPresentChecked;
-        element.is_present ? isPresentChecked = true : isPresentChecked = false;
+        element.is_present
+          ? (isPresentChecked = true)
+          : (isPresentChecked = false);
 
-        let isLateChecked; 
-        element.is_late ? isLateChecked = true : isLateChecked = false;
+        let isLateChecked;
+        element.is_late ? (isLateChecked = true) : (isLateChecked = false);
 
         return (
-          <div className="row" key={index}>
+          <div className={attenRow} key={index}>
             <div className="col-sm-1">
               <img
                 className={styles.avatar}
@@ -79,22 +89,54 @@ export default function MarkAttendance({ obj }) {
             </div>
             <div className="col-sm-2">{element.name}</div>
             <div className="col-sm-1">
-              <input type="checkbox" name="is_present" defaultValue={element.id} defaultChecked={isPresentChecked}/>
+              <input
+                type="checkbox"
+                name="is_present"
+                defaultValue={element.id}
+                defaultChecked={isPresentChecked}
+              />
             </div>
             <div className="col-sm-1">
-              <input type="checkbox" name="is_late" defaultValue={element.id} defaultChecked={isLateChecked}/>
+              <input
+                type="checkbox"
+                name="is_late"
+                defaultValue={element.id}
+                defaultChecked={isLateChecked}
+              />
             </div>
             <div className="col-sm-3">
-              <input type="text" name="remarks" defaultValue={element.remarks} />
+              <input
+                className="form-control"
+                type="text"
+                name="remarks"
+                defaultValue={element.remarks}
+              />
             </div>
             <div className="col-sm">
-              <input type="file" name="document" />
+              {/* <input
+                className="form-control"
+                type="text"
+                name="document"
+                defaultValue={element.document}
+              />
+              <input type="file" name="document_prompt" /> */}
+              <FileUpload document={element.document} id={element.id}/>
             </div>
             <div className="col-sm" hidden>
-              <input type="text" name="student_id_order" defaultValue={element.id} hidden/>
+              <input
+                type="text"
+                name="student_id_order"
+                defaultValue={element.id}
+                hidden
+              />
             </div>
             <div className="col-sm" hidden>
-              <input type="text" name="session_id" defaultValue={obj.session.id} hidden/>
+              <input
+                type="text"
+                name="session_id"
+                defaultValue={obj.session.id}
+                hidden
+              />
             </div>
           </div>
         );
@@ -138,15 +180,17 @@ export default function MarkAttendance({ obj }) {
         <div className={styles.attendance}>
           <div className="row">
             <div className="col-sm">
-              <h5>{title}</h5>
-              <p>{date}</p>
-              <p>
-                {startTime} - {endTime}
-              </p>
+              <div className={styles.title}>
+                <h5>{title}</h5>
+                <p>{date}</p>
+                <p>
+                  {startTime} - {endTime}
+                </p>
+              </div>
 
-              <div className="row mb-2">
+              <div className={attenHead}>
                 <div className="col-sm-1"></div>
-                <div className="col-sm-2"></div>
+                <div className="col-sm-2">Student Name</div>
                 <div className="col-sm-1">Present</div>
                 <div className="col-sm-1">Late</div>
                 <div className="col-sm-3">Remarks</div>
@@ -156,18 +200,16 @@ export default function MarkAttendance({ obj }) {
               <form action="/sessions/attendance/post" method="post">
                 {studentsHTML}
                 <button
-                  className="mt-3"
+                  className={styles.save}
                   type="submit"
                   onClick={handleSave}
                 >
                   Save
                 </button>
               </form>
-
             </div>
           </div>
         </div>
-
       </Dialog>
     </div>
   );
