@@ -3,6 +3,7 @@ import styles from "./calendar.scss";
 import MonthSelector from "./month-selector";
 import YearSelector from "./year-selector";
 import NewSessionDialog from "./new-session-dialog";
+import SessionDetails from "./session-details";
 
 var classNames = require("classnames");
 const cx = classNames.bind(styles);
@@ -25,6 +26,9 @@ export default class CalendarGrid extends React.Component {
       selectedYear: y,
       sessions: [],
       classes: [],
+      isSessionHidden: true,
+      sessionObj: "",
+
     };
   }
 
@@ -153,6 +157,19 @@ export default class CalendarGrid extends React.Component {
     this.initCalendarArray(this.state.selectedMonth, event.target.value);
   };
 
+  showSessionDetails = (event) => {
+    console.log(event.target.id);
+    let sessionId = parseInt(event.target.id);
+    let sessionDetails = this.state.sessions.find(element => element.id === sessionId);
+    let classDetails = this.state.classes.find(element => element.id === sessionDetails.class_id);
+    let obj = {
+      session: sessionDetails,
+      class: classDetails
+    };
+    console.log(obj);
+    this.setState({sessionObj: obj});
+  }
+
   render() {
     const box = cx(styles.calendar_box, "col-sm");
 
@@ -188,10 +205,9 @@ export default class CalendarGrid extends React.Component {
                 <div className="row" key={index}>
                   <div className={sessionBox}>
                     <a href="#" className={styles.tip}>
-                      <div>
+                      <div id={element.id} onClick={this.showSessionDetails}>
                         {classObj.title} | {startTime}
                       </div>
-                      <div>Hello</div>
                     </a>
                   </div>
                 </div>
@@ -232,6 +248,8 @@ export default class CalendarGrid extends React.Component {
             />
           </div>
         </div>
+
+        <SessionDetails obj={this.state.sessionObj} />
 
         <div className="row">
           <div className={boxAround}>
