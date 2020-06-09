@@ -12,10 +12,11 @@ import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import CloseIcon from "@material-ui/icons/Close";
 import Slide from "@material-ui/core/Slide";
-// import PropTypes from "prop-types";
 var moment = require("moment");
 import styles from "./calendar.scss";
 import FileUpload from "./file-upload";
+import Checkbox from "@material-ui/core/Checkbox";
+import SaveIcon from "@material-ui/icons/Save";
 
 var classNames = require("classnames");
 const cx = classNames.bind(styles);
@@ -89,38 +90,46 @@ export default function MarkAttendance({ obj }) {
             </div>
             <div className="col-sm-2">{element.name}</div>
             <div className="col-sm-1">
-              <input
+              <Checkbox
+                name="is_present"
+                defaultValue={element.id}
+                defaultChecked={isPresentChecked}
+                color="primary"
+                inputProps={{ "aria-label": "primary checkbox" }}
+              />
+              {/* <input
                 type="checkbox"
                 name="is_present"
                 defaultValue={element.id}
                 defaultChecked={isPresentChecked}
-              />
+              /> */}
             </div>
             <div className="col-sm-1">
-              <input
+              <Checkbox
+                name="is_late"
+                defaultValue={element.id}
+                defaultChecked={isLateChecked}
+                color="primary"
+                inputProps={{ "aria-label": "primary checkbox" }}
+              />
+              {/* <input
                 type="checkbox"
                 name="is_late"
                 defaultValue={element.id}
                 defaultChecked={isLateChecked}
-              />
+              /> */}
             </div>
             <div className="col-sm-3">
-              <input
+              <textarea
                 className="form-control"
                 type="text"
                 name="remarks"
+                rows="2"
                 defaultValue={element.remarks}
               />
             </div>
             <div className="col-sm">
-              {/* <input
-                className="form-control"
-                type="text"
-                name="document"
-                defaultValue={element.document}
-              />
-              <input type="file" name="document_prompt" /> */}
-              <FileUpload document={element.document} id={element.id}/>
+              <FileUpload document={element.document} id={element.id} />
             </div>
             <div className="col-sm" hidden>
               <input
@@ -181,10 +190,9 @@ export default function MarkAttendance({ obj }) {
           <div className="row">
             <div className="col-sm">
               <div className={styles.title}>
-                <h5>{title}</h5>
-                <p>{date}</p>
+                <h5>Class: {title}</h5>
                 <p>
-                  {startTime} - {endTime}
+                  Session: {date}, {startTime} - {endTime}
                 </p>
               </div>
 
@@ -199,13 +207,32 @@ export default function MarkAttendance({ obj }) {
 
               <form action="/sessions/attendance/post" method="post">
                 {studentsHTML}
-                <button
+
+                <div className="row">
+                  <div className="col-sm">
+                    <div className={styles.save}>
+                      <Button
+                        variant="contained"
+                        type="submit"
+                        onClick={handleSave}
+                        size="large"
+                        color="primary"
+                        className={classes.button}
+                        startIcon={<SaveIcon />}
+                      >
+                        Save
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* <button
                   className={styles.save}
                   type="submit"
                   onClick={handleSave}
                 >
                   Save
-                </button>
+                </button> */}
               </form>
             </div>
           </div>
