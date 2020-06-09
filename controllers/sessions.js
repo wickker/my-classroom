@@ -40,6 +40,14 @@ module.exports = (db) => {
   const postAttendance = (request, response) => {
     console.log(request.body);
     let data = request.body;
+    // check if is_present and is_late checkbox data exists
+    if (!("is_present" in data)) {
+      data.is_present = [""];
+    } 
+    if (!("is_late" in data)) {
+      data.is_late = [""];
+    }
+    // check that all data is in array format
     for (const key in data) {
       if (!Array.isArray(data[key])) {
         let value = data[key];

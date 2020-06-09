@@ -72,7 +72,7 @@ module.exports = (pool) => {
   ) => {
     for (let i = 0; i < studentIdOrder.length; i++) {
       let is_present;
-      isPresent.includes(studentIdOrder[0]) ? is_present = true : is_present = false;
+      isPresent.includes(studentIdOrder[i]) ? is_present = true : is_present = false;
       let remarksInput = remarks[i];
       let is_late;
       isLate.includes(studentIdOrder[i]) ? is_late = 1 : is_late = 0;

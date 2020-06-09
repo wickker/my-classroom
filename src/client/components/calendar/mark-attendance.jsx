@@ -56,11 +56,18 @@ export default function MarkAttendance({ obj }) {
 
   const handleSave = () => {
     setOpen(false);
+    alert("Attendance submitted");
   };
 
   const renderTable = () => {
     if (obj !== "" && obj.class.students.length > 0) {
       let studentsHTML = obj.class.students.map((element, index) => {
+        let isPresentChecked;
+        element.is_present ? isPresentChecked = true : isPresentChecked = false;
+
+        let isLateChecked; 
+        element.is_late ? isLateChecked = true : isLateChecked = false;
+
         return (
           <div className="row" key={index}>
             <div className="col-sm-1">
@@ -72,13 +79,13 @@ export default function MarkAttendance({ obj }) {
             </div>
             <div className="col-sm-2">{element.name}</div>
             <div className="col-sm-1">
-              <input type="checkbox" name="is_present" defaultValue={element.id}/>
+              <input type="checkbox" name="is_present" defaultValue={element.id} defaultChecked={isPresentChecked}/>
             </div>
             <div className="col-sm-1">
-              <input type="checkbox" name="is_late" defaultValue={element.id} />
+              <input type="checkbox" name="is_late" defaultValue={element.id} defaultChecked={isLateChecked}/>
             </div>
-            <div className="col-sm">
-              <input type="text" name="remarks" />
+            <div className="col-sm-3">
+              <input type="text" name="remarks" defaultValue={element.remarks} />
             </div>
             <div className="col-sm">
               <input type="file" name="document" />
@@ -142,18 +149,21 @@ export default function MarkAttendance({ obj }) {
                 <div className="col-sm-2"></div>
                 <div className="col-sm-1">Present</div>
                 <div className="col-sm-1">Late</div>
-                <div className="col-sm">Remarks</div>
+                <div className="col-sm-3">Remarks</div>
                 <div className="col-sm">Upload Document</div>
               </div>
+
               <form action="/sessions/attendance/post" method="post">
                 {studentsHTML}
                 <button
+                  className="mt-3"
                   type="submit"
-                  onClick={handleClose}
+                  onClick={handleSave}
                 >
                   Save
                 </button>
               </form>
+
             </div>
           </div>
         </div>
