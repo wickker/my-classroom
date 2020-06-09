@@ -8,8 +8,7 @@ module.exports = (db) => {
     let location = data.location;
     let frequency = parseInt(data.frequency);
     let upTillDate = data.upTillDate;
-    let callback = (result) => {
-      console.log(result);
+    let callback = () => {
       response.send("new session(s) added");
     };
     db.sessions.writeNewSession(

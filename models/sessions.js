@@ -1,5 +1,5 @@
 module.exports = (pool) => {
-  const writeNewSession = (
+  const writeNewSession = async (
     callback,
     classId,
     startDateTime,
@@ -9,45 +9,60 @@ module.exports = (pool) => {
     upTillDate
   ) => {
     let isDelete = false;
-    if (frequency === 1) {
-      let queryText = `insert into sessions (class_id, start_datetime, end_datetime, location, is_delete) values (${classId}, ${startDateTime}, ${endDateTime}, '${location}', ${isDelete}) returning *`;
-      pool.query(queryText, (err, result) => {
-        if (err) {
-          console.log(err);
-        } else {
-          callback(result.rows[0]);
+    let queryText = `select distinct on (student_id) student_id from attendance where class_id = ${classId}`;
+    await pool.query(queryText).then(async (result) => {
+      let studentIdsArr = result.rows;
+      console.log(studentIdsArr);
+      if (frequency === 1) {
+        let queryText = `insert into sessions (class_id, start_datetime, end_datetime, location, is_delete) values (${classId}, ${startDateTime}, ${endDateTime}, '${location}', ${isDelete}) returning *`;
+        await pool.query(queryText).then(async (result) => {
+          let newSession = result.rows[0];
+          console.log(newSession);
+          for (let i = 0; i < studentIdsArr.length; i++) {
+            let queryText = `insert into attendance (class_id, session_id, student_id, is_present, remarks, is_late, document) values (${classId}, ${newSession.id}, ${studentIdsArr[i].student_id}, false, '', 0, '') returning *`;
+            await pool.query(queryText).then(async (result) => {
+              console.log(result.rows[0]);
+            });
+          }
+        });
+      } else if (frequency === 2) {
+        // 24 hours in mS
+        let unit = 86400000;
+        while (startDateTime < upTillDate) {
+          let queryText = `insert into sessions (class_id, start_datetime, end_datetime, location, is_delete) values (${classId}, ${startDateTime}, ${endDateTime}, '${location}', ${isDelete}) returning *`;
+          await pool.query(queryText).then(async (result) => {
+            let newSession = result.rows[0];
+            console.log(newSession);
+            for (let i = 0; i < studentIdsArr.length; i++) {
+              let queryText = `insert into attendance (class_id, session_id, student_id, is_present, remarks, is_late, document) values (${classId}, ${newSession.id}, ${studentIdsArr[i].student_id}, false, '', 0, '') returning *`;
+              await pool.query(queryText).then(async (result) => {
+                console.log(result.rows[0]);
+              });
+            }
+          });
+          startDateTime = startDateTime + unit;
+          endDateTime = endDateTime + unit;
         }
-      });
-    } else if (frequency === 2) {
-      // 24 hours in mS
-      let unit = 86400000;
-      while (startDateTime < upTillDate) {
-        let queryText = `insert into sessions (class_id, start_datetime, end_datetime, location, is_delete) values (${classId}, ${startDateTime}, ${endDateTime}, '${location}', ${isDelete}) returning *`;
-        pool.query(queryText, (err, result) => {
-          if (err) {
-            console.log(err);
-          } else {
-            callback(result.rows[0]);
-          }
-        });
-        startDateTime = startDateTime + unit;
-        endDateTime = endDateTime + unit;
+      } else if (frequency === 3) {
+        let unit = 604800000;
+        while (startDateTime < upTillDate) {
+          let queryText = `insert into sessions (class_id, start_datetime, end_datetime, location, is_delete) values (${classId}, ${startDateTime}, ${endDateTime}, '${location}', ${isDelete}) returning *`;
+          await pool.query(queryText).then(async (result) => {
+            let newSession = result.rows[0];
+            console.log(newSession);
+            for (let i = 0; i < studentIdsArr.length; i++) {
+              let queryText = `insert into attendance (class_id, session_id, student_id, is_present, remarks, is_late, document) values (${classId}, ${newSession.id}, ${studentIdsArr[i].student_id}, false, '', 0, '') returning *`;
+              await pool.query(queryText).then(async (result) => {
+                console.log(result.rows[0]);
+              });
+            }
+          });
+          startDateTime = startDateTime + unit;
+          endDateTime = endDateTime + unit;
+        }
       }
-    } else if (frequency === 3) {
-      let unit = 604800000;
-      while (startDateTime < upTillDate) {
-        let queryText = `insert into sessions (class_id, start_datetime, end_datetime, location, is_delete) values (${classId}, ${startDateTime}, ${endDateTime}, '${location}', ${isDelete}) returning *`;
-        pool.query(queryText, (err, result) => {
-          if (err) {
-            console.log(err);
-          } else {
-            callback(result.rows[0]);
-          }
-        });
-        startDateTime = startDateTime + unit;
-        endDateTime = endDateTime + unit;
-      }
-    }
+      callback();
+    });
   };
 
   const querySessionsByDateRange = (callback, startDate, endDate) => {
@@ -72,10 +87,12 @@ module.exports = (pool) => {
   ) => {
     for (let i = 0; i < studentIdOrder.length; i++) {
       let is_present;
-      isPresent.includes(studentIdOrder[i]) ? is_present = true : is_present = false;
+      isPresent.includes(studentIdOrder[i])
+        ? (is_present = true)
+        : (is_present = false);
       let remarksInput = remarks[i];
       let is_late;
-      isLate.includes(studentIdOrder[i]) ? is_late = 1 : is_late = 0;
+      isLate.includes(studentIdOrder[i]) ? (is_late = 1) : (is_late = 0);
       let documentInput = document[i];
       let studentId = parseInt(studentIdOrder[i]);
       let queryText = `update attendance set is_present = ${is_present}, remarks = '${remarksInput}', is_late = ${is_late}, document = '${documentInput}' where session_id = ${sessionId} and student_id = ${studentId} returning *`;
