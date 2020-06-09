@@ -30,15 +30,46 @@ module.exports = (db) => {
     let callback = (result) => {
       console.log(result);
       let data = {
-        sessions: result
+        sessions: result,
       };
       response.send(data);
-    }
+    };
     db.sessions.querySessionsByDateRange(callback, startDate, endDate);
-  }
+  };
+
+  const postAttendance = (request, response) => {
+    console.log(request.body);
+    let data = request.body;
+    for (const key in data) {
+      if (!Array.isArray(data[key])) {
+        let value = data[key];
+        data[key] = [value];
+      }
+    }
+    console.log(data);
+    let studentIdOrder = data.student_id_order;
+    let isPresent = data.is_present;
+    let isLate = data.is_late;
+    let remarks = data.remarks;
+    let document = data.document;
+    let sessionId = parseInt(data.session_id[0]);
+    let callback = () => {
+      response.redirect("/calendar");
+    };
+    db.sessions.markAttendance(
+      callback,
+      studentIdOrder,
+      isPresent,
+      isLate,
+      remarks,
+      document,
+      sessionId
+    );
+  };
 
   return {
     newSession,
     getSessions,
+    postAttendance,
   };
 };

@@ -44,7 +44,7 @@ export default class SessionDetails extends React.Component {
           <div className="col-sm">
             <h5>{title}</h5>
             <div>
-              <MarkAttendance obj={obj}/>
+              <MarkAttendance obj={this.props.obj}/>
             </div>
             <div className="row">
               <div className="col-sm">
