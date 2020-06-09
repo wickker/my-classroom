@@ -206,7 +206,7 @@ export default class CalendarGrid extends React.Component {
                 <div className="row" key={index}>
                   <div className={sessionBox}>
                     <a href="#" className={styles.tip}>
-                      <div id={element.id} onClick={this.showSessionDetails}>
+                      <div className={styles.session} id={element.id} onClick={this.showSessionDetails}>
                         {classObj.title} | {startTime}
                       </div>
                     </a>

@@ -70,87 +70,93 @@ export default function MarkAttendance({ obj }) {
 
   const renderTable = () => {
     if (obj !== "" && obj.class.students.length > 0) {
-      let studentsHTML = obj.class.students.map((element, index) => {
-        let isPresentChecked;
-        element.is_present
-          ? (isPresentChecked = true)
-          : (isPresentChecked = false);
-
-        let isLateChecked;
-        element.is_late ? (isLateChecked = true) : (isLateChecked = false);
-
-        return (
-          <div className={attenRow} key={index}>
-            <div className="col-sm-1">
-              <img
-                className={styles.avatar}
-                src={element.image}
-                alt="student display picture"
-              />
-            </div>
-            <div className="col-sm-2">{element.name}</div>
-            <div className="col-sm-1">
-              <Checkbox
-                name="is_present"
-                defaultValue={element.id}
-                defaultChecked={isPresentChecked}
-                color="primary"
-                inputProps={{ "aria-label": "primary checkbox" }}
-              />
-              {/* <input
-                type="checkbox"
-                name="is_present"
-                defaultValue={element.id}
-                defaultChecked={isPresentChecked}
-              /> */}
-            </div>
-            <div className="col-sm-1">
-              <Checkbox
-                name="is_late"
-                defaultValue={element.id}
-                defaultChecked={isLateChecked}
-                color="primary"
-                inputProps={{ "aria-label": "primary checkbox" }}
-              />
-              {/* <input
-                type="checkbox"
-                name="is_late"
-                defaultValue={element.id}
-                defaultChecked={isLateChecked}
-              /> */}
-            </div>
-            <div className="col-sm-3">
-              <textarea
-                className="form-control"
-                type="text"
-                name="remarks"
-                rows="2"
-                defaultValue={element.remarks}
-              />
-            </div>
-            <div className="col-sm">
-              <FileUpload document={element.document} id={element.id} />
-            </div>
-            <div className="col-sm" hidden>
-              <input
-                type="text"
-                name="student_id_order"
-                defaultValue={element.id}
-                hidden
-              />
-            </div>
-            <div className="col-sm" hidden>
-              <input
-                type="text"
-                name="session_id"
-                defaultValue={obj.session.id}
-                hidden
-              />
-            </div>
-          </div>
-        );
+      let sessionId = obj.session.id;
+      let studentsFiltered = obj.class.students.filter((element) => {
+        return element.session_id === sessionId;
       });
-      return studentsHTML;
+      if (studentsFiltered.length > 0) {
+        let studentsHTML = studentsFiltered.map((element, index) => {
+          let isPresentChecked;
+          element.is_present
+            ? (isPresentChecked = true)
+            : (isPresentChecked = false);
+
+          let isLateChecked;
+          element.is_late === 1 ? (isLateChecked = true) : (isLateChecked = false);
+
+          return (
+            <div className={attenRow} key={index}>
+              <div className="col-sm-1">
+                <img
+                  className={styles.avatar}
+                  src={element.image}
+                  alt="student display picture"
+                />
+              </div>
+              <div className="col-sm-2">{element.name}</div>
+              <div className="col-sm-1">
+                <Checkbox
+                  name="is_present"
+                  value={element.id}
+                  defaultChecked={isPresentChecked}
+                  color="primary"
+                  inputProps={{ "aria-label": "primary checkbox" }}
+                />
+                {/* <input
+                type="checkbox"
+                name="is_present"
+                defaultValue={element.id}
+                defaultChecked={isPresentChecked}
+              /> */}
+              </div>
+              <div className="col-sm-1">
+                <Checkbox
+                  name="is_late"
+                  value={element.id}
+                  defaultChecked={isLateChecked}
+                  color="primary"
+                  inputProps={{ "aria-label": "primary checkbox" }}
+                />
+                {/* <input
+                type="checkbox"
+                name="is_late"
+                defaultValue={element.id}
+                defaultChecked={isLateChecked}
+              /> */}
+              </div>
+              <div className="col-sm-3">
+                <textarea
+                  className="form-control"
+                  type="text"
+                  name="remarks"
+                  rows="2"
+                  defaultValue={element.remarks}
+                />
+              </div>
+              <div className="col-sm">
+                <FileUpload document={element.document} id={element.id} />
+              </div>
+              <div className="col-sm" hidden>
+                <input
+                  type="text"
+                  name="student_id_order"
+                  defaultValue={element.id}
+                  hidden
+                />
+              </div>
+              <div className="col-sm" hidden>
+                <input
+                  type="text"
+                  name="session_id"
+                  defaultValue={obj.session.id}
+                  hidden
+                />
+              </div>
+            </div>
+          );
+        });
+        return studentsHTML;
+      }
     }
   };
 

@@ -42,10 +42,15 @@ export default class SessionDetails extends React.Component {
             ></img>
           </div>
           <div className="col-sm">
-            <h5>{title}</h5>
-            <div>
-              <MarkAttendance obj={this.props.obj}/>
+            <div className="row">
+              <div className="col-sm-6">
+                <h5>{title}</h5>
+              </div>
+              <div className="col-sm">
+                <MarkAttendance obj={this.props.obj} />
+              </div>
             </div>
+
             <div className="row">
               <div className="col-sm">
                 <p>{date}</p>
