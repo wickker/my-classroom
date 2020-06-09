@@ -164,7 +164,7 @@ export default function MarkAttendance({ obj }) {
 
   return (
     <div>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+      <Button variant="contained" color="primary" onClick={handleClickOpen}>
         Mark Attendance
       </Button>
       <Dialog

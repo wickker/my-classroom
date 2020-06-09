@@ -42,7 +42,7 @@ export default class SessionDetails extends React.Component {
             ></img>
           </div>
           <div className="col-sm">
-            <div className="row">
+            <div className="row mb-3">
               <div className="col-sm-6">
                 <h5>{title}</h5>
               </div>
