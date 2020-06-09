@@ -107,9 +107,28 @@ module.exports = (pool) => {
     callback();
   };
 
+  const removeSession = (callback, id) => {
+    let queryText = `update sessions set is_delete = true where id = ${id} returning *`;
+    pool.query(queryText, (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        queryText = `delete from attendance where session_id = ${id} returning *`;
+        pool.query(queryText, (err, result) => {
+          if (err) {
+            console.log(err);
+          } else {
+            callback(result.rows);
+          }
+        });
+      }
+    });
+  }
+
   return {
     writeNewSession,
     querySessionsByDateRange,
     markAttendance,
+    removeSession,
   };
 };

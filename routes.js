@@ -22,5 +22,7 @@ module.exports = (app, allModels) => {
   app.post('/sessions/attendance/post', sessions.postAttendance);
 
   app.post('/sessions/post', sessions.newSession);
+
+  app.post('/sessions/delete', sessions.deleteSession);
   
 };

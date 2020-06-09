@@ -190,7 +190,7 @@ export default class CalendarGrid extends React.Component {
             let sessionDate = moment(element.start_datetime, "x").format(
               "D-M-YYYY"
             );
-            return sessionDate === col;
+            return sessionDate === col && !element.is_delete;
           });
           if (matchingSessions.length > 0) {
             sessionsHTML = matchingSessions.map((element, index) => {

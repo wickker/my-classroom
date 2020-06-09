@@ -74,9 +74,20 @@ module.exports = (db) => {
     );
   };
 
+  const deleteSession = (request, response) => {
+    console.log(request.body);
+    let id = parseInt(request.body.seshId);
+    let callback = (result) => {
+      console.log(result);
+      response.redirect("/calendar");
+    }
+    db.sessions.removeSession(callback, id);
+  }
+
   return {
     newSession,
     getSessions,
     postAttendance,
+    deleteSession,
   };
 };
