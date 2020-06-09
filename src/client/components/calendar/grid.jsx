@@ -149,11 +149,13 @@ export default class CalendarGrid extends React.Component {
 
   selectMonth = (event) => {
     console.log(event.target.value);
+    this.setState({sessionObj: ""});
     this.initCalendarArray(event.target.value, this.state.selectedYear);
   };
 
   selectYear = (event) => {
     console.log(event.target.value);
+    this.setState({sessionObj: ""});
     this.initCalendarArray(this.state.selectedMonth, event.target.value);
   };
 
