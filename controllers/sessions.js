@@ -84,10 +84,21 @@ module.exports = (db) => {
     db.sessions.removeSession(callback, id);
   }
 
+  const getAttendanceByClass = (request, response) => {
+    console.log(request.query);
+    let classId = parseInt(request.query.classId);
+    let callback = (result) => {
+      console.log(result);
+      response.send(result);
+    }
+    db.sessions.getAttendanceData(callback, classId);
+  }
+
   return {
     newSession,
     getSessions,
     postAttendance,
     deleteSession,
+    getAttendanceByClass,
   };
 };

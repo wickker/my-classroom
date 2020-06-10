@@ -125,10 +125,31 @@ module.exports = (pool) => {
     });
   }
 
+  const getAttendanceData = async (callback, classId) => {
+    let queryText = `select * from attendance where class_id = ${classId}`;
+    await pool.query(queryText).then(async (result) => {
+      let data = {};
+      data.attendance = result.rows;
+      console.log(data);
+      queryText = `select distinct on (attendance.student_id) attendance.student_id, attendance.class_id, students.name, students.image, students.notes, students.birthday, students.gender, students.is_delete from attendance join students on (attendance.student_id = students.id) where attendance.class_id = ${classId} and students.is_delete = false order by attendance.student_id`;
+      await pool.query(queryText).then(async (result) => {
+        console.log(result.rows);
+        data.students = result.rows;
+        queryText = `select distinct on (attendance.session_id) attendance.session_id, attendance.class_id, sessions.start_datetime, sessions.end_datetime, sessions.location, sessions.is_delete from attendance join sessions on (attendance.session_id = sessions.id) where attendance.class_id = ${classId} and sessions.is_delete = false order by attendance.session_id`;
+        await pool.query(queryText).then(async (result) => {
+          console.log(result.rows);
+          data.sessions = result.rows;
+          callback(data);
+        });
+      });
+    });
+  }
+
   return {
     writeNewSession,
     querySessionsByDateRange,
     markAttendance,
     removeSession,
+    getAttendanceData,
   };
 };

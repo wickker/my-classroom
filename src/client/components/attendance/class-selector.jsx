@@ -10,10 +10,7 @@ export default class ClassSelector extends React.Component {
     let classes = "";
     let classesHTML = "";
 
-    console.log(this.props.classes);
-
     if (this.props.classes.length > 0) {
-      console.log("if loop");
       classes = this.props.classes;
       classesHTML = classes.map((element, index) => {
         return <MenuItem key={index} value={element.id}>{element.title}</MenuItem>;
