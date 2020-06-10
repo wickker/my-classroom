@@ -28,6 +28,6 @@ module.exports = (app, allModels) => {
 
   app.post('/sessions/delete', sessions.deleteSession);
 
-  app.post('/students/new', students.newStudent);
+  app.post('/students/post', students.newStudent);
   
 };

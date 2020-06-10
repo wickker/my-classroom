@@ -44,9 +44,29 @@ export default function NewStudent({ classes }) {
       file
     };
     console.log(data);
+
+    let url = '/students/post';
+    fetch(url, {
+      method: 'POST', // or 'PUT'
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('Success:', data);
+        window.location.reload(false);
+
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        window.location.reload(false);
+
+      });
   };
 
-  let date = new Date();
+  let date = moment(new Date()).valueOf();
   const [birthday, setBirthday] = React.useState(date);
   const [checkClasses, setCheckClasses] = React.useState([]);
   const [name, setName] = React.useState("");
@@ -55,7 +75,9 @@ export default function NewStudent({ classes }) {
   const [file, setFile] = React.useState("");
 
   const birthdaySet = (event) => {
-    setBirthday(event);
+    let bday = moment(event).valueOf();
+    console.log(bday);
+    setBirthday(bday);
   };
 
   const nameSet = (event) => {

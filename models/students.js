@@ -1,22 +1,30 @@
 module.exports = (pool) => {
-  let queryAllClasses = async (callback) => {
-    let queryText = `select * from classes order by title asc`;
+  let addNewStudent = async (callback, name, birthday, classes, gender, notes, image) => {
+    let queryText = `insert into students (name, image, notes, birthday, gender, is_delete) values ('${name}', '${image}', '${notes}', ${birthday}, '${gender}', false) returning *`;
     await pool.query(queryText).then(async (result) => {
-      let data = {};
-      data.classes = result.rows;
-      console.log(data);
-      for (let i = 0; i < data.classes.length; i++) {
-        queryText = `select students.id, students.name, students.image, students.is_delete, attendance.class_id, attendance.session_id,attendance.student_id, attendance.is_present, attendance.remarks, attendance.is_late, attendance.document from students join attendance on (students.id = attendance.student_id) where attendance.class_id = ${data.classes[i].id} order by students.name asc`;
-        console.log(queryText);
+      console.log(result.rows[0]);
+      let studentId = result.rows[0].id;
+      console.log("student id: ", studentId);
+      for (let i = 0; i < classes.length; i++) {
+        let classId = parseInt(classes[i]);
+        queryText = `select id from sessions where class_id = ${classId}`;
         await pool.query(queryText).then(async (result) => {
-          data.classes[i].students = result.rows;
+          let sessions = result.rows;
+          console.log(sessions);
+          for (let x = 0; x < sessions.length; x++) {
+            console.log("sessionId: ", sessions[x].id);
+            queryText = `insert into attendance (class_id, session_id, student_id, is_present, remarks, is_late, document) values (${classId}, ${sessions[x].id}, ${studentId}, false, '', 0, '') returning *`;
+            await pool.query(queryText).then(async (result) => {
+              console.log(result.rows[0]);
+            });
+          }
         });
       }
-      callback(data);
     });
+    callback();
   };
 
   return {
-    queryAllClasses,
+    addNewStudent
   };
 };
