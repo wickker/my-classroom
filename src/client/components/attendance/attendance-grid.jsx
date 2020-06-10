@@ -164,21 +164,21 @@ export default class AttendanceGrid extends React.Component {
     if (this.state.attendanceArray.length > 0) {
       let attendance = this.state.attendance;
       let HTML = attendance.sessions.map((element, index) => {
-        let date = moment(element.start_datetime, "x").format("DD/MM/YY hh:mmA");
-        return <div className="col-sm" key={index}>{date}</div>;
+        let date = moment(element.start_datetime, "x").format(
+          "DD/MM/YY hh:mmA"
+        );
+        return (
+          <div className="col-sm" key={index}>
+            {date}
+          </div>
+        );
       });
       return (
         <div className={this.boxHead}>
-          <div className="col-sm">
-
-          </div>
-          <div className="col-sm">
-            Student
-          </div>
+          <div className="col-sm"></div>
+          <div className="col-sm">Student</div>
           {HTML}
-          <div className="col-sm">
-            Summary
-          </div>
+          <div className="col-sm">Summary</div>
         </div>
       );
     }

@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Home from "./home";
 import Calendar from "./calendar";
 import Attendance from "./attendance";
+import Students from "./students";
 
 import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
@@ -159,6 +160,14 @@ export default function Navigation() {
                 <ListItemText>Attendance</ListItemText>
               </ListItem>
             </Link>
+            <Link
+              to="/students"
+              style={{ textDecoration: "none", color: "black" }}
+            >
+              <ListItem button>
+                <ListItemText>Students</ListItemText>
+              </ListItem>
+            </Link>
           </List>
           <Divider />
         </Drawer>
@@ -175,6 +184,9 @@ export default function Navigation() {
             </Route>
             <Route path="/attendance">
               <Attendance />
+            </Route>
+            <Route path="/students">
+              <Students />
             </Route>
             <Route path="/">
               <Home />
