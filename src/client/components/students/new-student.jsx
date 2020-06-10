@@ -5,7 +5,6 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import PropTypes from "prop-types";
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
 import {
@@ -13,16 +12,17 @@ import {
   KeyboardTimePicker,
   KeyboardDatePicker,
 } from "@material-ui/pickers";
-
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
-
+import Checkbox from "@material-ui/core/Checkbox";
 
 var moment = require("moment");
+import FileUpload from "./file-upload-stu";
 
-export default function NewStudent() {
+export default function NewStudent({ classes }) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -35,112 +35,157 @@ export default function NewStudent() {
 
   const submit = () => {
     setOpen(false);
-   
+    let data = {
+      name, 
+      birthday, 
+      checkClasses, 
+      gender, 
+      notes, 
+      file
+    };
+    console.log(data);
   };
 
+  let date = new Date();
+  const [birthday, setBirthday] = React.useState(date);
+  const [checkClasses, setCheckClasses] = React.useState([]);
+  const [name, setName] = React.useState("");
+  const [gender, setGender] = React.useState("");
+  const [notes, setNotes] = React.useState("");
+  const [file, setFile] = React.useState("");
+
+  const birthdaySet = (event) => {
+    setBirthday(event);
+  };
+
+  const nameSet = (event) => {
+    console.log(event.target.value);
+    setName(event.target.value);
+  };
+
+  const onCheckChanged = (event) => {
+    if (event.target.checked) {
+      checkClasses.push(event.target.value);
+      setCheckClasses(checkClasses);
+    }
+  };
+
+  const genderSet = (event) => {
+    console.log(event.target.value);
+    let gender;
+    event.target.value === 1 ? gender = "Male" : gender = "Female";
+    console.log(gender);
+    setGender(gender);
+  };
+
+  const notesSet = (event) => {
+    setNotes(event.target.value);
+  }
+
+  const callback = (string) => {
+    console.log("STRING: ", string);
+    setFile(string);
+  }
+
+  const renderSelectClass = () => {
+    if (classes.length > 0) {
+      let HTML = classes.map((element, index) => {
+        return (
+          <span key={index}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  name="classes"
+                  color="primary"
+                  value={element.id}
+                  onChange={onCheckChanged}
+                />
+              }
+              label={element.title}
+            />
+          </span>
+        );
+      });
+      return HTML;
+    }
+  };
+
+  let checkboxes = renderSelectClass() || "";
 
   return (
     <div>
-      <button onClick={handleClickOpen}>Add New Student</button>
+      <Button variant="contained" color="primary" onClick={handleClickOpen}>
+        Add New Student
+      </Button>
       <Dialog
         open={open}
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
         fullWidth
       >
+        {/* <form action="/students/new" method="post"> */}
         <div className="row">
           <div className="col-sm">
-            <DialogTitle>Add New Session</DialogTitle>
+            <DialogTitle>New Student</DialogTitle>
             <DialogContent>
-              {selectClass}
+              <TextField margin="dense" label="Name" onChange={nameSet} fullWidth />
 
-              <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <KeyboardDatePicker
-                  disabled
-                  fullWidth
-                  variant="inline"
-                  format="dd/MM/yyyy"
-                  margin="normal"
-                  label="Start Date"
-                  value={selectedDate}
-                  KeyboardButtonProps={{
-                    "aria-label": "change date",
-                  }}
-                />
-                <div className="row">
-                  <div className="col-sm">
-                    <KeyboardTimePicker
-                      label="Start Time"
-                      value={selectedStartTime}
-                      onChange={selectStartDateTime}
-                      KeyboardButtonProps={{
-                        "aria-label": "change time",
-                      }}
-                    />
-                  </div>
-                  <div className="col-sm">
-                    <KeyboardTimePicker
-                      label="Time picker"
-                      value={selectedEndTime}
-                      onChange={selectEndDateTime}
-                      KeyboardButtonProps={{
-                        "aria-label": "change time",
-                      }}
-                    />
-                  </div>
-                </div>
-              </MuiPickersUtilsProvider>
-              <TextField
-                // autoFocus
-                margin="dense"
-                label="Location"
-                onChange={selectLocation}
-                fullWidth
-              />
-              <div className="row">
-                <div className="col-sm mt-3">
-                  <FormControl fullWidth>
-                    <InputLabel>Select Frequency</InputLabel>
-                    <Select onChange={selectFreq}>
-                      <MenuItem value="" disabled>
-                        Select Frequency
-                      </MenuItem>
-                      <MenuItem value="1">Ad Hoc (i.e. once off)</MenuItem>
-                      <MenuItem value="2">Daily</MenuItem>
-                      <MenuItem value="3">Weekly</MenuItem>
-                    </Select>
-                  </FormControl>
-                </div>
+              <div className="mt-3">Select Classes</div>
+              {checkboxes}
+
+              <div className="row mb-3">
                 <div className="col-sm">
                   <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <KeyboardDatePicker
-                      disableToolbar
                       fullWidth
                       variant="inline"
                       format="dd/MM/yyyy"
                       margin="normal"
-                      label="Up Till"
-                      value={upTillDateDisplay}
-                      onChange={selectUpTill}
-                      KeyboardButtonProps={{
-                        "aria-label": "change date",
-                      }}
+                      label="Birthday"
+                      value={birthday}
+                      onChange={birthdaySet}
                     />
                   </MuiPickersUtilsProvider>
+                </div>
+                <div className="col-sm mt-3">
+                  <FormControl fullWidth>
+                    <InputLabel>Select Gender</InputLabel>
+                    <Select onChange={genderSet}>
+                      <MenuItem value="" disabled>
+                        Select Gender
+                      </MenuItem>
+                      <MenuItem value="1">Male</MenuItem>
+                      <MenuItem value="2">Female</MenuItem>
+                    </Select>
+                  </FormControl>
+                </div>
+              </div>
+
+              <div className="row mb-2">
+                <div className="col-sm">
+                  <TextField
+                    margin="dense"
+                    label="Notes"
+                    multiline
+                    rows={2}
+                    fullWidth
+                    onChange={notesSet}
+                  />
+                </div>
+                <div className="col-sm">
+                  <FileUpload callback={callback}/>
                 </div>
               </div>
             </DialogContent>
           </div>
         </div>
         <DialogActions>
-          <Button color="primary" onClick={submit}>Submit</Button>
+          <Button variant="contained" color="primary" onClick={submit}>
+            Submit
+          </Button>
         </DialogActions>
+        {/* </form> */}
       </Dialog>
     </div>
   );
 }
-
-FormDialog.propTypes = {
-  classes: PropTypes.array,
-  dateStr: PropTypes.string,
-};

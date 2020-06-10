@@ -14,6 +14,7 @@ module.exports = (app, allModels) => {
   // require the controller
   const sessions = require('./controllers/sessions')(allModels);
   const classes = require('./controllers/classes')(allModels);
+  const students = require('./controllers/students')(allModels);
 
   app.get('/classes', classes.getAllClasses);
 
@@ -26,5 +27,7 @@ module.exports = (app, allModels) => {
   app.post('/sessions/post', sessions.newSession);
 
   app.post('/sessions/delete', sessions.deleteSession);
+
+  app.post('/students/new', students.newStudent);
   
 };

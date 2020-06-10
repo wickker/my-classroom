@@ -1,6 +1,7 @@
 import React from "react";
 import bsCustomFileInput from "bs-custom-file-input";
-import styles from "./calendar.scss";
+import styles from "./students.scss";
+import { CssBaseline } from "@material-ui/core";
 var classNames = require("classnames");
 const cx = classNames.bind(styles);
 
@@ -14,7 +15,10 @@ export default class FileUpload extends React.Component {
 
   componentDidMount() {
     bsCustomFileInput.init();
-    this.setState({ document: this.props.document });
+  }
+
+  saveFile = (event) => {
+    this.props.callback(event.target.value);
   }
 
   uploadFileFetch = (event) => {
@@ -24,7 +28,7 @@ export default class FileUpload extends React.Component {
       "https://api.cloudinary.com/v1_1/dwoimiuph/image/upload";
     let cloudinary_upload_preset = "wh3xm7xt";
 
-    let fileId = "inputFile" + this.props.id;
+    let fileId = "inputFile";
     let fileGroup = document.getElementById(fileId);
     console.log(fileGroup.files);
 
@@ -49,12 +53,13 @@ export default class FileUpload extends React.Component {
         let inputURL = result.secure_url;
         console.log(inputURL);
         this.setState({ document: inputURL });
+        this.props.callback(inputURL);
       })
       .catch((error) => console.log("error", error));
   };
 
   render() {
-    let fileId = "inputFile" + this.props.id;
+    let fileId = "inputFile";
 
     const uploadButton = cx(styles.uploadButton, "input-group-text");
 
@@ -86,6 +91,7 @@ export default class FileUpload extends React.Component {
               className="form-control"
               name="document"
               defaultValue={this.state.document}
+              onChange={this.saveFile}
             />
           </div>
         </span>

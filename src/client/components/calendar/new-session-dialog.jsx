@@ -262,7 +262,7 @@ export default function FormDialog({ classes, dateStr }) {
           </div>
         </div>
         <DialogActions>
-          <Button color="primary" onClick={submit}>Submit</Button>
+          <Button variant="contained" color="primary" onClick={submit}>Submit</Button>
         </DialogActions>
       </Dialog>
     </span>

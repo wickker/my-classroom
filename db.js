@@ -64,10 +64,11 @@ pool.on('error', function (err) {
 
 const allSessionsModelsFunction = require('./models/sessions');
 const allClassesModelsFunction = require('./models/classes');
+const allStudentsModelsFunction = require('./models/students');
 
 const sessionsModelsObject = allSessionsModelsFunction( pool );
 const classesModelsObject = allClassesModelsFunction( pool );
-
+const studentsModelsObject = allStudentsModelsFunction( pool );
 
 /*
  * ===================================================
@@ -97,5 +98,6 @@ module.exports = {
 
   // users: userModelsObject,
   sessions: sessionsModelsObject,
-  classes: classesModelsObject
+  classes: classesModelsObject,
+  students: studentsModelsObject
 };
