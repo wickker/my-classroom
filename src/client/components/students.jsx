@@ -1,5 +1,5 @@
 import React from "react";
-import Body from "./students/body";
+import Body from "./students/body-student";
 
 export default class Students extends React.Component {
   render() {

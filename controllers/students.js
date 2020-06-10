@@ -21,8 +21,17 @@ module.exports = (db) => {
     );
   };
 
+  const getStudents = (request, response) => {
+    let callback = (result) => {
+      console.log(result);
+      response.send(result);
+    }
+    db.students.queryStudents(callback);
+  }
+
   return {
     newStudent,
+    getStudents,
   };
 };
 

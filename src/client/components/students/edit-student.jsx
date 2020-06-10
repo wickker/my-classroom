@@ -20,9 +20,9 @@ import Select from "@material-ui/core/Select";
 import Checkbox from "@material-ui/core/Checkbox";
 
 var moment = require("moment");
-import FileUpload from "./file-upload-stu";
+import FileUploadEdit from "./file-upload-stu-edit";
 
-export default function NewStudent({ classes }) {
+export default function NewStudent({ classes, student }) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -36,43 +36,47 @@ export default function NewStudent({ classes }) {
   const submit = () => {
     setOpen(false);
     let data = {
-      name, 
-      birthday, 
-      checkClasses, 
-      gender, 
-      notes, 
-      file
+      name,
+      birthday,
+      checkClasses,
+      gender,
+      notes,
+      file,
     };
     console.log(data);
 
-    let url = '/students/post';
-    fetch(url, {
-      method: 'POST', // or 'PUT'
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log('Success:', data);
-        window.location.reload(false);
+    // let url = '/students/post';
+    // fetch(url, {
+    //   method: 'POST', // or 'PUT'
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify(data)
+    // })
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     console.log('Success:', data);
+    //     window.location.reload(false);
 
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-        window.location.reload(false);
+    //   })
+    //   .catch((error) => {
+    //     console.error('Error:', error);
+    //     window.location.reload(false);
 
-      });
+    //   });
   };
 
-  let date = moment(new Date()).valueOf();
+  let date = moment(student.birthday, "x").format();
   const [birthday, setBirthday] = React.useState(date);
-  const [checkClasses, setCheckClasses] = React.useState([]);
-  const [name, setName] = React.useState("");
-  const [gender, setGender] = React.useState("");
-  const [notes, setNotes] = React.useState("");
-  const [file, setFile] = React.useState("");
+  let arr = [];
+  for (let i = 0; i < student.classes.length; i++) {
+    arr.push(student.classes[i].class_id);
+  }
+  const [checkClasses, setCheckClasses] = React.useState(arr);
+  const [name, setName] = React.useState(student.name);
+  const [gender, setGender] = React.useState(student.gender);
+  const [notes, setNotes] = React.useState(student.notes);
+  const [file, setFile] = React.useState(student.image);
 
   const birthdaySet = (event) => {
     let bday = moment(event).valueOf();
@@ -95,19 +99,19 @@ export default function NewStudent({ classes }) {
   const genderSet = (event) => {
     console.log(event.target.value);
     let gender;
-    event.target.value === 1 ? gender = "Male" : gender = "Female";
+    event.target.value === 1 ? (gender = "Male") : (gender = "Female");
     console.log(gender);
     setGender(gender);
   };
 
   const notesSet = (event) => {
     setNotes(event.target.value);
-  }
+  };
 
   const callback = (string) => {
     console.log("STRING: ", string);
     setFile(string);
-  }
+  };
 
   const renderSelectClass = () => {
     if (classes.length > 0) {
@@ -136,8 +140,8 @@ export default function NewStudent({ classes }) {
 
   return (
     <div>
-      <Button variant="contained" color="primary" onClick={handleClickOpen}>
-        Add New Student
+      <Button size="small" color="primary" onClick={handleClickOpen}>
+        Edit
       </Button>
       <Dialog
         open={open}
@@ -150,7 +154,13 @@ export default function NewStudent({ classes }) {
           <div className="col-sm">
             <DialogTitle>New Student</DialogTitle>
             <DialogContent>
-              <TextField margin="dense" label="Name" onChange={nameSet} fullWidth />
+              <TextField
+                margin="dense"
+                label="Name"
+                onChange={nameSet}
+                fullWidth
+                defaultValue={name}
+              />
 
               <div className="mt-3">Select Classes</div>
               {checkboxes}
@@ -196,7 +206,7 @@ export default function NewStudent({ classes }) {
                 </div>
                 <div className="col-sm">
                   Upload/ Input Display Picture
-                  <FileUpload callback={callback}/>
+                  <FileUploadEdit callback={callback} />
                 </div>
               </div>
             </DialogContent>

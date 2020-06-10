@@ -7,7 +7,7 @@ module.exports = (pool) => {
       console.log("student id: ", studentId);
       for (let i = 0; i < classes.length; i++) {
         let classId = parseInt(classes[i]);
-        queryText = `select id from sessions where class_id = ${classId}`;
+        queryText = `select id from sessions where class_id = ${classId} and is_delete = false`;
         await pool.query(queryText).then(async (result) => {
           let sessions = result.rows;
           console.log(sessions);
@@ -24,7 +24,25 @@ module.exports = (pool) => {
     callback();
   };
 
+  const queryStudents = async (callback) => {
+    let queryText = `select * from students where is_delete = false order by students.name asc`;
+    await pool.query(queryText).then(async (result) => {
+      let students = result.rows;
+      // console.log(students);
+      for (let i=0; i<students.length; i++) {
+        queryText = `select distinct on (attendance.class_id) attendance.class_id, attendance.student_id, classes.title from attendance join classes on (attendance.class_id = classes.id) where classes.is_delete = false and attendance.student_id = ${students[i].id} order by attendance.class_id`;
+        await pool.query(queryText).then(async (result) => {
+          students[i].classes = result.rows;
+          // console.log(students);
+        });
+      }
+      callback(students);
+    });
+  }
+
   return {
-    addNewStudent
+    addNewStudent,
+    queryStudents,
+
   };
 };

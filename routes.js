@@ -28,6 +28,8 @@ module.exports = (app, allModels) => {
 
   app.post('/sessions/delete', sessions.deleteSession);
 
+  app.get('/students/get', students.getStudents);
+
   app.post('/students/post', students.newStudent);
   
 };
