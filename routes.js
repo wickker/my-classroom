@@ -33,5 +33,7 @@ module.exports = (app, allModels) => {
   app.post('/students/post', students.newStudent);
 
   app.post('/students/edit', students.editStudent);
+
+  app.post('/students/delete', students.deleteStudent);
   
 };

@@ -72,7 +72,7 @@ export default function MarkAttendance({ obj }) {
     if (obj !== "" && obj.class.students.length > 0) {
       let sessionId = obj.session.id;
       let studentsFiltered = obj.class.students.filter((element) => {
-        return element.session_id === sessionId;
+        return element.session_id === sessionId && element.is_delete === false;
       });
       if (studentsFiltered.length > 0) {
         let studentsHTML = studentsFiltered.map((element, index) => {

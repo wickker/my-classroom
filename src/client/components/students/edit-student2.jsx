@@ -68,9 +68,6 @@ export default class EditStudent2 extends React.Component {
   submit = () => {
     this.setState({ isClick: !this.state.isClick });
 
-    // let genderX;
-    // this.state.gender === 1 ? genderX = "Male" : genderX = "Female";
-
     let data = {
       id: this.state.id,
       name: this.state.name,

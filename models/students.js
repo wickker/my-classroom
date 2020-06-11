@@ -93,9 +93,22 @@ module.exports = (pool) => {
     });
   };
 
+  const removeStudent = (callback, id) => {
+    let queryText = `update students set is_delete = true where id = ${id} returning *`;
+    pool.query(queryText, (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result.rows[0]);
+        callback();
+      }
+    });
+  }
+
   return {
     addNewStudent,
     queryStudents,
     writeEditStudent,
+    removeStudent,
   };
 };

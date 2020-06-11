@@ -55,10 +55,20 @@ module.exports = (db) => {
     );
   };
 
+  const deleteStudent = (request, response) => {
+    console.log(request.body);
+    let id = request.body.id;
+    let callback = () => {
+      response.redirect("/students");
+    }
+    db.students.removeStudent(callback, id);
+  }
+
   return {
     newStudent,
     getStudents,
     editStudent,
+    deleteStudent
   };
 };
 
