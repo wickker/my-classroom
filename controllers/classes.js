@@ -28,9 +28,21 @@ module.exports = (db) => {
     db.classes.writeEditClass(callback, data);
   }
 
+  const deleteClass = (request, response) => {
+    console.log(request.body);
+    let id = parseInt(request.body.id);
+    let callback = (result) => {
+      console.log(result);
+      response.redirect("/classes");
+    }
+    db.classes.removeClass(callback, id);
+  }
+
+
   return {
     getAllClasses,
     newClass,
     editClass,
+    deleteClass,
   };
 };

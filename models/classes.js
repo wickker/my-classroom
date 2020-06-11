@@ -25,7 +25,7 @@ module.exports = (pool) => {
         callback(result.rows[0]);
       }
     });
-  }
+  };
 
   const writeEditClass = (callback, data) => {
     let queryText = `update classes set title = '${data.title}', description = '${data.description}', frequency = '${data.frequency}', image = '${data.image}' where id = ${data.id} returning *`;
@@ -36,11 +36,23 @@ module.exports = (pool) => {
         callback(result.rows[0]);
       }
     });
-  }
+  };
+
+  const removeClass = (callback, id) => {
+    let queryText = `update classes set is_delete = true where id = ${id} returning *`;
+    pool.query(queryText, (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        callback(result.rows[0]);
+      }
+    });
+  };
 
   return {
     queryAllClasses,
     addNewClass,
     writeEditClass,
+    removeClass,
   };
 };

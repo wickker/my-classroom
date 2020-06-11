@@ -6,7 +6,7 @@ import styles from "./students.scss";
 var classNames = require("classnames");
 const cx = classNames.bind(styles);
 
-export default class Body extends React.Component {
+export default class BodyStudent extends React.Component {
   constructor() {
     super();
     this.state = {

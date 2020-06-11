@@ -22,6 +22,8 @@ module.exports = (app, allModels) => {
 
   app.post('/classes/edit', classes.editClass);
 
+  app.post('/classes/delete', classes.deleteClass);
+
   app.get('/sessions', sessions.getSessions);
 
   app.get('/sessions/attendance', sessions.getAttendanceByClass);

@@ -39,27 +39,27 @@ export default function MediaCard({ classCard, isHidden }) {
   }
 
   const deleteClass = () => {
-    // console.log(id);
-    // let data = {
-    //   id: id,
-    // }
-    // let url = '/students/delete';
-    // fetch(url, {
-    //   method: 'POST', // or 'PUT'
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify(data)
-    // })
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     console.log('Success:', data);
-    //     window.location.reload(false);
-    //   })
-    //   .catch((error) => {
-    //     console.error('Error:', error);
-    //     window.location.reload(false);
-    //   });
+    console.log(id);
+    let data = {
+      id: id,
+    }
+    let url = '/classes/delete';
+    fetch(url, {
+      method: 'POST', // or 'PUT'
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('Success:', data);
+        window.location.reload(false);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        window.location.reload(false);
+      });
   }
 
   return (
