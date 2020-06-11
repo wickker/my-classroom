@@ -48,5 +48,7 @@ module.exports = (app, allModels) => {
   app.post('/students/delete', students.deleteStudent);
 
   app.post('/instructors/new', instructors.newInstructor);
+
+  app.get('/instructors/get', instructors.getInstructors);
   
 };

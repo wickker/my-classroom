@@ -1,0 +1,86 @@
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import Card from "@material-ui/core/Card";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import CardMedia from "@material-ui/core/CardMedia";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+var moment = require("moment");
+import styles from "./instructors.scss";
+// import EditClass from "./edit-class";
+
+const useStyles = makeStyles({
+  root: {
+    maxWidth: 350,
+  },
+  media: {
+    height: 350,
+  },
+});
+
+export default function MediaCard({ instructor, index }) {
+  const classes = useStyles();
+
+  const deleteInstructor = () => {
+    console.log(id);
+    // let data = {
+    //   id: id,
+    // }
+    // let url = '/classes/delete';
+    // fetch(url, {
+    //   method: 'POST', // or 'PUT'
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify(data)
+    // })
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     console.log('Success:', data);
+    //     window.location.reload(false);
+    //   })
+    //   .catch((error) => {
+    //     console.error('Error:', error);
+    //     window.location.reload(false);
+    //   });
+  }
+
+  let classesHTML = instructor.classes.map((element, classIndex) => {
+    return (
+      <li key={classIndex}>{element.title}</li>
+    );
+  });
+
+  return (
+    <div className={styles.card} key={index}>
+      <Card className={classes.root}>
+        <CardMedia
+          className={classes.media}
+          image={instructor.image}
+          alt="instructor display picture"
+        />
+        <CardContent>
+        <Typography gutterBottom variant="h5" component="h2">
+            {instructor.name}
+          </Typography>
+          <div>
+            About: {instructor.about}
+          </div>
+          <div>
+            Classes:
+            <ul>
+              {classesHTML}
+            </ul>
+          </div>
+        </CardContent>
+        <CardActions>
+          {/* <EditClass classCard={classCard} /> */}
+          <Button variant="contained" color="primary" onClick={deleteInstructor}>
+            Delete
+          </Button>
+        </CardActions>
+      </Card>
+    </div>
+  );
+}

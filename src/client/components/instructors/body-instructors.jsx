@@ -1,7 +1,7 @@
 import React from "react";
 import NewInstructor from "./new-instructor";
 // import SearchStudents from "./search-students";
-// import ShowCard from "./show-card";
+import InstructorCard from "./card-instructor";
 import styles from "./instructors.scss";
 var classNames = require("classnames");
 const cx = classNames.bind(styles);
@@ -12,10 +12,7 @@ export default class BodyInstructors extends React.Component {
     this.state = {
       classes: [],
       sessions: [],
-      // ogStudents: [],
-      // searchMsg: "",
-      // studentCard: "",
-      // isHidden: true,
+      instructors: [],
     };
   }
 
@@ -35,15 +32,40 @@ export default class BodyInstructors extends React.Component {
     return data;
   };
 
+  getInstructors = async () => {
+    console.log("instructor call made");
+    let url = "/instructors/get";
+    let response = await fetch(url);
+    let data = await response.json();
+    console.log("instructors: ", data);
+    return data;
+  };
+
   componentWillMount = async () => {
     this.state.loading = true;
     let classes = await this.getClasses();
     let sessions = await this.getSessions();
+    let instructors = await this.getInstructors();
     this.setState({
       loading: false,
       classes,
       sessions,
+      instructors,
     });
+  };
+
+  renderCards = () => {
+    if (this.state.instructors.length > 0) {
+      let instructors = this.state.instructors;
+      let HTML = instructors.map((element, index) => {
+        return (
+          <div className="col-sm-4">
+            <InstructorCard instructor={element} index={index} />
+          </div>
+        );
+      });
+      return HTML;
+    }
   };
 
   search = (event) => {
@@ -63,24 +85,23 @@ export default class BodyInstructors extends React.Component {
     //     });
   };
 
-  getStudent = (event) => {
-    // console.log(event.target.id);
-    // let studentId = parseInt(event.target.id);
-    // console.log(this.state.ogStudents);
-    // let obj = this.state.ogStudents.find((element) => {
-    //   return element.id === studentId;
-    // });
-    // console.log("obj: ", obj);
-    // this.setState({ studentCard: obj, isHidden: false });
-  };
-
-  input = cx(styles.input, "form-control");
+  // input = cx(styles.input, "form-control");
 
   render() {
+
+    let cards = this.renderCards() || "";
+
     return (
       <div className="row">
         <div className="col-sm">
-          <NewInstructor classes={this.state.classes} sessions={this.state.sessions} />
+          <NewInstructor
+            classes={this.state.classes}
+            sessions={this.state.sessions}
+          />
+
+          <div className="row mt-3">
+            {cards}
+          </div>
 
           {/* <div className="row">
             <div className="col-sm-5">

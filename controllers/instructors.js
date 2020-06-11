@@ -11,10 +11,18 @@ module.exports = (db) => {
     db.instructors.writeNewInstructor(callback, name, image, about, checked);
   }
 
+  const getInstructors = (request, response) => {
+    let callback = (result) => {
+      console.log(result);
+      response.send(result);
+    }
+    db.instructors.queryInstructors(callback);
+  }
 
 
   return {
     newInstructor,
+    getInstructors,
   };
 };
 

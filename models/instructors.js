@@ -1,5 +1,4 @@
 module.exports = (pool) => {
-
   const writeNewInstructor = async (callback, name, image, about, checked) => {
     let queryText = `insert into instructors (name, image, about, is_delete) values ('${name}', '${image}', '${about}', false) returning *`;
     await pool.query(queryText).then(async (result) => {
@@ -21,9 +20,30 @@ module.exports = (pool) => {
       }
     });
     callback();
-  }
+  };
+
+  const queryInstructors = async (callback) => {
+    let queryText = `select * from instructors where is_delete = false order by name asc`;
+    console.log(queryText);
+    await pool.query(queryText).then(async (result) => {
+      console.log(result.rows);
+      let data = result.rows;
+      for (let i = 0; i < data.length; i++) {
+        queryText = `select distinct on (instructors_classes.class_id) instructors_classes.class_id, classes.title from instructors_classes join classes on (instructors_classes.class_id = classes.id) where instructors_classes.instructor_id = ${data[i].id} and classes.is_delete = false order by instructors_classes.class_id`;
+        await pool.query(queryText).then(async (result) => {
+          data[i].classes = result.rows;
+          queryText = `select instructors_classes.session_id, sessions.start_datetime, sessions.class_id from instructors_classes join sessions on (instructors_classes.session_id = sessions.id) where sessions.is_delete = false and instructors_classes.instructor_id = ${data[i].id}`;
+          await pool.query(queryText).then(async (result) => {
+            data[i].sessions = result.rows;
+          });
+        });
+      }
+      callback(data);
+    });
+  };
 
   return {
-   writeNewInstructor,
+    writeNewInstructor,
+    queryInstructors,
   };
 };
