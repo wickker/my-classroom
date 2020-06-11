@@ -10,13 +10,11 @@ import Typography from "@material-ui/core/Typography";
 var moment = require("moment");
 import styles from "./students.scss";
 import EditStudent from "./edit-student";
+import EditStudent2 from "./edit-student2";
 
 const useStyles = makeStyles({
   root: {
     maxWidth: 350,
-    "&:hover": {
-      cursor: "default",
-    },
   },
   media: {
     height: 350,
@@ -46,7 +44,6 @@ export default function MediaCard({ student, isHidden, classesArr }) {
   return (
     <div className={styles.card} hidden={isHidden}>
       <Card className={classes.root}>
-        {/* <CardActionArea> */}
         <CardMedia
           className={classes.media}
           image={image}
@@ -72,9 +69,9 @@ export default function MediaCard({ student, isHidden, classesArr }) {
             </ul>
           </div>
         </CardContent>
-        {/* </CardActionArea> */}
         <CardActions>
-          <EditStudent classes={classesArr} student={student} />
+          {/* <EditStudent classes={classesArr} student={student} /> */}
+          <EditStudent2 classes={classesArr} student={student} />
           <Button size="small" color="primary">
             Delete
           </Button>

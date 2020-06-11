@@ -20,11 +20,12 @@ import Select from "@material-ui/core/Select";
 import Checkbox from "@material-ui/core/Checkbox";
 
 var moment = require("moment");
-import FileUploadEdit from "./file-upload-stu-edit";
+import FileUploadEdit from "./file-upload-student-edit";
 
 export default function EditStudent({ classes, student }) {
   console.log(student);
   const [open, setOpen] = useState(false);
+  
   const [birthday, setBirthday] = useState("");
   const [checkClasses, setCheckClasses] = useState([]);
   const [name, setName] = useState(student.name);

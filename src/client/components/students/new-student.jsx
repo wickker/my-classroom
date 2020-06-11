@@ -20,7 +20,7 @@ import Select from "@material-ui/core/Select";
 import Checkbox from "@material-ui/core/Checkbox";
 
 var moment = require("moment");
-import FileUpload from "./file-upload-stu";
+import FileUpload from "./file-upload-student";
 
 export default function NewStudent({ classes }) {
   const [open, setOpen] = React.useState(false);
