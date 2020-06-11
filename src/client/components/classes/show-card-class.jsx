@@ -8,7 +8,7 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 var moment = require("moment");
 import styles from "./classes.scss";
-// import EditStudent2 from "./edit-student2";
+import EditClass from "./edit-class";
 
 const useStyles = makeStyles({
   root: {
@@ -82,8 +82,8 @@ export default function MediaCard({ classCard, isHidden }) {
           </div>
         </CardContent>
         <CardActions>
-          {/* <EditStudent2 classes={classesArr} student={student} /> */}
-          <Button size="small" color="primary" onClick={deleteClass}>
+          <EditClass classCard={classCard} />
+          <Button variant="contained" color="primary" onClick={deleteClass}>
             Delete
           </Button>
         </CardActions>

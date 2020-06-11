@@ -184,7 +184,7 @@ export default class EditStudent2 extends React.Component {
   render() {
     return (
       <div>
-        <Button size="small" color="primary" onClick={this.clickEdit}>
+        <Button variant="contained" color="primary" onClick={this.clickEdit}>
           Edit
         </Button>
         <Dialog

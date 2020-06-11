@@ -84,7 +84,7 @@ export default class Body extends React.Component {
           <NewStudent classes={this.state.classes} />
 
           <div className="row">
-            <div className="col-sm-4">
+            <div className="col-sm-5">
               Search
               <input className={this.input} onChange={this.search} />
               <div>{this.state.searchMsg}</div>

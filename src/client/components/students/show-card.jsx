@@ -95,7 +95,7 @@ export default function MediaCard({ student, isHidden, classesArr }) {
         </CardContent>
         <CardActions>
           <EditStudent2 classes={classesArr} student={student} />
-          <Button size="small" color="primary" onClick={deleteStudent}>
+          <Button variant="contained" color="primary" onClick={deleteStudent}>
             Delete
           </Button>
         </CardActions>
