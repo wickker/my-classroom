@@ -3,12 +3,14 @@ import styles from "./classes.scss";
 var classNames = require("classnames");
 const cx = classNames.bind(styles);
 import SearchClasses from "./search-classes";
+import ShowClass from "./show-card-class";
+import NewClass from "./new-class";
 
 export default class BodyClasses extends React.Component {
   constructor() {
     super();
     this.state = {
-      loading: "",
+      loading: false,
       classes: [],
       ogClasses: [],
       searchMsg: "",
@@ -28,6 +30,7 @@ export default class BodyClasses extends React.Component {
   componentWillMount = async () => {
     this.state.loading = true;
     let classes = await this.getClasses();
+    console.log("classes: ", classes);
     this.setState({
       loading: false,
       classes,
@@ -67,7 +70,7 @@ export default class BodyClasses extends React.Component {
     return (
       <div className="row">
         <div className="col-sm">
-          {/* <NewClass /> */}
+          <NewClass />
 
           <div className="row">
             <div className="col-sm-4">
@@ -82,11 +85,10 @@ export default class BodyClasses extends React.Component {
               )}
             </div>
             <div className="col-sm">
-              {/* <ShowCard
-              student={this.state.studentCard}
+              <ShowClass
+              classCard={this.state.classCard}
               isHidden={this.state.isHidden}
-              classesArr={this.state.classes}
-            /> */}
+            />
             </div>
           </div>
         </div>

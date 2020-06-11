@@ -1,17 +1,18 @@
 import React from "react";
 import bsCustomFileInput from "bs-custom-file-input";
-import styles from "./students.scss";
+import styles from "./classes.scss";
+import { CssBaseline } from "@material-ui/core";
 var classNames = require("classnames");
 const cx = classNames.bind(styles);
 
-export default class FileUploadEdit extends React.Component {
+export default class FileUpload extends React.Component {
   componentDidMount() {
     bsCustomFileInput.init();
   }
 
   saveFile = (event) => {
     this.props.callback(event.target.value);
-  };
+  }
 
   uploadFileFetch = (event) => {
     event.preventDefault();
@@ -68,11 +69,14 @@ export default class FileUploadEdit extends React.Component {
             name="document_prompt"
           />
           <label className="custom-file-label" htmlFor={fileId}>
-            Choose File
+            Choose File / Input URL Below
           </label>
           <div className="input-group mt-2">
             <div className="input-group-prepend">
-              <span onClick={this.uploadFileFetch} className={uploadButton}>
+              <span
+                onClick={this.uploadFileFetch}
+                className={uploadButton}
+              >
                 Upload
               </span>
             </div>
@@ -81,7 +85,6 @@ export default class FileUploadEdit extends React.Component {
               type="text"
               className="form-control"
               name="document"
-              defaultValue={this.props.ogImage}
               onChange={this.saveFile}
             />
           </div>

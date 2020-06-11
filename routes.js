@@ -18,6 +18,8 @@ module.exports = (app, allModels) => {
 
   app.get('/classes/get', classes.getAllClasses);
 
+  app.post('/classes/new', classes.newClass);
+
   app.get('/sessions', sessions.getSessions);
 
   app.get('/sessions/attendance', sessions.getAttendanceByClass);

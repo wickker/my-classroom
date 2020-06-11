@@ -8,7 +8,18 @@ module.exports = (db) => {
     db.classes.queryAllClasses(callback);
   }
   
+  const newClass = (request, response) => {
+    console.log(request.body);
+    let data = request.body;
+    let callback = (result) => {
+      console.log(result);
+      response.redirect("/classes");
+    }
+    db.classes.addNewClass(callback, data);
+  }
+
   return {
     getAllClasses,
+    newClass,
   };
 };
