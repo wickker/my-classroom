@@ -60,7 +60,7 @@ export default class BodyInstructors extends React.Component {
       let HTML = instructors.map((element, index) => {
         return (
           <div className="col-sm-4">
-            <InstructorCard instructor={element} index={index} />
+            <InstructorCard instructor={element} index={index} classesArr={this.state.classes} sessions={this.state.sessions} />
           </div>
         );
       });

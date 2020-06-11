@@ -8,7 +8,7 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 var moment = require("moment");
 import styles from "./instructors.scss";
-// import EditClass from "./edit-class";
+import EditInstructor from "./edit-instructor";
 
 const useStyles = makeStyles({
   root: {
@@ -19,11 +19,11 @@ const useStyles = makeStyles({
   },
 });
 
-export default function MediaCard({ instructor, index }) {
+export default function MediaCard({ instructor, index, classesArr, sessions }) {
   const classes = useStyles();
 
   const deleteInstructor = () => {
-    console.log(id);
+    console.log(instructor.id);
     // let data = {
     //   id: id,
     // }
@@ -44,12 +44,10 @@ export default function MediaCard({ instructor, index }) {
     //     console.error('Error:', error);
     //     window.location.reload(false);
     //   });
-  }
+  };
 
   let classesHTML = instructor.classes.map((element, classIndex) => {
-    return (
-      <li key={classIndex}>{element.title}</li>
-    );
+    return <li key={classIndex}>{element.title}</li>;
   });
 
   return (
@@ -61,22 +59,28 @@ export default function MediaCard({ instructor, index }) {
           alt="instructor display picture"
         />
         <CardContent>
-        <Typography gutterBottom variant="h5" component="h2">
+          <Typography gutterBottom variant="h5" component="h2">
             {instructor.name}
           </Typography>
-          <div>
-            About: {instructor.about}
-          </div>
+          <div>About: {instructor.about}</div>
           <div>
             Classes:
-            <ul>
-              {classesHTML}
-            </ul>
+            <ul>{classesHTML}</ul>
           </div>
         </CardContent>
         <CardActions>
-          {/* <EditClass classCard={classCard} /> */}
-          <Button variant="contained" color="primary" onClick={deleteInstructor}>
+
+          <EditInstructor
+            instructor={instructor}
+            classes={classesArr}
+            sessions={sessions}
+          />
+          
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={deleteInstructor}
+          >
             Delete
           </Button>
         </CardActions>
