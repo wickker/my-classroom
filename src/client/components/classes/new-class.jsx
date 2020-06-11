@@ -22,7 +22,7 @@ import Checkbox from "@material-ui/core/Checkbox";
 var moment = require("moment");
 import FileUpload from "./file-upload-class";
 
-export default class EditStudent2 extends React.Component {
+export default class NewClass extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -106,7 +106,7 @@ export default class EditStudent2 extends React.Component {
               <DialogContent>
                 <TextField
                   margin="dense"
-                  label="Name"
+                  label="Title"
                   onChange={this.setTitle}
                   fullWidth
                 />
@@ -124,7 +124,7 @@ export default class EditStudent2 extends React.Component {
                   onChange={this.setFrequency}
                   fullWidth
                 />
-                <div className="mt-3">
+                <div className="mt-3 mb-3">
                 Select Image
                 <FileUpload callback={this.callback} />
                 </div>

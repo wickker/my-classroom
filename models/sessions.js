@@ -145,11 +145,23 @@ module.exports = (pool) => {
     });
   }
 
+  const getAllSessionsQuery = (callback) => {
+    let queryText = `select * from sessions where is_delete = false order by start_datetime asc`;
+    pool.query(queryText, (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        callback(result.rows);
+      }
+    });
+  }
+
   return {
     writeNewSession,
     querySessionsByDateRange,
     markAttendance,
     removeSession,
     getAttendanceData,
+    getAllSessionsQuery,
   };
 };

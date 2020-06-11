@@ -94,11 +94,19 @@ module.exports = (db) => {
     db.sessions.getAttendanceData(callback, classId);
   }
 
+  const getAllSessions = (request, response) => {
+    let callback = (result) => {
+      response.send(result);
+    }
+    db.sessions.getAllSessionsQuery(callback);
+  }
+
   return {
     newSession,
     getSessions,
     postAttendance,
     deleteSession,
     getAttendanceByClass,
+    getAllSessions,
   };
 };

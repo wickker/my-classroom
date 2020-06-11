@@ -15,6 +15,7 @@ module.exports = (app, allModels) => {
   const sessions = require('./controllers/sessions')(allModels);
   const classes = require('./controllers/classes')(allModels);
   const students = require('./controllers/students')(allModels);
+  const instructors = require('./controllers/instructors')(allModels);
 
   app.get('/classes/get', classes.getAllClasses);
 
@@ -24,7 +25,11 @@ module.exports = (app, allModels) => {
 
   app.post('/classes/delete', classes.deleteClass);
 
+  // by date range
   app.get('/sessions', sessions.getSessions);
+
+  // all sessions
+  app.get('/sessions/get', sessions.getAllSessions);
 
   app.get('/sessions/attendance', sessions.getAttendanceByClass);
 
@@ -41,5 +46,7 @@ module.exports = (app, allModels) => {
   app.post('/students/edit', students.editStudent);
 
   app.post('/students/delete', students.deleteStudent);
+
+  app.post('/instructors/new', instructors.newInstructor);
   
 };

@@ -142,7 +142,7 @@ export default class EditClass extends React.Component {
                   defaultValue={this.state.frequency}
                   fullWidth
                 />
-                <div className="mt-3">
+                <div className="mt-3 mb-3">
                 Select Image
                 <FileUploadEdit callback={this.callback} image={this.state.image} />
                 </div>

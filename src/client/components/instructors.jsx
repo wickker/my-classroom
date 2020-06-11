@@ -1,4 +1,5 @@
 import React from "react";
+import BodyInstructors from "./instructors/body-instructors";
 
 export default class Instructors extends React.Component {
   render() {
@@ -6,6 +7,7 @@ export default class Instructors extends React.Component {
       <div className="row">
         <div className="col-sm">
           <h1>INSTRUCTORS</h1>
+          <BodyInstructors />
         </div>
       </div>
     );
