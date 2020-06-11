@@ -25,13 +25,40 @@ module.exports = (db) => {
     let callback = (result) => {
       console.log(result);
       response.send(result);
-    }
+    };
     db.students.queryStudents(callback);
-  }
+  };
+
+  const editStudent = (request, response) => {
+    console.log(request.body);
+    let id = request.body.id;
+    let name = request.body.name;
+    let birthday = request.body.birthday;
+    let classes = request.body.classesCheck;
+    let g;
+    request.body.gender === "1" ? (g = "Male") : (g = "Female");
+    let gender = g;
+    let notes = request.body.notes;
+    let image = request.body.image;
+    let callback = () => {
+      response.redirect("/students");
+    };
+    db.students.writeEditStudent(
+      callback,
+      id,
+      name,
+      birthday,
+      classes,
+      gender,
+      notes,
+      image
+    );
+  };
 
   return {
     newStudent,
     getStudents,
+    editStudent,
   };
 };
 

@@ -30,6 +30,7 @@ export default class EditStudent2 extends React.Component {
       student: "",
       isClick: false,
       checkboxesState: {},
+      id: "",
       name: "",
       birthday: "",
       gender: "",
@@ -54,6 +55,7 @@ export default class EditStudent2 extends React.Component {
       this.setState({
         classes: classes,
         student: student,
+        id: student.id,
         name: student.name,
         birthday: moment(student.birthday, "x").format(),
         gender: g,
@@ -61,6 +63,42 @@ export default class EditStudent2 extends React.Component {
         image: student.image,
       });
     }
+  };
+
+  submit = () => {
+    this.setState({ isClick: !this.state.isClick });
+
+    // let genderX;
+    // this.state.gender === 1 ? genderX = "Male" : genderX = "Female";
+
+    let data = {
+      id: this.state.id,
+      name: this.state.name,
+      birthday: moment(this.state.birthday).valueOf(),
+      classesCheck: this.state.checkboxesState,
+      gender: this.state.gender,
+      notes: this.state.notes,
+      image: this.state.image,
+    }
+    console.log(data);
+    
+    let url = '/students/edit';
+    fetch(url, {
+      method: 'POST', // or 'PUT'
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('Success:', data);
+        window.location.reload(false);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        window.location.reload(false);
+      });
   };
 
   setName = (event) => {
@@ -73,7 +111,7 @@ export default class EditStudent2 extends React.Component {
     console.log(event.target.checked);
     let value = event.target.value;
     let checkboxesState = this.state.checkboxesState;
-    checkboxesState[value] = !checkboxesState[value];
+    checkboxesState[value].current = !checkboxesState[value].current;
     this.setState({ checkboxesState });
   };
 
@@ -82,6 +120,7 @@ export default class EditStudent2 extends React.Component {
   };
 
   setGender = (event) => {
+    console.log(event.target.value);
     this.setState({ gender: event.target.value });
   };
 
@@ -103,10 +142,13 @@ export default class EditStudent2 extends React.Component {
     // map checkboxes state object
     let checkboxesState = {};
     classes.forEach((element) => {
+      checkboxesState[element.id] = {};
       if (array.includes(element.id)) {
-        checkboxesState[element.id] = true;
+        checkboxesState[element.id].og = true;
+        checkboxesState[element.id].current = true
       } else {
-        checkboxesState[element.id] = false;
+        checkboxesState[element.id].og = false;
+        checkboxesState[element.id].current = false;
       }
     });
     this.setState({ checkboxesState });
@@ -123,7 +165,7 @@ export default class EditStudent2 extends React.Component {
               control={
                 <Checkbox
                   name="classes"
-                  checked={checkboxesState[element.id]}
+                  checked={checkboxesState[element.id].current}
                   color="primary"
                   value={element.id}
                   onChange={this.setCheck}
@@ -140,11 +182,6 @@ export default class EditStudent2 extends React.Component {
 
   clickEdit = () => {
     this.setState({ isClick: !this.state.isClick });
-  };
-
-  submit = () => {
-    this.setState({ isClick: !this.state.isClick });
-    //
   };
 
   render() {
