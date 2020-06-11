@@ -79,7 +79,9 @@ export default class AttendanceGrid extends React.Component {
     }
     console.log(array);
     if (array.length === 0 || array[0].length === 0) {
-      this.setState({ isHidden: !this.state.isHidden });
+      this.setState({ isHidden: false });
+    } else {
+      this.setState({ isHidden: true });
     }
     this.setState({ attendance, attendanceArray: array });
   };
