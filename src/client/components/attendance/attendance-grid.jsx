@@ -12,6 +12,7 @@ export default class AttendanceGrid extends React.Component {
       classes: [],
       attendance: [],
       attendanceArray: [],
+      isHidden: true,
     };
   }
 
@@ -77,6 +78,9 @@ export default class AttendanceGrid extends React.Component {
       }
     }
     console.log(array);
+    if (array.length === 0 || array[0].length === 0) {
+      this.setState({ isHidden: !this.state.isHidden });
+    }
     this.setState({ attendance, attendanceArray: array });
   };
 
@@ -198,6 +202,18 @@ export default class AttendanceGrid extends React.Component {
                 findClassIdMatch={this.findClassIdMatch}
               />
             </div>
+          </div>
+          <div hidden={this.state.isHidden}>
+            <p>
+              Sorry, the class you have selected has no affiliated sessions or
+              students yet.
+            </p>
+            <p>
+              <a href="/students">Add a student</a>
+            </p>
+            <p>
+              <a href="/calendar">Add a session</a>
+            </p>
           </div>
           {head}
           {grid}
