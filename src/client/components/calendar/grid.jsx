@@ -134,7 +134,7 @@ export default class CalendarGrid extends React.Component {
   };
 
   getClasses = () => {
-    let url = "/classes";
+    let url = "/classes/get";
     fetch(url)
       .then((response) => response.json())
       .then((data) => {

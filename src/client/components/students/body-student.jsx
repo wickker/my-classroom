@@ -20,7 +20,7 @@ export default class Body extends React.Component {
   }
 
   getClasses = async () => {
-    let url = "/classes";
+    let url = "/classes/get";
     let response = await fetch(url);
     let data = await response.json();
     console.log("classes: ", data);

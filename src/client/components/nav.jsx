@@ -5,6 +5,7 @@ import Home from "./home";
 import Calendar from "./calendar";
 import Attendance from "./attendance";
 import Students from "./students";
+import Classes from "./classes";
 
 import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
@@ -168,6 +169,14 @@ export default function Navigation() {
                 <ListItemText>Students</ListItemText>
               </ListItem>
             </Link>
+            <Link
+              to="/classes"
+              style={{ textDecoration: "none", color: "black" }}
+            >
+              <ListItem button>
+                <ListItemText>Classes</ListItemText>
+              </ListItem>
+            </Link>
           </List>
           <Divider />
         </Drawer>
@@ -187,6 +196,9 @@ export default function Navigation() {
             </Route>
             <Route path="/students">
               <Students />
+            </Route>
+            <Route path="/classes">
+              <Classes />
             </Route>
             <Route path="/">
               <Home />

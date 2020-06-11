@@ -16,7 +16,7 @@ module.exports = (app, allModels) => {
   const classes = require('./controllers/classes')(allModels);
   const students = require('./controllers/students')(allModels);
 
-  app.get('/classes', classes.getAllClasses);
+  app.get('/classes/get', classes.getAllClasses);
 
   app.get('/sessions', sessions.getSessions);
 
