@@ -5,7 +5,7 @@ import { CssBaseline } from "@material-ui/core";
 var classNames = require("classnames");
 const cx = classNames.bind(styles);
 
-export default class FileUpload extends React.Component {
+export default class FileUploadEdit extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -52,7 +52,9 @@ export default class FileUpload extends React.Component {
         console.log(result);
         let inputURL = result.secure_url;
         console.log(inputURL);
-        this.setState({ document: inputURL });
+        let inputField = document.getElementById("file_name");
+        inputField.value = inputURL;
+        // this.setState({ document: inputURL });
         this.props.callback(inputURL);
       })
       .catch((error) => console.log("error", error));
@@ -87,10 +89,11 @@ export default class FileUpload extends React.Component {
               </span>
             </div>
             <input
+              id="file_name"
               type="text"
               className="form-control"
               name="document"
-              defaultValue={this.state.document}
+              defaultValue={this.props.ogImage}
               onChange={this.saveFile}
             />
           </div>

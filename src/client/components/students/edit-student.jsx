@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -22,8 +22,19 @@ import Checkbox from "@material-ui/core/Checkbox";
 var moment = require("moment");
 import FileUploadEdit from "./file-upload-stu-edit";
 
-export default function NewStudent({ classes, student }) {
-  const [open, setOpen] = React.useState(false);
+export default function EditStudent({ classes, student }) {
+  console.log(student);
+  const [open, setOpen] = useState(false);
+  const [birthday, setBirthday] = useState("");
+  const [checkClasses, setCheckClasses] = useState([]);
+  const [name, setName] = useState(student.name);
+  const [gender, setGender] = useState("");
+  const [notes, setNotes] = useState("");
+  const [file, setFile] = useState("");
+
+  useEffect(() => {
+    console.log("effect happened");
+  });
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -66,18 +77,6 @@ export default function NewStudent({ classes, student }) {
     //   });
   };
 
-  let date = moment(student.birthday, "x").format();
-  const [birthday, setBirthday] = React.useState(date);
-  let arr = [];
-  for (let i = 0; i < student.classes.length; i++) {
-    arr.push(student.classes[i].class_id);
-  }
-  const [checkClasses, setCheckClasses] = React.useState(arr);
-  const [name, setName] = React.useState(student.name);
-  const [gender, setGender] = React.useState(student.gender);
-  const [notes, setNotes] = React.useState(student.notes);
-  const [file, setFile] = React.useState(student.image);
-
   const birthdaySet = (event) => {
     let bday = moment(event).valueOf();
     console.log(bday);
@@ -89,12 +88,14 @@ export default function NewStudent({ classes, student }) {
     setName(event.target.value);
   };
 
-  const onCheckChanged = (event) => {
-    if (event.target.checked) {
-      checkClasses.push(event.target.value);
-      setCheckClasses(checkClasses);
-    }
-  };
+  // const onCheckChanged = (event) => {
+  //   console.log(event.target.value);
+  //   console.log(event.target.checked);
+  //   if (event.target.checked) {
+  //     checkClasses.push(event.target.value);
+  //     setCheckClasses(checkClasses);
+  //   }
+  // };
 
   const genderSet = (event) => {
     console.log(event.target.value);
@@ -113,15 +114,79 @@ export default function NewStudent({ classes, student }) {
     setFile(string);
   };
 
+  // const renderSelectClass = () => {
+  //   if (classes.length > 0 && student !== "") {
+  //     // get array of class ids student is already enrolled in
+  //     let arr = [];
+  //     for (let i = 0; i < student.classes.length; i++) {
+  //       arr.push(student.classes[i].class_id);
+  //     }
+
+  //     let HTML = classes.map((element, index) => {
+  //       let isChecked = false;
+  //       if (arr.includes(element.id)) {
+  //         isChecked = true;
+  //       }
+  //       return (
+  //         <span key={index}>
+  //           <FormControlLabel
+  //             control={
+  //               <Checkbox
+  //                 name="classes"
+  //                 checked={isChecked}
+  //                 color="primary"
+  //                 value={element.id}
+  //                 onChange={onCheckChanged}
+  //               />
+  //             }
+  //             label={element.title}
+  //           />
+  //         </span>
+  //       );
+  //     });
+  //     return HTML;
+  //   }
+  // };
+
+  const initClasses = () => {
+    if (classes.length > 0 && student !== "") {
+      let newClassesState = [];
+      // get array of class ids student is already enrolled in
+      let arr = [];
+      for (let i = 0; i < student.classes.length; i++) {
+        arr.push(student.classes[i].class_id);
+      }
+
+      classes.forEach((element) => {
+        let isChecked = false;
+        if (arr.includes(element.id)) {
+          isChecked = true;
+        }
+        newClassesState.push({
+          id: element.id,
+          title: element.title,
+          checked: isChecked,
+        });
+      });
+      console.log(newClassesState);
+      return newClassesState;
+    }
+  };
+
+  const [classesState, setClassesState] = useState(initClasses());
   const renderSelectClass = () => {
-    if (classes.length > 0) {
-      let HTML = classes.map((element, index) => {
+    console.log('classesState: ', classesState);
+    if (classesState && classesState.length > 0 && student !== "") {
+      // get array of class ids student is already enrolled in
+
+      let HTML = classesState.map((element, index) => {
         return (
           <span key={index}>
             <FormControlLabel
               control={
                 <Checkbox
                   name="classes"
+                  checked={element.checked}
                   color="primary"
                   value={element.id}
                   onChange={onCheckChanged}
@@ -135,8 +200,27 @@ export default function NewStudent({ classes, student }) {
       return HTML;
     }
   };
-
+  const onCheckChanged = (event) => {
+    const findClass = (element) => {
+      return element.id === event.target.value;
+    };
+    const targetClass = classesState.findIndex(findClass);
+    const newClassesState = {
+      ...classesState[targetClass],
+      checked: !classesState[targetClass].checked,
+    };
+    setClassesState(newClassesState);
+  };
   let checkboxes = renderSelectClass() || "";
+
+  let ogName = student.name || "";
+  let ogBday = moment(student.birthday, "x").format() || "";
+
+  let ogGender;
+  student.gender === "Male" ? (ogGender = 1) : (ogGender = 2);
+
+  let ogNotes = student.notes || "";
+  let ogImage = student.image || "";
 
   return (
     <div>
@@ -149,17 +233,16 @@ export default function NewStudent({ classes, student }) {
         aria-labelledby="form-dialog-title"
         fullWidth
       >
-        {/* <form action="/students/new" method="post"> */}
         <div className="row">
           <div className="col-sm">
-            <DialogTitle>New Student</DialogTitle>
+            <DialogTitle>Edit Student</DialogTitle>
             <DialogContent>
               <TextField
                 margin="dense"
                 label="Name"
                 onChange={nameSet}
                 fullWidth
-                defaultValue={name}
+                defaultValue={ogName}
               />
 
               <div className="mt-3">Select Classes</div>
@@ -174,7 +257,7 @@ export default function NewStudent({ classes, student }) {
                       format="dd/MM/yyyy"
                       margin="normal"
                       label="Birthday"
-                      value={birthday}
+                      value={ogBday}
                       onChange={birthdaySet}
                     />
                   </MuiPickersUtilsProvider>
@@ -182,7 +265,7 @@ export default function NewStudent({ classes, student }) {
                 <div className="col-sm mt-3">
                   <FormControl fullWidth>
                     <InputLabel>Select Gender</InputLabel>
-                    <Select onChange={genderSet}>
+                    <Select defaultValue={ogGender} onChange={genderSet}>
                       <MenuItem value="" disabled>
                         Select Gender
                       </MenuItem>
@@ -202,11 +285,12 @@ export default function NewStudent({ classes, student }) {
                     rows={2}
                     fullWidth
                     onChange={notesSet}
+                    defaultValue={ogNotes}
                   />
                 </div>
                 <div className="col-sm">
                   Upload/ Input Display Picture
-                  <FileUploadEdit callback={callback} />
+                  <FileUploadEdit callback={callback} ogImage={ogImage} />
                 </div>
               </div>
             </DialogContent>
@@ -217,7 +301,6 @@ export default function NewStudent({ classes, student }) {
             Submit
           </Button>
         </DialogActions>
-        {/* </form> */}
       </Dialog>
     </div>
   );

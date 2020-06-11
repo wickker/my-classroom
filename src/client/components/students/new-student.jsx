@@ -110,7 +110,7 @@ export default function NewStudent({ classes }) {
   }
 
   const renderSelectClass = () => {
-    if (classes.length > 0) {
+    if (classes && classes.length > 0) {
       let HTML = classes.map((element, index) => {
         return (
           <span key={index}>

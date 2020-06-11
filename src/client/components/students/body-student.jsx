@@ -19,29 +19,32 @@ export default class Body extends React.Component {
     };
   }
 
-  getClasses = () => {
+  getClasses = async () => {
     let url = "/classes";
-    fetch(url)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("classes: ", data);
-        this.setState({ classes: data.classes });
-      });
+    let response = await fetch(url);
+    let data = await response.json();
+    console.log("classes: ", data);
+    return data.classes;
   };
 
-  getStudents = () => {
+  getStudents = async () => {
     let url = "/students/get";
-    fetch(url)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("students: ", data);
-        this.setState({ students: data, ogStudents: data });
-      });
+    let response = await fetch(url);
+    let data = await response.json();
+    console.log("students: ", data);
+    return data;
   };
 
-  componentDidMount = () => {
-    this.getClasses();
-    this.getStudents();
+  componentWillMount = async () => {
+    this.state.loading = true;
+    let classes = await this.getClasses();
+    let students = await this.getStudents();
+    this.setState({
+      loading: false,
+      classes,
+      students,
+      ogStudents: students,
+    });
   };
 
   search = (event) => {
@@ -85,10 +88,12 @@ export default class Body extends React.Component {
               Search
               <input className={this.input} onChange={this.search} />
               <div>{this.state.searchMsg}</div>
-              <SearchStudents
-                students={this.state.students}
-                getStudent={this.getStudent}
-              />
+              {this.state.loading ? null : (
+                <SearchStudents
+                  students={this.state.students}
+                  getStudent={this.getStudent}
+                />
+              )}
             </div>
             <div className="col-sm">
               <ShowCard
