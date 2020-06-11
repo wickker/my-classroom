@@ -1,5 +1,5 @@
 import React from "react";
-import Body from "./students/body-student";
+import BodyClasses from "./classes/body-classes";
 
 export default class Classes extends React.Component {
   render() {
@@ -7,7 +7,7 @@ export default class Classes extends React.Component {
       <div className="row">
         <div className="col-sm">
           <h1>CLASSES</h1>
-         
+          <BodyClasses />
         </div>
       </div>
     );
