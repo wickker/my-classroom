@@ -8,7 +8,7 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 var moment = require("moment");
 import styles from "./students.scss";
-import EditStudent2 from "./edit-student2";
+import EditStudent2 from "./edit-student";
 
 const useStyles = makeStyles({
   root: {

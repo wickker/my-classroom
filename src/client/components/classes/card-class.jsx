@@ -12,14 +12,14 @@ import EditClass from "./edit-class";
 
 const useStyles = makeStyles({
   root: {
-    maxWidth: 350,
+    maxWidth: 250,
   },
   media: {
-    height: 350,
+    height: 250,
   },
 });
 
-export default function MediaCard({ classCard, isHidden }) {
+export default function MediaCard({ classCard, index }) {
   const classes = useStyles();
 
   let title = "";
@@ -63,7 +63,7 @@ export default function MediaCard({ classCard, isHidden }) {
   }
 
   return (
-    <div className={styles.card} hidden={isHidden}>
+    <div className={styles.card} key={index}>
       <Card className={classes.root}>
         <CardMedia
           className={classes.media}

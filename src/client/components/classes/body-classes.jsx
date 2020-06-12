@@ -2,8 +2,7 @@ import React from "react";
 import styles from "./classes.scss";
 var classNames = require("classnames");
 const cx = classNames.bind(styles);
-import SearchClasses from "./search-classes";
-import ShowClass from "./show-card-class";
+import ClassCard from "./card-class";
 import NewClass from "./new-class";
 
 export default class BodyClasses extends React.Component {
@@ -55,42 +54,36 @@ export default class BodyClasses extends React.Component {
         });
   };
 
-  getClass = (event) => {
-    console.log(event.target.id);
-    let classId = parseInt(event.target.id);
-    let obj = this.state.ogClasses.find((element) => {
-      return element.id === classId;
-    });
-    this.setState({ classCard: obj, isHidden: false });
+  renderCards = () => {
+    if (this.state.classes.length > 0) {
+      let classes = this.state.classes;
+      let HTML = classes.map((element, index) => {
+        return (
+          <div className="col-sm-3 mb-3">
+            <ClassCard
+              classCard={element}
+              index={index}
+            />
+          </div>
+        );
+      });
+      return HTML;
+    }
   };
 
   input = cx(styles.input, "form-control");
 
   render() {
+    let cards = this.renderCards() || "";
+
     return (
       <div className="row">
         <div className="col-sm">
           <NewClass />
-
-          <div className="row">
-            <div className="col-sm-5">
-              Search
-              <input className={this.input} onChange={this.search} />
-              <div>{this.state.searchMsg}</div>
-              {this.state.loading ? null : (
-                <SearchClasses
-                  classes={this.state.classes}
-                  getClass={this.getClass}
-                />
-              )}
-            </div>
-            <div className="col-sm">
-              <ShowClass
-              classCard={this.state.classCard}
-              isHidden={this.state.isHidden}
-            />
-            </div>
-          </div>
+          Search
+          <input className={this.input} onChange={this.search} />
+          <div>{this.state.searchMsg}</div>
+          <div className="row mt-3">{cards}</div>
         </div>
       </div>
     );
