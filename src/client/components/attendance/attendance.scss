@@ -18,3 +18,40 @@
   font-size: 17px;
   text-transform: uppercase;
 }
+
+.attenRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 15px;
+
+}
+
+.attenHead {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 17px;
+  text-transform: uppercase;
+  
+}
+
+.title {
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-top: 30px;
+  padding-bottom: 15px;
+}
+
+.save {
+  margin-left: 30px;
+  margin-top: 30px;
+}
+
+.uploadButton:hover {
+  cursor: pointer;
+}
+
+.browseButton:hover {
+  cursor: pointer;
+}

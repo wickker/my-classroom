@@ -6,6 +6,7 @@ import { withRouter } from "react-router-dom";
 var classNames = require("classnames");
 const cx = classNames.bind(styles);
 var moment = require("moment");
+import MarkAttendance from "./mark-attendance-att";
 
 export class AttendanceGrid extends React.Component {
   constructor() {
@@ -16,10 +17,11 @@ export class AttendanceGrid extends React.Component {
       attendanceArray: [],
       isHidden: true,
       classSelected: "",
+      classObjSelected: {},
     };
   }
 
-  getClasses = async () => {
+  initClasses = async () => {
     let url = "/classes/get";
     const response = await fetch(url);
     const data = await response.json();
@@ -46,26 +48,35 @@ export class AttendanceGrid extends React.Component {
   findClassIdMatch = (event) => {
     console.log(event.target.value);
     let classId = event.target.value;
-    this.setState({ classSelected: classId });
-    this.findClassForId(classId);
+    this.setState({classSelected: classId});
+    this.setClassObjSelected(classId);
+    this.initSelectedClassForId(classId);
   };
 
-  findClassForId = (classId) => {
+  setClassObjSelected = (classId) => {
+    let classes = this.state.classes;
+    console.log(classId);
+    console.log('getting classes from state:', classes);
+    let obj = classes.find((element) => element.id === parseInt(classId, 10));
+    console.log("FIND CLASS OBJECT YOOOOO", obj);
+    this.setState({ classObjSelected: obj });
+  }
+
+  initSelectedClassForId = async (classId) => {
     const params = { classId: classId };
     console.log(params);
     let url = new URL("http://localhost:3000/sessions/attendance");
     url.search = new URLSearchParams(params).toString();
-    fetch(url)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("data: ", data);
-        let studentsByName = data.students.sort(this.compareName);
-        data.students = studentsByName;
-        let sessionsByTime = data.sessions.sort(this.compareTime);
-        data.sessions = sessionsByTime;
-        console.log("sorted: ", data);
-        this.initAttendanceArray(data);
-      });
+
+    let response = await fetch(url);
+    let data = await response.json();
+
+    let studentsByName = data.students.sort(this.compareName);
+    data.students = studentsByName;
+    let sessionsByTime = data.sessions.sort(this.compareTime);
+    data.sessions = sessionsByTime;
+
+    this.initAttendanceArray(data);
   };
 
   initAttendanceArray = (data) => {
@@ -93,14 +104,15 @@ export class AttendanceGrid extends React.Component {
   getClassFromParams = (props) => {
     const searchQuery = get(props, "location.search") || "";
     const classId = searchQuery ? searchQuery.split("?classid=")[1] : "";
-    console.log(classId);
-    this.findClassForId(classId);
-    this.setState({classSelected: classId});
-  }
+    return classId;
+  };
 
   componentDidMount = async () => {
-    await this.getClasses();
-    this.getClassFromParams(this.props);
+    const classId = this.getClassFromParams(this.props);
+    await this.initClasses();
+    this.setClassObjSelected(classId);
+    await this.initSelectedClassForId(classId);
+    this.setState({ classSelected: classId });
   };
 
   box = cx(styles.box_row, "row", "mb-2", "mt-2");
@@ -182,13 +194,23 @@ export class AttendanceGrid extends React.Component {
   renderColHeaders = () => {
     if (this.state.attendanceArray.length > 0) {
       let attendance = this.state.attendance;
+      console.log("---------");
+      console.log(attendance);
+      console.log("----------");
       let HTML = attendance.sessions.map((element, index) => {
+        // create obj to be passed to mark attendance button
+        let obj = {};
+        obj.class = this.state.classObjSelected;
+        obj.session = element;
+        console.log("OBJ FOR BUTTON~~~~", obj);
+        // generate date column header label
         let date = moment(element.start_datetime, "x").format(
           "DD/MM/YY hh:mmA"
         );
         return (
           <div className="col-sm" key={index}>
             {date}
+            <MarkAttendance obj={obj} />
           </div>
         );
       });
