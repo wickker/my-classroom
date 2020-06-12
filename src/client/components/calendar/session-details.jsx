@@ -97,8 +97,10 @@ export default class SessionDetails extends React.Component {
               </div>
               <div className="col-sm">
                 <p>{description}</p>
-                <p>Instructors:</p>
-                <ul>{instructorHTML}</ul>
+                <p>
+                  Instructors:
+                  <ul>{instructorHTML}</ul>
+                </p>
               </div>
             </div>
           </div>

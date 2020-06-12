@@ -15,16 +15,15 @@ export default class BodyClasses extends React.Component {
       classes: [],
       ogClasses: [],
       searchMsg: "",
-      isHidden: true,
       classCard: "",
     };
   }
 
+  // get all classes data
   getClasses = async () => {
     let url = "/classes/get";
     let response = await fetch(url);
     let data = await response.json();
-    console.log("classes: ", data);
     return data.classes;
   };
 
@@ -39,6 +38,7 @@ export default class BodyClasses extends React.Component {
     });
   };
 
+  // search function
   search = (event) => {
     let str = event.target.value.toUpperCase();
     let classes = this.state.classes;
@@ -48,6 +48,7 @@ export default class BodyClasses extends React.Component {
         searched.push(element);
       }
     });
+    // if there are search results, or not
     searched.length > 0
       ? this.setState({ classes: searched, searchMsg: "" })
       : this.setState({
@@ -56,22 +57,22 @@ export default class BodyClasses extends React.Component {
         });
   };
 
+  // render class cards depending on search results
   renderCards = () => {
     if (this.state.classes.length > 0) {
       let classes = this.state.classes;
       let HTML = classes.map((element, index) => {
         return (
-          // <Grid item xs={3}>
-            <div className="col-sm-3 mb-3">
-              <ClassCard classCard={element} index={index} />
-            </div>
-          // </Grid>
+          <div className="col-sm-3 mb-3" key={index}>
+            <ClassCard classCard={element} />
+          </div>
         );
       });
       return HTML;
     }
   };
 
+  // styles
   input = cx(styles.input, "form-control");
 
   render() {
@@ -80,16 +81,14 @@ export default class BodyClasses extends React.Component {
     return (
       <div className="row">
         <div className="col-sm">
+          {/* new class button */}
           <NewClass />
+          {/* search component begins here */}
           Search
           <input className={this.input} onChange={this.search} />
           <div>{this.state.searchMsg}</div>
-          <div className="mt-3 card-group">
-            <Grid container alignItems="stretch">
-              {cards}
-            </Grid>
-          </div>
-
+          {/* render all class cards */}
+          <div className="mt-3 row">{cards}</div>
         </div>
       </div>
     );

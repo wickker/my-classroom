@@ -13,6 +13,10 @@ module.exports = (pool) => {
           queryText = `select * from sessions where class_id = ${data.classes[i].id}`;
           await pool.query(queryText).then(async (result) => {
             data.classes[i].sessions = result.rows;
+            queryText = `select distinct on (instructors_classes.instructor_id) instructors_classes.instructor_id, instructors_classes.class_id, instructors.name, instructors.about, instructors.image from instructors_classes join instructors on (instructors_classes.instructor_id = instructors.id) where instructors_classes.class_id = ${data.classes[i].id} and instructors.is_delete = false order by instructors_classes.instructor_id`;
+            await pool.query(queryText).then(async (result) => {
+              data.classes[i].instructors = result.rows;
+            });
           });
         });
       }
