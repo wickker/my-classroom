@@ -38,6 +38,7 @@ module.exports = (db) => {
 
   const postAttendance = (request, response) => {
     console.log(request.body);
+    console.log('console log endssssssss');
     let data = request.body;
     // check if is_present and is_late checkbox data exists
     if (!("is_present" in data)) {
@@ -54,6 +55,7 @@ module.exports = (db) => {
       }
     }
     console.log(data);
+    let classId = data.classId;
     let studentIdOrder = data.student_id_order;
     let isPresent = data.is_present;
     let isLate = data.is_late;
@@ -61,7 +63,7 @@ module.exports = (db) => {
     let document = data.document;
     let sessionId = parseInt(data.session_id[0]);
     let callback = () => {
-      response.redirect("/calendar");
+      response.redirect("/attendance?classid=" + classId);
     };
     db.sessions.markAttendance(
       callback,

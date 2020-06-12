@@ -4,6 +4,8 @@ var classNames = require("classnames");
 const cx = classNames.bind(styles);
 import ClassCard from "./card-class";
 import NewClass from "./new-class";
+import Grid from "@material-ui/core/Grid";
+import Card from "@material-ui/core/Card";
 
 export default class BodyClasses extends React.Component {
   constructor() {
@@ -59,12 +61,11 @@ export default class BodyClasses extends React.Component {
       let classes = this.state.classes;
       let HTML = classes.map((element, index) => {
         return (
-          <div className="col-sm-3 mb-3">
-            <ClassCard
-              classCard={element}
-              index={index}
-            />
-          </div>
+          // <Grid item xs={3}>
+            <div className="col-sm-3 mb-3">
+              <ClassCard classCard={element} index={index} />
+            </div>
+          // </Grid>
         );
       });
       return HTML;
@@ -83,7 +84,12 @@ export default class BodyClasses extends React.Component {
           Search
           <input className={this.input} onChange={this.search} />
           <div>{this.state.searchMsg}</div>
-          <div className="row mt-3">{cards}</div>
+          <div className="mt-3 card-group">
+            <Grid container alignItems="stretch">
+              {cards}
+            </Grid>
+          </div>
+
         </div>
       </div>
     );

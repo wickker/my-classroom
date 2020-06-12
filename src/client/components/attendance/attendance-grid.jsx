@@ -1,11 +1,13 @@
 import React from "react";
 import ClassSelector from "./class-selector";
+import { get } from "lodash";
 import styles from "./attendance.scss";
+import { withRouter } from "react-router-dom";
 var classNames = require("classnames");
 const cx = classNames.bind(styles);
 var moment = require("moment");
 
-export default class AttendanceGrid extends React.Component {
+export class AttendanceGrid extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -13,17 +15,15 @@ export default class AttendanceGrid extends React.Component {
       attendance: [],
       attendanceArray: [],
       isHidden: true,
+      classSelected: "",
     };
   }
 
-  getClasses = () => {
+  getClasses = async () => {
     let url = "/classes/get";
-    fetch(url)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("data: ", data);
-        this.setState({ classes: data.classes });
-      });
+    const response = await fetch(url);
+    const data = await response.json();
+    this.setState({ classes: data.classes });
   };
 
   compareName = (a, b) => {
@@ -46,7 +46,11 @@ export default class AttendanceGrid extends React.Component {
   findClassIdMatch = (event) => {
     console.log(event.target.value);
     let classId = event.target.value;
+    this.setState({ classSelected: classId });
+    this.findClassForId(classId);
+  };
 
+  findClassForId = (classId) => {
     const params = { classId: classId };
     console.log(params);
     let url = new URL("http://localhost:3000/sessions/attendance");
@@ -86,8 +90,17 @@ export default class AttendanceGrid extends React.Component {
     this.setState({ attendance, attendanceArray: array });
   };
 
-  componentDidMount = () => {
-    this.getClasses();
+  getClassFromParams = (props) => {
+    const searchQuery = get(props, "location.search") || "";
+    const classId = searchQuery ? searchQuery.split("?classid=")[1] : "";
+    console.log(classId);
+    this.findClassForId(classId);
+    this.setState({classSelected: classId});
+  }
+
+  componentDidMount = async () => {
+    await this.getClasses();
+    this.getClassFromParams(this.props);
   };
 
   box = cx(styles.box_row, "row", "mb-2", "mt-2");
@@ -202,6 +215,7 @@ export default class AttendanceGrid extends React.Component {
               <ClassSelector
                 classes={this.state.classes}
                 findClassIdMatch={this.findClassIdMatch}
+                classSelected={this.state.classSelected}
               />
             </div>
           </div>
@@ -224,3 +238,5 @@ export default class AttendanceGrid extends React.Component {
     );
   }
 }
+
+export default withRouter(AttendanceGrid);

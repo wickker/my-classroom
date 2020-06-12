@@ -17,10 +17,12 @@ export default class ClassSelector extends React.Component {
       });
     }
 
+    const classSelected = this.props.classSelected ? this.props.classSelected : "";
+
     return (
       <FormControl fullWidth>
         <InputLabel>Select Class</InputLabel>
-        <Select onChange={this.props.findClassIdMatch}>
+        <Select onChange={this.props.findClassIdMatch} value={classSelected}>
           <MenuItem disabled>Select Class</MenuItem>
           {classesHTML}
         </Select>

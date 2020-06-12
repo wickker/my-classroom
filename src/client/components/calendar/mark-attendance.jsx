@@ -43,9 +43,11 @@ export default function MarkAttendance({ obj }) {
   let date = "";
   let startTime = "";
   let endTime = "";
+  let id = "";
 
   if (obj !== "") {
     title = obj.class.title;
+    id = obj.class.id;
     date = moment(obj.session.start_datetime, "x").format("DD MMMM YYYY");
     startTime = moment(obj.session.start_datetime, "x").format("hh:mm A");
     endTime = moment(obj.session.end_datetime, "x").format("hh:mm A");
@@ -61,7 +63,7 @@ export default function MarkAttendance({ obj }) {
 
   const handleSave = () => {
     setOpen(false);
-    alert("Attendance submitted");
+    // alert("Attendance submitted");
   };
 
   const attenRow = cx(styles.attenRow, "col-sm", "mb-4", "mt-2");
@@ -213,6 +215,8 @@ export default function MarkAttendance({ obj }) {
 
               <form action="/sessions/attendance/post" method="post">
                 {studentsHTML}
+
+                <input name="classId" value={id} hidden></input>
 
                 <div className="row">
                   <div className="col-sm">
