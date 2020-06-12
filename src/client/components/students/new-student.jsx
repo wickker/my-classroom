@@ -36,33 +36,31 @@ export default function NewStudent({ classes }) {
   const submit = () => {
     setOpen(false);
     let data = {
-      name, 
-      birthday, 
-      checkClasses, 
-      gender, 
-      notes, 
-      file
+      name,
+      birthday,
+      checkClasses,
+      gender,
+      notes,
+      file,
     };
     console.log(data);
 
-    let url = '/students/post';
+    let url = "/students/post";
     fetch(url, {
-      method: 'POST', // or 'PUT'
+      method: "POST", // or 'PUT'
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log('Success:', data);
+        console.log("Success:", data);
         window.location.reload(false);
-
       })
       .catch((error) => {
-        console.error('Error:', error);
+        console.error("Error:", error);
         window.location.reload(false);
-
       });
   };
 
@@ -95,38 +93,40 @@ export default function NewStudent({ classes }) {
   const genderSet = (event) => {
     console.log(event.target.value);
     let gender;
-    event.target.value === 1 ? gender = "Male" : gender = "Female";
+    event.target.value === 1 ? (gender = "Male") : (gender = "Female");
     console.log(gender);
     setGender(gender);
   };
 
   const notesSet = (event) => {
     setNotes(event.target.value);
-  }
+  };
 
   const callback = (string) => {
     console.log("STRING: ", string);
     setFile(string);
-  }
+  };
 
   const renderSelectClass = () => {
     if (classes && classes.length > 0) {
       let HTML = classes.map((element, index) => {
-        return (
-          <span key={index}>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  name="classes"
-                  color="primary"
-                  value={element.id}
-                  onChange={onCheckChanged}
-                />
-              }
-              label={element.title}
-            />
-          </span>
-        );
+        if (element.sessions.length > 0) {
+          return (
+            <span key={index}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    name="classes"
+                    color="primary"
+                    value={element.id}
+                    onChange={onCheckChanged}
+                  />
+                }
+                label={element.title}
+              />
+            </span>
+          );
+        }
       });
       return HTML;
     }
@@ -145,12 +145,16 @@ export default function NewStudent({ classes }) {
         aria-labelledby="form-dialog-title"
         fullWidth
       >
-        {/* <form action="/students/new" method="post"> */}
         <div className="row">
           <div className="col-sm">
             <DialogTitle>New Student</DialogTitle>
             <DialogContent>
-              <TextField margin="dense" label="Name" onChange={nameSet} fullWidth />
+              <TextField
+                margin="dense"
+                label="Name"
+                onChange={nameSet}
+                fullWidth
+              />
 
               <div className="mt-3">Select Classes</div>
               {checkboxes}
@@ -196,7 +200,7 @@ export default function NewStudent({ classes }) {
                 </div>
                 <div className="col-sm">
                   Upload/ Input Display Picture
-                  <FileUpload callback={callback}/>
+                  <FileUpload callback={callback} />
                 </div>
               </div>
             </DialogContent>
@@ -207,7 +211,6 @@ export default function NewStudent({ classes }) {
             Submit
           </Button>
         </DialogActions>
-        {/* </form> */}
       </Dialog>
     </div>
   );

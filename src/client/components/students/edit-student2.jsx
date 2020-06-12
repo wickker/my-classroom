@@ -27,6 +27,7 @@ export default class EditStudent2 extends React.Component {
     super();
     this.state = {
       classes: [],
+      classesWSessions: [],
       student: "",
       isClick: false,
       checkboxesState: {},
@@ -47,13 +48,18 @@ export default class EditStudent2 extends React.Component {
     if (!isEqual(this.props.student, prevProps.student)) {
       let student = this.props.student;
 
-      this.initCheckboxState(classes, student);
+      let classesWSessions = classes.filter((element) => {
+        return element.sessions.length > 0;
+      });
+
+      this.initCheckboxState(classesWSessions, student);
 
       let g;
       student.gender === "Male" ? (g = 1) : (g = 2);
 
       this.setState({
         classes: classes,
+        classesWSessions: classesWSessions,
         student: student,
         id: student.id,
         name: student.name,
@@ -76,24 +82,24 @@ export default class EditStudent2 extends React.Component {
       gender: this.state.gender,
       notes: this.state.notes,
       image: this.state.image,
-    }
+    };
     console.log(data);
-    
-    let url = '/students/edit';
+
+    let url = "/students/edit";
     fetch(url, {
-      method: 'POST', // or 'PUT'
+      method: "POST", // or 'PUT'
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log('Success:', data);
+        console.log("Success:", data);
         window.location.reload(false);
       })
       .catch((error) => {
-        console.error('Error:', error);
+        console.error("Error:", error);
         window.location.reload(false);
       });
   };
@@ -142,7 +148,7 @@ export default class EditStudent2 extends React.Component {
       checkboxesState[element.id] = {};
       if (array.includes(element.id)) {
         checkboxesState[element.id].og = true;
-        checkboxesState[element.id].current = true
+        checkboxesState[element.id].current = true;
       } else {
         checkboxesState[element.id].og = false;
         checkboxesState[element.id].current = false;
@@ -152,8 +158,9 @@ export default class EditStudent2 extends React.Component {
   };
 
   renderCheckboxes = () => {
-    if (this.state.classes.length > 0) {
-      let classes = this.state.classes;
+    if (this.state.classesWSessions.length > 0) {
+      let classes = this.state.classesWSessions;
+      console.log("CLASSES~~~~~", classes);
       let HTML = classes.map((element, index) => {
         let checkboxesState = this.state.checkboxesState;
         return (

@@ -10,6 +10,10 @@ module.exports = (pool) => {
         console.log(queryText);
         await pool.query(queryText).then(async (result) => {
           data.classes[i].students = result.rows;
+          queryText = `select * from sessions where class_id = ${data.classes[i].id}`;
+          await pool.query(queryText).then(async (result) => {
+            data.classes[i].sessions = result.rows;
+          });
         });
       }
       callback(data);
