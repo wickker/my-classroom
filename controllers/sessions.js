@@ -22,6 +22,7 @@ module.exports = (db) => {
     );
   };
 
+  // get sessions by date range
   const getSessions = (request, response) => {
     console.log("query: ", request.query);
     let startDate = parseInt(request.query.startDate);

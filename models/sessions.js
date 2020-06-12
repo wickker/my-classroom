@@ -65,14 +65,18 @@ module.exports = (pool) => {
     });
   };
 
-  const querySessionsByDateRange = (callback, startDate, endDate) => {
+  const querySessionsByDateRange = async (callback, startDate, endDate) => {
     let queryText = `select * from sessions where start_datetime >= ${startDate} and start_datetime <= ${endDate} order by start_datetime asc`;
-    pool.query(queryText, (err, result) => {
-      if (err) {
-        console.log(err);
-      } else {
-        callback(result.rows);
+    await pool.query(queryText).then(async (result) => {
+      let sessions = result.rows;
+      console.log("SESSIONS~~~~", sessions);
+      for (let i = 0; i < sessions.length; i++) {
+        queryText = `select instructors_classes.instructor_id, instructors.name, instructors.image, instructors.about from instructors_classes join instructors on (instructors_classes.instructor_id = instructors.id) where instructors.is_delete = false and instructors_classes.session_id = ${sessions[i].id}`;
+        await pool.query(queryText).then(async (result) => {
+          sessions[i].instructors = result.rows;
+        });
       }
+      callback(sessions);
     });
   };
 
@@ -123,7 +127,7 @@ module.exports = (pool) => {
         });
       }
     });
-  }
+  };
 
   const getAttendanceData = async (callback, classId) => {
     let queryText = `select * from attendance where class_id = ${classId}`;
@@ -143,7 +147,7 @@ module.exports = (pool) => {
         });
       });
     });
-  }
+  };
 
   const getAllSessionsQuery = (callback) => {
     let queryText = `select * from sessions where is_delete = false order by start_datetime asc`;
@@ -154,7 +158,7 @@ module.exports = (pool) => {
         callback(result.rows);
       }
     });
-  }
+  };
 
   return {
     writeNewSession,

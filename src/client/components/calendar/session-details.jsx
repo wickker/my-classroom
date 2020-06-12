@@ -1,19 +1,21 @@
 import React from "react";
-
 import styles from "./calendar.scss";
 var moment = require("moment");
 import MarkAttendance from "./mark-attendance";
 import TrashIcon from "../../svg/trash-solid.svg";
+import { get, isEmpty } from "lodash";
 
 export default class SessionDetails extends React.Component {
+  // delete session
   deleteSession = (event) => {
     console.log(event.target.id);
     let seshId = event.target.id;
     const data = { seshId: seshId };
     let url = "/sessions/delete";
+    // alert to confirm
     alert("Confirm delete?");
     fetch(url, {
-      method: "POST", // or 'PUT'
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
@@ -31,31 +33,31 @@ export default class SessionDetails extends React.Component {
   };
 
   render() {
-    let obj = this.props.obj;
+    // check if session object is empty and if not, define variables
+    let obj = get(this.props, "obj") || {};
+    // hide session details if object is empty
+    let isHidden = isEmpty(obj);
+    let image = get(obj, "class.image") || "";
+    let title = get(obj, "class.title") || "";
+    let description = get(obj, "class.description") || "";
+    let startDateTime = get(obj, "session.start_datetime") || "";
+    let date = moment(startDateTime, "x").format("DD MMMM YYYY");
+    let startTime = moment(startDateTime, "x").format("hh:mm A");
+    let endDateTime = get(obj, "session.end_datetime") || "";
+    let endTime = moment(endDateTime, "x").format("hh:mm A");
+    let location = get(obj, "session.location") || "";
+    let sessionId = get(obj, "session.id") || "";
+    let instructors = get(obj, "session.instructors") || "";
 
-    let isHidden = true;
-    let image = "";
-    let title = "";
-    let description = "";
-    let date = "";
-    let startTime = "";
-    let endTime = "";
-    let location = "";
-    let sessionId = "";
-
-    if (obj !== "") {
-      isHidden = false;
-      image = obj.class.image;
-      title = obj.class.title;
-      description = obj.class.description;
-      date = moment(obj.session.start_datetime, "x").format("DD MMMM YYYY");
-      startTime = moment(obj.session.start_datetime, "x").format("hh:mm A");
-      endTime = moment(obj.session.end_datetime, "x").format("hh:mm A");
-      location = obj.session.location;
-      sessionId = obj.session.id;
+    // generate list of instructors for display
+    let instructorHTML;
+    if (instructors.length > 0) {
+      instructorHTML = instructors.map((element, index) => {
+        return <li key={index}>{element.name}</li>;
+      });
+    } else {
+      instructorHTML = <p>No instructor assigned yet.</p>;
     }
-
-    console.log("image: ", image);
 
     return (
       <div hidden={isHidden}>
@@ -74,7 +76,7 @@ export default class SessionDetails extends React.Component {
                 <h5>{title}</h5>
               </div>
               <div className="col-sm-4">
-                <MarkAttendance obj={this.props.obj} />
+                <MarkAttendance object={obj} />
               </div>
               <div className="col-sm">
                 <img
@@ -85,7 +87,6 @@ export default class SessionDetails extends React.Component {
                 />
               </div>
             </div>
-
             <div className="row">
               <div className="col-sm">
                 <p>{date}</p>
@@ -96,6 +97,8 @@ export default class SessionDetails extends React.Component {
               </div>
               <div className="col-sm">
                 <p>{description}</p>
+                <p>Instructors:</p>
+                <ul>{instructorHTML}</ul>
               </div>
             </div>
           </div>
