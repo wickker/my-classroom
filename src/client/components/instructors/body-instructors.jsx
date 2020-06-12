@@ -12,7 +12,9 @@ export default class BodyInstructors extends React.Component {
     this.state = {
       classes: [],
       sessions: [],
+      ogInstructors: [],
       instructors: [],
+      searchMsg: "",
     };
   }
 
@@ -51,6 +53,7 @@ export default class BodyInstructors extends React.Component {
       classes,
       sessions,
       instructors,
+      ogInstructors: instructors,
     });
   };
 
@@ -59,8 +62,13 @@ export default class BodyInstructors extends React.Component {
       let instructors = this.state.instructors;
       let HTML = instructors.map((element, index) => {
         return (
-          <div className="col-sm-4">
-            <InstructorCard instructor={element} index={index} classesArr={this.state.classes} sessions={this.state.sessions} />
+          <div className="col-sm-3">
+            <InstructorCard
+              instructor={element}
+              index={index}
+              classesArr={this.state.classes}
+              sessions={this.state.sessions}
+            />
           </div>
         );
       });
@@ -69,26 +77,26 @@ export default class BodyInstructors extends React.Component {
   };
 
   search = (event) => {
-    // let str = event.target.value.toUpperCase();
-    // let students = this.state.students;
-    // let searched = [];
-    // students.forEach((element) => {
-    //   if (element.name.toUpperCase().includes(str)) {
-    //     searched.push(element);
-    //   }
-    // });
-    // searched.length > 0
-    //   ? this.setState({ students: searched, searchMsg: "" })
-    //   : this.setState({
-    //       students: this.state.ogStudents,
-    //       searchMsg: "No search results found.",
-    //     });
+    console.log(event.target.value);
+    let str = event.target.value.toUpperCase();
+    let ogInstructors = this.state.ogInstructors;
+    let searched = [];
+    ogInstructors.forEach((element) => {
+      if (element.name.toUpperCase().includes(str)) {
+        searched.push(element);
+      }
+    });
+    searched.length > 0
+      ? this.setState({ instructors: searched, searchMsg: "" })
+      : this.setState({
+          instructors: this.state.ogInstructors,
+          searchMsg: "No search results found.",
+        });
   };
 
-  // input = cx(styles.input, "form-control");
+  input = cx(styles.input, "form-control");
 
   render() {
-
     let cards = this.renderCards() || "";
 
     return (
@@ -98,31 +106,10 @@ export default class BodyInstructors extends React.Component {
             classes={this.state.classes}
             sessions={this.state.sessions}
           />
-
-          <div className="row mt-3">
-            {cards}
-          </div>
-
-          {/* <div className="row">
-            <div className="col-sm-5">
-              Search
-              <input className={this.input} onChange={this.search} />
-              <div>{this.state.searchMsg}</div>
-              {this.state.loading ? null : (
-                <SearchStudents
-                  students={this.state.students}
-                  getStudent={this.getStudent}
-                />
-              )}
-            </div>
-            <div className="col-sm">
-              <ShowCard
-                student={this.state.studentCard}
-                isHidden={this.state.isHidden}
-                classesArr={this.state.classes}
-              />
-            </div>
-          </div> */}
+          Search
+          <input className={this.input} onChange={this.search} />
+          <div>{this.state.searchMsg}</div>
+          <div className="row mt-3">{cards}</div>
         </div>
       </div>
     );

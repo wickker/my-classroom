@@ -12,10 +12,10 @@ import EditInstructor from "./edit-instructor";
 
 const useStyles = makeStyles({
   root: {
-    maxWidth: 350,
+    maxWidth: 250,
   },
   media: {
-    height: 350,
+    height: 250,
   },
 });
 
