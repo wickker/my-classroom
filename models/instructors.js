@@ -76,9 +76,21 @@ module.exports = (pool) => {
     });
   };
 
+  const removeInstructor = (callback, id) => {
+    let queryText = `update instructors set is_delete = true where id = ${id} returning *`;
+    pool.query(queryText, (err, result) => {
+      if (err) {
+        console.log(err)
+      } else {
+        callback();
+      }
+    });
+  }
+
   return {
     writeNewInstructor,
     queryInstructors,
     writeEditInstructor,
+    removeInstructor,
   };
 };

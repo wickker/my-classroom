@@ -24,26 +24,26 @@ export default function MediaCard({ instructor, index, classesArr, sessions }) {
 
   const deleteInstructor = () => {
     console.log(instructor.id);
-    // let data = {
-    //   id: id,
-    // }
-    // let url = '/classes/delete';
-    // fetch(url, {
-    //   method: 'POST', // or 'PUT'
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify(data)
-    // })
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     console.log('Success:', data);
-    //     window.location.reload(false);
-    //   })
-    //   .catch((error) => {
-    //     console.error('Error:', error);
-    //     window.location.reload(false);
-    //   });
+    let data = {
+      id: instructor.id,
+    }
+    let url = '/instructors/delete';
+    fetch(url, {
+      method: 'POST', // or 'PUT'
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('Success:', data);
+        window.location.reload(false);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        window.location.reload(false);
+      });
   };
 
   let classesHTML = instructor.classes.map((element, classIndex) => {
@@ -75,7 +75,7 @@ export default function MediaCard({ instructor, index, classesArr, sessions }) {
             classes={classesArr}
             sessions={sessions}
           />
-          
+
           <Button
             variant="contained"
             color="primary"

@@ -32,11 +32,20 @@ module.exports = (db) => {
     db.instructors.writeEditInstructor(callback, id, name, image, about, checked);
   }
 
+  const deleteInstructor = (request, response) => {
+    console.log(request.body);
+    let id = request.body.id;
+    let callback = () => {
+      response.redirect("/instructors");
+    }
+    db.instructors.removeInstructor(callback, id);
+  }
 
   return {
     newInstructor,
     getInstructors,
     editInstructor,
+    deleteInstructor,
   };
 };
 
