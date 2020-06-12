@@ -20,7 +20,7 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import Checkbox from "@material-ui/core/Checkbox";
 var moment = require("moment");
-import FileUpload from "./file-upload-instructor";
+import FileUploadEdit from "./file-upload-instructor-edit";
 
 export default class EditInstructor extends React.Component {
   constructor() {
@@ -29,6 +29,7 @@ export default class EditInstructor extends React.Component {
       isClick: false,
       sessions: [],
       classes: [],
+      id: "",
       name: "",
       image: "",
       about: "",
@@ -48,6 +49,11 @@ export default class EditInstructor extends React.Component {
       sessions: this.props.sessions,
       classes: this.props.classes,
       instructor: this.props.instructor,
+      id: this.props.instructor.id,
+      name: this.props.instructor.name, 
+      about: this.props.instructor.about, 
+      image: this.props.instructor.image, 
+
     });
 
     this.initCheckedState();
@@ -166,6 +172,7 @@ export default class EditInstructor extends React.Component {
     this.setState({ isClick: !this.state.isClick });
 
     let data = {
+      id: this.state.id,
       name: this.state.name,
       image: this.state.image,
       about: this.state.about,
@@ -173,7 +180,7 @@ export default class EditInstructor extends React.Component {
     };
     console.log(data);
 
-    let url = "/instructors/new";
+    let url = "/instructors/edit";
     fetch(url, {
       method: "POST", // or 'PUT'
       headers: {
@@ -251,6 +258,7 @@ export default class EditInstructor extends React.Component {
                   margin="dense"
                   label="Name"
                   onChange={this.setName}
+                  defaultValue={this.state.name}
                   fullWidth
                 />
                 <TextField
@@ -260,13 +268,14 @@ export default class EditInstructor extends React.Component {
                   fullWidth
                   multiline
                   rows={2}
+                  defaultValue={this.state.about}
                 />
                 <div className="mt-4">Select Classes and Sessions</div>
                 <div>{this.renderCheckboxes()}</div>
 
                 <div className="mt-3 mb-3">
                   Select Image
-                  <FileUpload callback={this.callback} />
+                  <FileUploadEdit callback={this.callback} image={this.state.image} />
                 </div>
               </DialogContent>
 

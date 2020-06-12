@@ -19,10 +19,24 @@ module.exports = (db) => {
     db.instructors.queryInstructors(callback);
   }
 
+  const editInstructor = (request, response) => {
+    console.log(request.body);
+    let id = request.body.id;
+    let name = request.body.name;
+    let image = request.body.image;
+    let about = request.body.about;
+    let checked = request.body.checkedState;
+    let callback = () => {
+      response.redirect("/instructors");
+    }
+    db.instructors.writeEditInstructor(callback, id, name, image, about, checked);
+  }
+
 
   return {
     newInstructor,
     getInstructors,
+    editInstructor,
   };
 };
 

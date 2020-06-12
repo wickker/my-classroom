@@ -50,5 +50,7 @@ module.exports = (app, allModels) => {
   app.post('/instructors/new', instructors.newInstructor);
 
   app.get('/instructors/get', instructors.getInstructors);
+
+  app.post('/instructors/edit', instructors.editInstructor);
   
 };

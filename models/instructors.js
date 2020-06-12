@@ -22,6 +22,40 @@ module.exports = (pool) => {
     callback();
   };
 
+  const writeEditInstructor = async (
+    callback,
+    id,
+    name,
+    image,
+    about,
+    checked
+  ) => {
+    let queryText = `update instructors set name = '${name}', image = '${image}', about = '${about}' where id = ${id} returning *`;
+    await pool.query(queryText).then(async (result) => {
+      console.log(result.rows[0]);
+      for (const key in checked) {
+        let current = checked[key]["current"];
+        let og = checked[key]["og"];
+        for (const prop in current) {
+          let sessionId = parseInt(prop);
+          let classId = parseInt(key);
+          if (current[prop] !== og[prop] && current[prop]) {
+            queryText = `insert into instructors_classes (instructor_id, session_id, class_id) values (${id}, ${sessionId}, ${classId}) returning *`;
+            await pool.query(queryText).then(async (result) => {
+              console.log(result.rows[0]);
+            });
+          } else if (current[prop] !== og[prop] && !current[prop]) {
+            queryText = `delete from instructors_classes where instructor_id = ${id} and session_id = ${sessionId} and class_id = ${classId} returning *`;
+            await pool.query(queryText).then(async (result) => {
+              console.log(result.rows[0]);
+            });
+          }
+        }
+      }
+    });
+    callback();
+  };
+
   const queryInstructors = async (callback) => {
     let queryText = `select * from instructors where is_delete = false order by name asc`;
     console.log(queryText);
@@ -45,5 +79,6 @@ module.exports = (pool) => {
   return {
     writeNewInstructor,
     queryInstructors,
+    writeEditInstructor,
   };
 };
