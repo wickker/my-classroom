@@ -251,7 +251,7 @@ export default class CalendarGrid extends React.Component {
           </div>
         </div>
 
-        <SessionDetails obj={this.state.sessionObj} />
+        <SessionDetails obj={this.state.sessionObj} classesArr={this.state.classes}/>
 
         <div className="row">
           <div className={boxAround}>

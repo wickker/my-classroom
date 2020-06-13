@@ -4,6 +4,7 @@ var moment = require("moment");
 import MarkAttendance from "./mark-attendance";
 import TrashIcon from "../../svg/trash-solid.svg";
 import { get, isEmpty } from "lodash";
+import EditSession from "./edit-session";
 
 export default class SessionDetails extends React.Component {
   // delete session
@@ -75,16 +76,19 @@ export default class SessionDetails extends React.Component {
               <div className="col-sm-6">
                 <h5>{title}</h5>
               </div>
-              <div className="col-sm-4">
+              <div className="col-sm-3">
                 <MarkAttendance object={obj} />
               </div>
-              <div className="col-sm">
+              <div className="col-sm-1">
                 <img
                   className={styles.trash}
                   src={TrashIcon}
                   id={sessionId}
                   onClick={this.deleteSession}
                 />
+              </div>
+              <div className="col-sm">
+                <EditSession obj={this.props.obj} classesArr={this.props.classesArr}/>
               </div>
             </div>
             <div className="row">
