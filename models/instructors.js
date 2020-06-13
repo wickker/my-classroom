@@ -1,6 +1,6 @@
 module.exports = (pool) => {
-  const writeNewInstructor = async (callback, name, image, about, checked) => {
-    let queryText = `insert into instructors (name, image, about, is_delete) values ('${name}', '${image}', '${about}', false) returning *`;
+  const writeNewInstructor = async (callback, name, image, about, email, password, checked) => {
+    let queryText = `insert into instructors (name, image, about, email, password, is_delete) values ('${name}', '${image}', '${about}', '${email}', '${password}', false) returning *`;
     await pool.query(queryText).then(async (result) => {
       console.log(result.rows[0]);
       let instructorId = result.rows[0].id;

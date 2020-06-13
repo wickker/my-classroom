@@ -1,14 +1,18 @@
+var sha256 = require('js-sha256');
+
 module.exports = (db) => {
   const newInstructor = (request, response) => {
     console.log(request.body);
     let name = request.body.name;
     let image = request.body.image;
     let about = request.body.about;
+    let email = request.body.email;
+    let password = sha256(request.body.password);
     let checked = request.body.checkedState;
     let callback = () => {
       response.redirect("/instructors");
     }
-    db.instructors.writeNewInstructor(callback, name, image, about, checked);
+    db.instructors.writeNewInstructor(callback, name, image, about, email, password, checked);
   }
 
   const getInstructors = (request, response) => {

@@ -32,6 +32,8 @@ export default class NewInstructor extends React.Component {
       name: "",
       image: "",
       about: "",
+      email: "",
+      password: "",
       checkedState: {},
       primaryCheckedState: {},
     };
@@ -44,9 +46,7 @@ export default class NewInstructor extends React.Component {
     }
     if (!isEqual(this.props.sessions, prevProps.sessions)) {
       let sessions = this.props.sessions;
-
       this.initCheckedState(sessions, classes);
-
       this.setState({
         sessions,
         classes,
@@ -54,8 +54,11 @@ export default class NewInstructor extends React.Component {
     }
   };
 
+  // initialize objects to keep track of check box state
   initCheckedState = (sessions, classes) => {
+    // for sessions of classes
     let obj = {};
+    // for classes
     let primaryObj = {};
     for (let i = 0; i < classes.length; i++) {
       let classId = classes[i].id;
@@ -63,32 +66,36 @@ export default class NewInstructor extends React.Component {
       obj[classId]["og"] = {};
       obj[classId]["current"] = {};
       primaryObj[classId] = false;
+      // find sessions that correspond to a particular class id
       let matchingSessions = sessions.filter((element) => {
         return element.class_id === classId;
       });
+      // map sessions for a particular class id
       matchingSessions.forEach((element) => {
         obj[classId]["og"][element.id] = false;
         obj[classId]["current"][element.id] = false;
       });
     }
-    console.log("obj: ", obj);
-    console.log("primary obj: ", primaryObj);
     this.setState({ checkedState: obj, primaryCheckedState: primaryObj });
   };
 
+  // render checkboxes for classes and sessions
   renderCheckboxes = () => {
     if (this.state.classes.length > 0 && this.state.sessions.length > 0) {
       let classes = this.state.classes;
       let sessions = this.state.sessions;
       let checkedState = this.state.checkedState;
       let primaryCheckedState = this.state.primaryCheckedState;
-
+      // map class selection
       let classChoices = classes.map((classEle, classIndex) => {
+        // map sessions that correspond to class
         let matchingSessions = sessions.filter((element) => {
           return element.class_id === classEle.id;
         });
+        // only if there are sessions that correspond to that class 
         if (matchingSessions.length > 0) {
           let seshChoices = matchingSessions.map((session, seshIndex) => {
+            // hide the session selection if the corresponding class is not selected 
             let isHide;
             primaryCheckedState[classEle.id] === false
               ? (isHide = true)
@@ -97,13 +104,14 @@ export default class NewInstructor extends React.Component {
               "DD/MM/YY, hh:mmA"
             );
             return (
+              // session checkboxes
               <span key={seshIndex} hidden={isHide}>
                 <FormControlLabel
                   control={
                     <Checkbox
                       name="sessions"
                       color="primary"
-                      id={classEle.id}
+                      id={classEle.id.toString()}
                       value={session.id}
                       onChange={this.setSessionCheck}
                       checked={checkedState[classEle.id]["current"][session.id]}
@@ -115,6 +123,7 @@ export default class NewInstructor extends React.Component {
             );
           });
           return (
+            // class checkboxes
             <div key={classIndex}>
               <FormControlLabel
                 control={
@@ -139,18 +148,19 @@ export default class NewInstructor extends React.Component {
 
   submit = () => {
     this.setState({ isClick: !this.state.isClick });
-
     let data = {
       name: this.state.name,
       image: this.state.image,
       about: this.state.about,
+      email: this.state.email,
+      password: this.state.password,
       checkedState: this.state.checkedState,
     }
     console.log(data);
-
+    // post new instructor to server
     let url = '/instructors/new';
     fetch(url, {
-      method: 'POST', // or 'PUT'
+      method: 'POST', 
       headers: {
         'Content-Type': 'application/json'
       },
@@ -168,9 +178,6 @@ export default class NewInstructor extends React.Component {
   };
 
   setSessionCheck = (event) => {
-    console.log(event.target.value);
-    console.log(event.target.id);
-    console.log(event.target.checked);
     let value = parseInt(event.target.value);
     let boo = event.target.checked;
     let classId = parseInt(event.target.id);
@@ -188,20 +195,28 @@ export default class NewInstructor extends React.Component {
   };
 
   setName = (event) => {
-    console.log(event.target.value);
     this.setState({ name: event.target.value });
   };
 
   setAbout = (event) => {
-    console.log(event.target.value);
     this.setState({ about: event.target.value });
   };
 
+  setEmail = (event) => {
+    this.setState({ email: event.target.value });
+  };
+
+  setPassword = (event) => {
+    this.setState({ password: event.target.value });
+  };
+
+  // gets image url from upload component
   callback = (result) => {
     console.log("callback: ", result);
     this.setState({ image: result });
   };
 
+  // controls opening and closing of form
   clickEdit = () => {
     this.setState({ isClick: !this.state.isClick });
   };
@@ -236,15 +251,26 @@ export default class NewInstructor extends React.Component {
                   multiline
                   rows={2}
                 />
+                <TextField
+                  margin="dense"
+                  label="Email"
+                  onChange={this.setEmail}
+                  fullWidth
+                />
+                <TextField
+                  margin="dense"
+                  label="Password"
+                  onChange={this.setPassword}
+                  fullWidth
+                />
                 <div className="mt-4">Select Classes and Sessions</div>
+                {/* checkboxes go here */}
                 <div>{this.renderCheckboxes()}</div>
-
                 <div className="mt-3 mb-3">
                   Select Image
                   <FileUpload callback={this.callback} />
                 </div>
               </DialogContent>
-
               <DialogActions>
                 <Button
                   className="mr-3"
