@@ -96,8 +96,8 @@ export default class DashboardBody extends React.Component {
         let startTime = moment(element.start_datetime, "x").format("hh:mm A");
         let endTime = moment(element.end_datetime, "x").format("hh:mm A");
         return (
-          <div key={index} className="col-sm-3 h-100">
-            <div className="card">
+          <div key={index} className="col-sm-3">
+            <div className="card h-100">
               <img className="card-img-top" src={element.image} alt="class image" />
               <div className="card-body">
                 <h5 className="card-title">{element.title}</h5>

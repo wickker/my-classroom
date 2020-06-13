@@ -35,17 +35,15 @@ export default class EditClass extends React.Component {
     };
   }
 
-  componentDidUpdate = (prevProps) => {
-    if (!isEqual(this.props.classCard, prevProps.classCard)) {
-      let classCard = this.props.classCard;
-      this.setState({
-        image: classCard.image,
-        title: classCard.title,
-        description: classCard.description,
-        frequency: classCard.frequency,
-        id: classCard.id,
-      });
-    }
+  componentDidMount = () => {
+    let classCard = this.props.classCard;
+    this.setState({
+      image: classCard.image,
+      title: classCard.title,
+      description: classCard.description,
+      frequency: classCard.frequency,
+      id: classCard.id,
+    });
   };
 
   submit = () => {
@@ -57,24 +55,24 @@ export default class EditClass extends React.Component {
       description: this.state.description,
       frequency: this.state.frequency,
       image: this.state.image,
-    }
+    };
     console.log(data);
 
-    let url = '/classes/edit';
+    let url = "/classes/edit";
     fetch(url, {
-      method: 'POST', // or 'PUT'
+      method: "POST", // or 'PUT'
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log('Success:', data);
+        console.log("Success:", data);
         window.location.reload(false);
       })
       .catch((error) => {
-        console.error('Error:', error);
+        console.error("Error:", error);
         window.location.reload(false);
       });
   };
@@ -143,8 +141,11 @@ export default class EditClass extends React.Component {
                   fullWidth
                 />
                 <div className="mt-3 mb-3">
-                Select Image
-                <FileUploadEdit callback={this.callback} image={this.state.image} />
+                  Select Image
+                  <FileUploadEdit
+                    callback={this.callback}
+                    image={this.state.image}
+                  />
                 </div>
               </DialogContent>
             </div>
