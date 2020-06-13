@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 import Dashboard from "./dashboard";
-import Calendar from "./calendar";
+import Calendar from "./calendar_home";
 import Attendance from "./attendance";
 import Students from "./students";
 import Classes from "./classes";
@@ -102,7 +102,7 @@ class Navigation extends React.Component {
     };
   }
 
-  componentDidMount = () => {
+  componentDidMount= () => {
     let banana = localStorage.getItem("banana");
     if (!!banana) {
       this.setState({ isLogin: true, isLogout: false });
@@ -115,6 +115,10 @@ class Navigation extends React.Component {
     localStorage.removeItem("banana");
     this.setState({ isLogin: false, isLogout: true });
   };
+
+  callback = (result) => {
+    this.setState({isLogin: result.isLogin, isLogout: result.isLogout });
+  }
 
   handleDrawerOpen = () => {
     this.setState({ open: true });
@@ -267,7 +271,7 @@ class Navigation extends React.Component {
                 <Instructors />
               </Route>
               <Route path="/login">
-                <Login isLogin={this.state.isLogin} isLogout={this.state.isLogout}/>
+                <Login callback={this.callback}/>
               </Route>
               <Route path="/dashboard">
                 <Dashboard />

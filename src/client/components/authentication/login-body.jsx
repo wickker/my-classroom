@@ -63,6 +63,12 @@ class LoginBody extends React.Component {
       banana = JSON.stringify(banana);
       // set local storage item
       localStorage.setItem("banana", banana);
+      // pass data back to navigation to change options displayed
+      let data = {
+        isLogin: true,
+        isLogout: false
+      };
+      this.props.callback(data);
       // redirect to dashboard
       console.log(JSON.parse(localStorage.getItem("banana")));
       this.props.history.push("/dashboard");

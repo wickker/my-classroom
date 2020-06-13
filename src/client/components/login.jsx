@@ -7,7 +7,7 @@ export default class Login extends React.Component {
       <div className="row">
         <div className="col-sm">
           <h1>LOGIN</h1>
-          <LoginBody />
+          <LoginBody callback={this.props.callback}/>
         </div>
       </div>
     );
