@@ -16,6 +16,7 @@ export default class BodyClasses extends React.Component {
       ogClasses: [],
       searchMsg: "",
       classCard: "",
+      hide: false,
     };
   }
 
@@ -28,6 +29,11 @@ export default class BodyClasses extends React.Component {
   };
 
   componentWillMount = async () => {
+    // check for login
+    let banana = localStorage.getItem("banana");
+    if (!banana) {
+      this.setState({ hide: true });
+    }
     this.state.loading = true;
     let classes = await this.getClasses();
     console.log("classes: ", classes);
@@ -64,7 +70,7 @@ export default class BodyClasses extends React.Component {
       let HTML = classes.map((element, index) => {
         return (
           <div className="col-sm-3 mb-3" key={index}>
-            <ClassCard classCard={element} />
+            <ClassCard classCard={element} hide={this.state.hide} />
           </div>
         );
       });
@@ -82,7 +88,9 @@ export default class BodyClasses extends React.Component {
       <div className="row">
         <div className="col-sm">
           {/* new class button */}
-          <NewClass />
+          <div hidden={this.state.hide}>
+            <NewClass />
+          </div>
           {/* search component begins here */}
           Search
           <input className={this.input} onChange={this.search} />

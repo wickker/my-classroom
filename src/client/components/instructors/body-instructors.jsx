@@ -15,6 +15,7 @@ export default class BodyInstructors extends React.Component {
       ogInstructors: [],
       instructors: [],
       searchMsg: "",
+      hide: false,
     };
   }
 
@@ -44,6 +45,11 @@ export default class BodyInstructors extends React.Component {
   };
 
   componentWillMount = async () => {
+    // check for login
+    let banana = localStorage.getItem("banana");
+    if (!banana) {
+      this.setState({ hide: true });
+    }
     this.state.loading = true;
     let classes = await this.getClasses();
     let sessions = await this.getSessions();
@@ -68,6 +74,7 @@ export default class BodyInstructors extends React.Component {
               index={index}
               classesArr={this.state.classes}
               sessions={this.state.sessions}
+              hide={this.state.hide}
             />
           </div>
         );
@@ -102,10 +109,12 @@ export default class BodyInstructors extends React.Component {
     return (
       <div className="row">
         <div className="col-sm">
-          <NewInstructor
-            classes={this.state.classes}
-            sessions={this.state.sessions}
-          />
+          <div hidden={this.state.hide}>
+            <NewInstructor
+              classes={this.state.classes}
+              sessions={this.state.sessions}
+            />
+          </div>
           Search
           <input className={this.input} onChange={this.search} />
           <div>{this.state.searchMsg}</div>

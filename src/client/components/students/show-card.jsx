@@ -8,8 +8,10 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 var moment = require("moment");
 import styles from "./students.scss";
-import EditStudent2 from "./edit-student";
+import EditStudent from "./edit-student";
+import { get, isEmpty } from "lodash";
 
+// styles
 const useStyles = makeStyles({
   root: {
     maxWidth: 350,
@@ -19,51 +21,49 @@ const useStyles = makeStyles({
   },
 });
 
-export default function MediaCard({ student, isHidden, classesArr }) {
+// main function starts here
+export default function MediaCard({ student, isHidden, classesArr, hide }) {
+  // styles
   const classes = useStyles();
-  let name = "";
-  let image = "";
-  let notes = "";
-  let bday = "";
-  let gender = "";
-  let classesHTML = "";
-  let id = "";
 
-  if (student !== "") {
-    bday = moment(student.birthday, "x").format("DD MMMM YYYY");
-    name = student.name;
-    image = student.image;
-    notes = student.notes;
-    gender = student.gender;
-    id = student.id;
-    classesHTML = student.classes.map((element, index) => {
-      return <li key={index}>{element.title}</li>
-    });
-  }
+  // define variables
+  let name = get(student, "name") || "";
+  let image = get(student, "image") || "";
+  let notes = get(student, "notes") || "";
+  let birth_date = get(student, "birthday") || "";
+  let bday = moment(birth_date, "x").format("DD MMMM YYYY");
+  let gender = get(student, "gender") || "";
+  let id = get(student, "id") || "";
+  let stuClasses = get(student, "classes") || [];
+  let classesHTML = stuClasses.map((element, index) => {
+    return <li key={index}>{element.title}</li>;
+  });
 
+  // delete student
   const deleteStudent = () => {
     console.log(id);
     let data = {
       id: id,
-    }
-    let url = '/students/delete';
+    };
+    // post student id to server
+    let url = "/students/delete";
     fetch(url, {
-      method: 'POST', // or 'PUT'
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log('Success:', data);
+        console.log("Success:", data);
         window.location.reload(false);
       })
       .catch((error) => {
-        console.error('Error:', error);
+        console.error("Error:", error);
         window.location.reload(false);
       });
-  }
+  };
 
   return (
     <div className={styles.card} hidden={isHidden}>
@@ -74,31 +74,25 @@ export default function MediaCard({ student, isHidden, classesArr }) {
           alt="display picture"
         />
         <CardContent>
-        <Typography gutterBottom variant="h5" component="h2">
+          <Typography gutterBottom variant="h5" component="h2">
             {name}
           </Typography>
-          <div>
-            Notes: {notes}
-          </div>
-          <div>
-            Birthday: {bday}
-          </div>
-          <div>
-            Gender: {gender}
-          </div>
+          <div>Notes: {notes}</div>
+          <div>Birthday: {bday}</div>
+          <div>Gender: {gender}</div>
           <div>
             Class(es):
-            <ul>
-              {classesHTML}
-            </ul>
+            <ul>{classesHTML}</ul>
           </div>
         </CardContent>
-        <CardActions>
-          <EditStudent2 classes={classesArr} student={student} />
-          <Button variant="contained" color="primary" onClick={deleteStudent}>
-            Delete
-          </Button>
-        </CardActions>
+        <div hidden={hide}>
+          <CardActions>
+            <EditStudent classes={classesArr} student={student} />
+            <Button variant="contained" color="primary" onClick={deleteStudent}>
+              Delete
+            </Button>
+          </CardActions>
+        </div>
       </Card>
     </div>
   );

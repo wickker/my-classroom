@@ -22,7 +22,7 @@ const useStyles = makeStyles({
 });
 
 // main function begins here
-export default function MediaCard({ classCard }) {
+export default function MediaCard({ classCard, hide }) {
   const classes = useStyles();
 
   // declare variables
@@ -91,12 +91,14 @@ export default function MediaCard({ classCard }) {
           </div>
         </CardContent>
         {/* edit and delete buttons */}
-        <CardActions>
-          <EditClass classCard={classCard} />
-          <Button variant="contained" color="primary" onClick={deleteClass}>
-            Delete
-          </Button>
-        </CardActions>
+        <div hidden={hide}>
+          <CardActions>
+            <EditClass classCard={classCard} />
+            <Button variant="contained" color="primary" onClick={deleteClass}>
+              Delete
+            </Button>
+          </CardActions>
+        </div>
       </Card>
     </div>
   );

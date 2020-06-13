@@ -255,10 +255,10 @@ export class AttendanceGrid extends React.Component {
               Sorry, the class you have selected has no affiliated sessions or
               students yet.
             </p>
-            <p>
+            <p hidden={this.state.hide}>
               <a href="/students">Add a student</a>
             </p>
-            <p>
+            <p hidden={this.state.hide}>
               <a href="/calendar">Add a session</a>
             </p>
           </div>

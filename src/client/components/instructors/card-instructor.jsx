@@ -19,7 +19,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function MediaCard({ instructor, index, classesArr, sessions }) {
+export default function MediaCard({ instructor, index, classesArr, sessions, hide }) {
   const classes = useStyles();
 
   const deleteInstructor = () => {
@@ -76,6 +76,7 @@ export default function MediaCard({ instructor, index, classesArr, sessions }) {
             <ul>{classesHTML}</ul>
           </div>
         </CardContent>
+        <div hidden={hide}>
         <CardActions>
 
           <EditInstructor
@@ -92,6 +93,7 @@ export default function MediaCard({ instructor, index, classesArr, sessions }) {
             Delete
           </Button>
         </CardActions>
+        </div>
       </Card>
     </div>
   );

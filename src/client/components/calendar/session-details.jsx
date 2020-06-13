@@ -73,13 +73,13 @@ export default class SessionDetails extends React.Component {
           </div>
           <div className="col-sm">
             <div className="row mb-3">
-              <div className="col-sm-6">
+              <div className="col-sm">
                 <h5>{title}</h5>
               </div>
-              <div className="col-sm-3">
+              <div className="col-sm-3" hidden={this.props.hide}>
                 <MarkAttendance object={obj} />
               </div>
-              <div className="col-sm-1">
+              <div className="col-sm-1" hidden={this.props.hide}>
                 <img
                   className={styles.trash}
                   src={TrashIcon}
@@ -87,8 +87,11 @@ export default class SessionDetails extends React.Component {
                   onClick={this.deleteSession}
                 />
               </div>
-              <div className="col-sm">
-                <EditSession obj={this.props.obj} classesArr={this.props.classesArr}/>
+              <div className="col-sm" hidden={this.props.hide}> 
+                <EditSession
+                  obj={this.props.obj}
+                  classesArr={this.props.classesArr}
+                />
               </div>
             </div>
             <div className="row">
@@ -101,10 +104,10 @@ export default class SessionDetails extends React.Component {
               </div>
               <div className="col-sm">
                 <p>{description}</p>
-                <p>
+                <div>
                   Instructors:
                   <ul>{instructorHTML}</ul>
-                </p>
+                </div>
               </div>
             </div>
           </div>

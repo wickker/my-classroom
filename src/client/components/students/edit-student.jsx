@@ -28,7 +28,7 @@ export default class EditStudent2 extends React.Component {
     this.state = {
       classes: [],
       classesWSessions: [],
-      student: "",
+      student: {},
       isClick: false,
       checkboxesState: {},
       id: "",

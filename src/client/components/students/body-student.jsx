@@ -14,8 +14,11 @@ export default class BodyStudent extends React.Component {
       students: [],
       ogStudents: [],
       searchMsg: "",
-      studentCard: "",
+      studentCard: {},
+      // visibility of card
       isHidden: true,
+      // visibility of new/ edit/ delete buttons
+      hide: false,
     };
   }
 
@@ -36,6 +39,11 @@ export default class BodyStudent extends React.Component {
   };
 
   componentWillMount = async () => {
+    // check for login
+    let banana = localStorage.getItem("banana");
+    if (!banana) {
+      this.setState({ hide: true });
+    }
     this.state.loading = true;
     let classes = await this.getClasses();
     let students = await this.getStudents();
@@ -65,13 +73,12 @@ export default class BodyStudent extends React.Component {
   };
 
   getStudent = (event) => {
-    console.log(event.target.id);
+    console.log("STUDENT ID:", event.target.id);
     let studentId = parseInt(event.target.id);
     console.log(this.state.ogStudents);
     let obj = this.state.ogStudents.find((element) => {
       return element.id === studentId;
     });
-    console.log("obj: ", obj);
     this.setState({ studentCard: obj, isHidden: false });
   };
 
@@ -81,8 +88,9 @@ export default class BodyStudent extends React.Component {
     return (
       <div className="row">
         <div className="col-sm">
-          <NewStudent classes={this.state.classes} />
-
+          <div hidden={this.state.hide}>
+            <NewStudent classes={this.state.classes} />
+          </div>
           <div className="row">
             <div className="col-sm-5">
               Search
@@ -100,6 +108,7 @@ export default class BodyStudent extends React.Component {
                 student={this.state.studentCard}
                 isHidden={this.state.isHidden}
                 classesArr={this.state.classes}
+                hide={this.state.hide}
               />
             </div>
           </div>
