@@ -46,9 +46,17 @@ export default function MediaCard({ instructor, index, classesArr, sessions }) {
       });
   };
 
-  let classesHTML = instructor.classes.map((element, classIndex) => {
-    return <li key={classIndex}>{element.title}</li>;
-  });
+  let classesHTML;
+  if (instructor.classes.length > 0) {
+    classesHTML = instructor.classes.map((element, classIndex) => {
+      return <li key={classIndex}>{element.title}</li>;
+    });
+  } else {
+    classesHTML = (
+      <li>No class assigned yet.</li>
+    );
+  }
+  
 
   return (
     <div className={styles.card} key={index}>

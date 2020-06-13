@@ -1,25 +1,38 @@
 var faker = require("faker");
 var moment = require("moment");
+var sha256 = require("js-sha256");
 
 // min and max included
 function randomIntFromInterval(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-// attendance
-for (let i = 1; i < 31; i++) {
-  let class_id = randomIntFromInterval(1, 5);
-  let session_id = 0
-  let student_id = i;
-  let is_present = false;
-  let remarks = "";
-  let is_late = 0;
-  let document = "";
-
+// instructors
+for (let i = 1; i < 6; i++) {
+  let name = faker.name.findName();
+  let image = `https://picsum.photos/id/${i}/300`;
+  let about = faker.lorem.sentence();
+  let email = "admin" + i + "@mail.com";
+  let password = sha256("123456");
   console.log(
-    `insert into attendance (class_id, session_id, student_id, is_present, remarks, is_late, document ) values (${class_id}, ${session_id}, ${student_id}, ${is_present}, '${remarks}', ${is_late}, '${document}');`
+    `insert into instructors (name, image, about, is_delete, email, password) values ('${name}', '${image}', '${about}', false, '${email}', '${password}');`
   );
 }
+
+// attendance
+// for (let i = 1; i < 31; i++) {
+//   let class_id = randomIntFromInterval(1, 5);
+//   let session_id = 0
+//   let student_id = i;
+//   let is_present = false;
+//   let remarks = "";
+//   let is_late = 0;
+//   let document = "";
+
+//   console.log(
+//     `insert into attendance (class_id, session_id, student_id, is_present, remarks, is_late, document ) values (${class_id}, ${session_id}, ${student_id}, ${is_present}, '${remarks}', ${is_late}, '${document}');`
+//   );
+// }
 
 // students
 // for (let i = 0; i < 30; i++) {
@@ -33,7 +46,6 @@ for (let i = 1; i < 31; i++) {
 //     `insert into students (name, image, notes, birthday, gender, is_delete) values ('${name}', '${image}', '${notes}', ${birthday}, '${gender}', ${is_delete});`
 //   );
 // }
-
 
 // classes
 // for (let i = 0; i < 5; i++) {

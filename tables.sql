@@ -19,6 +19,8 @@ create table if not exists instructors (
   name text,
   image text,
   about text,
+  email text,
+  password text,
   is_delete boolean
   );
 
