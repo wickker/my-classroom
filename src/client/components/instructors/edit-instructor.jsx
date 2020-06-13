@@ -33,6 +33,8 @@ export default class EditInstructor extends React.Component {
       name: "",
       image: "",
       about: "",
+      email: "",
+      password: "",
       checkedState: {},
       primaryCheckedState: {},
       instructor: {},
@@ -40,11 +42,6 @@ export default class EditInstructor extends React.Component {
   }
 
   componentDidMount = () => {
-    console.log("EDIT COMPONENT MOUNT~~~~~~~~");
-    console.log(this.props.sessions);
-    console.log(this.props.classes);
-    console.log(this.props.instructor);
-
     this.setState({
       sessions: this.props.sessions,
       classes: this.props.classes,
@@ -53,7 +50,7 @@ export default class EditInstructor extends React.Component {
       name: this.props.instructor.name, 
       about: this.props.instructor.about, 
       image: this.props.instructor.image, 
-
+      email: this.props.instructor.email,
     });
 
     this.initCheckedState();
@@ -63,29 +60,24 @@ export default class EditInstructor extends React.Component {
     let sessions = this.props.sessions;
     let classes = this.props.classes;
     let instructor = this.props.instructor;
-
     let obj = {};
     let primaryObj = {};
-
     // for each class available
     for (let i = 0; i < classes.length; i++) {
       let classId = classes[i].id;
       obj[classId] = {};
       obj[classId]["og"] = {};
       obj[classId]["current"] = {};
-
       // if class id is already associated with instructor, set primaryObj value as true
       let found;
       found = instructor.classes.find((element) => {
         return element.class_id === classId;
       });
       found ? (primaryObj[classId] = true) : (primaryObj[classId] = false);
-
       // generate all sessions per class
       let matchingSessions = sessions.filter((element) => {
         return element.class_id === classId;
       });
-      
       // check if session already associated with instructor, if so, return true
       matchingSessions.forEach((element) => {
         let result;
@@ -101,9 +93,6 @@ export default class EditInstructor extends React.Component {
         }
       });
     }
-    console.log("obj edit: ", obj);
-    console.log("primary obj edit: ", primaryObj);
-
     this.setState({ checkedState: obj, primaryCheckedState: primaryObj });
   };
 
@@ -113,7 +102,6 @@ export default class EditInstructor extends React.Component {
       let sessions = this.state.sessions;
       let checkedState = this.state.checkedState;
       let primaryCheckedState = this.state.primaryCheckedState;
-
       let classChoices = classes.map((classEle, classIndex) => {
         let matchingSessions = sessions.filter((element) => {
           return element.class_id === classEle.id;
@@ -134,7 +122,7 @@ export default class EditInstructor extends React.Component {
                     <Checkbox
                       name="sessions"
                       color="primary"
-                      id={classEle.id}
+                      id={classEle.id.toString()}
                       value={session.id}
                       onChange={this.setSessionCheck}
                       checked={checkedState[classEle.id]["current"][session.id]}
@@ -170,16 +158,17 @@ export default class EditInstructor extends React.Component {
 
   submit = () => {
     this.setState({ isClick: !this.state.isClick });
-
     let data = {
       id: this.state.id,
       name: this.state.name,
       image: this.state.image,
       about: this.state.about,
       checkedState: this.state.checkedState,
+      email: this.state.email,
+      password: this.state.password,
     };
     console.log(data);
-
+    // post data to server 
     let url = "/instructors/edit";
     fetch(url, {
       method: "POST", // or 'PUT'
@@ -200,9 +189,6 @@ export default class EditInstructor extends React.Component {
   };
 
   setSessionCheck = (event) => {
-    console.log(event.target.value);
-    console.log(event.target.id);
-    console.log(event.target.checked);
     let value = parseInt(event.target.value);
     let boo = event.target.checked;
     let classId = parseInt(event.target.id);
@@ -220,14 +206,21 @@ export default class EditInstructor extends React.Component {
   };
 
   setName = (event) => {
-    console.log(event.target.value);
     this.setState({ name: event.target.value });
   };
 
   setAbout = (event) => {
-    console.log(event.target.value);
     this.setState({ about: event.target.value });
   };
+
+  setEmail = (event) => {
+    this.setState({ email: event.target.email });
+  };
+
+  setPassword = (event) => {
+    this.setState({ password: event.target.value });
+  };
+
 
   callback = (result) => {
     console.log("callback: ", result);
@@ -270,15 +263,27 @@ export default class EditInstructor extends React.Component {
                   rows={2}
                   defaultValue={this.state.about}
                 />
+                <TextField
+                  margin="dense"
+                  label="Name"
+                  onChange={this.setEmail}
+                  defaultValue={this.state.email}
+                  fullWidth
+                />
+                <TextField
+                  margin="dense"
+                  label="New Password"
+                  onChange={this.setPassword}
+                  fullWidth
+                />
                 <div className="mt-4">Select Classes and Sessions</div>
+                {/* checkboxes go here */}
                 <div>{this.renderCheckboxes()}</div>
-
                 <div className="mt-3 mb-3">
                   Select Image
                   <FileUploadEdit callback={this.callback} image={this.state.image} />
                 </div>
               </DialogContent>
-
               <DialogActions>
                 <Button
                   className="mr-3"

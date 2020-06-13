@@ -28,9 +28,11 @@ module.exports = (pool) => {
     name,
     image,
     about,
-    checked
+    checked,
+    email, 
+    password
   ) => {
-    let queryText = `update instructors set name = '${name}', image = '${image}', about = '${about}' where id = ${id} returning *`;
+    let queryText = `update instructors set name = '${name}', image = '${image}', about = '${about}', email = '${email}', password = '${password}' where id = ${id} returning *`;
     await pool.query(queryText).then(async (result) => {
       console.log(result.rows[0]);
       for (const key in checked) {
