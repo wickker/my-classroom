@@ -7,6 +7,7 @@ import Attendance from "./attendance";
 import Students from "./students";
 import Classes from "./classes";
 import Instructors from "./instructors";
+import Login from "./login";
 
 import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
@@ -24,6 +25,7 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 
+// styles
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -83,6 +85,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// main function starts here
 export default function Navigation() {
   const classes = useStyles();
   const theme = useTheme();
@@ -116,9 +119,18 @@ export default function Navigation() {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="button" noWrap>
-              Application Name
-            </Typography>
+            <div className="row">
+              <div className="col-sm-7">
+                <Typography variant="button" noWrap>
+                  My Classroom
+                </Typography>
+              </div>
+              <div className="col-sm">
+                {/* <Typography variant="button" noWrap>
+                  Logout
+                </Typography> */}
+              </div>
+            </div>
           </Toolbar>
         </AppBar>
         <Drawer
@@ -186,6 +198,17 @@ export default function Navigation() {
                 <ListItemText>Classes</ListItemText>
               </ListItem>
             </Link>
+            <Link
+              to="/login"
+              style={{ textDecoration: "none", color: "black" }}
+            >
+              <ListItem button>
+                <ListItemText>Login</ListItemText>
+              </ListItem>
+            </Link>
+            <ListItem button>
+              <ListItemText>Logout</ListItemText>
+            </ListItem>
           </List>
           <Divider />
         </Drawer>
@@ -195,8 +218,8 @@ export default function Navigation() {
           })}
         >
           <div className={classes.drawerHeader} />
+          {/* react router starts here */}
           <Switch>
-            
             <Route path="/calendar">
               <Calendar />
             </Route>
@@ -212,10 +235,12 @@ export default function Navigation() {
             <Route path="/instructors">
               <Instructors />
             </Route>
+            <Route path="/login">
+              <Login />
+            </Route>
             <Route path="/">
               <Home />
             </Route>
-            
           </Switch>
         </main>
       </Router>

@@ -4,8 +4,8 @@ var classNames = require("classnames");
 const cx = classNames.bind(styles);
 import ClassCard from "./card-class";
 import NewClass from "./new-class";
-import Grid from "@material-ui/core/Grid";
-import Card from "@material-ui/core/Card";
+// import Grid from "@material-ui/core/Grid";
+// import Card from "@material-ui/core/Card";
 
 export default class BodyClasses extends React.Component {
   constructor() {
