@@ -8,6 +8,7 @@ import Students from "./students";
 import Classes from "./classes";
 import Instructors from "./instructors";
 import Login from "./login";
+import Logout from "./logout";
 
 import clsx from "clsx";
 import {
@@ -96,8 +97,24 @@ class Navigation extends React.Component {
     super();
     this.state = {
       open: false,
+      isLogin: false,
+      isLogout: true,
     };
   }
+
+  componentDidMount = () => {
+    let banana = localStorage.getItem("banana");
+    if (!!banana) {
+      this.setState({ isLogin: true, isLogout: false });
+    } else {
+      this.setState({ isLogin: false, isLogout: true });
+    }
+  };
+
+  logout = () => {
+    localStorage.removeItem("banana");
+    this.setState({ isLogin: false, isLogout: true });
+  };
 
   handleDrawerOpen = () => {
     this.setState({ open: true });
@@ -165,7 +182,7 @@ class Navigation extends React.Component {
                 to="/dashboard"
                 style={{ textDecoration: "none", color: "black" }}
               >
-                <ListItem button>
+                <ListItem button hidden={this.state.isLogout}>
                   <ListItemText>Dashboard</ListItemText>
                 </ListItem>
               </Link>
@@ -210,13 +227,22 @@ class Navigation extends React.Component {
                 to="/login"
                 style={{ textDecoration: "none", color: "black" }}
               >
-                <ListItem button>
+                <ListItem button hidden={this.state.isLogin}>
                   <ListItemText>Login</ListItemText>
                 </ListItem>
               </Link>
-              <ListItem button>
-                <ListItemText>Logout</ListItemText>
-              </ListItem>
+              <Link
+                to="/logout"
+                style={{ textDecoration: "none", color: "black" }}
+              >
+                <ListItem
+                  button
+                  hidden={this.state.isLogout}
+                  onClick={this.logout}
+                >
+                  <ListItemText>Logout</ListItemText>
+                </ListItem>
+              </Link>
             </List>
             <Divider />
           </Drawer>
@@ -241,10 +267,13 @@ class Navigation extends React.Component {
                 <Instructors />
               </Route>
               <Route path="/login">
-                <Login />
+                <Login isLogin={this.state.isLogin} isLogout={this.state.isLogout}/>
               </Route>
               <Route path="/dashboard">
                 <Dashboard />
+              </Route>
+              <Route path="/logout">
+                <Logout />
               </Route>
               <Route path="/">
                 <Calendar />
