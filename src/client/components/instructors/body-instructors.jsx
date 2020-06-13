@@ -78,10 +78,9 @@ export default class BodyInstructors extends React.Component {
           hide = true;
         }
         return (
-          <div className="col-sm-3">
+          <div className="col-sm-3" key={index}>
             <InstructorCard
               instructor={element}
-              index={index}
               classesArr={this.state.classes}
               sessions={this.state.sessions}
               hide={hide}

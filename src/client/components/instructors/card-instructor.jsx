@@ -19,7 +19,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function MediaCard({ instructor, index, classesArr, sessions, hide }) {
+export default function MediaCard({ instructor, classesArr, sessions, hide }) {
   const classes = useStyles();
 
   const deleteInstructor = () => {
@@ -27,6 +27,10 @@ export default function MediaCard({ instructor, index, classesArr, sessions, hid
     let data = {
       id: instructor.id,
     }
+    alert("Confirm delete?");
+    // log the instructor out
+    localStorage.removeItem("banana");
+    // send request to server
     let url = '/instructors/delete';
     fetch(url, {
       method: 'POST', // or 'PUT'
@@ -59,7 +63,7 @@ export default function MediaCard({ instructor, index, classesArr, sessions, hid
   
 
   return (
-    <div className={styles.card} key={index}>
+    <div className={styles.card}>
       <Card className={classes.root}>
         <CardMedia
           className={classes.media}
