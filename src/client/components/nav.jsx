@@ -10,7 +10,12 @@ import Instructors from "./instructors";
 import Login from "./login";
 
 import clsx from "clsx";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import {
+  makeStyles,
+  useTheme,
+  withTheme,
+  withStyles,
+} from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import AppBar from "@material-ui/core/AppBar";
@@ -28,7 +33,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 // styles
 const drawerWidth = 240;
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = (theme) => ({
   root: {
     display: "flex",
   },
@@ -83,164 +88,173 @@ const useStyles = makeStyles((theme) => ({
     }),
     marginLeft: 0,
   },
-}));
+});
 
-// main function starts here
-export default function Navigation() {
-  const classes = useStyles();
-  const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+// main class starts here
+class Navigation extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      open: false,
+    };
+  }
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
+  handleDrawerOpen = () => {
+    this.setState({ open: true });
   };
 
-  const handleDrawerClose = () => {
-    setOpen(false);
+  handleDrawerClose = () => {
+    this.setState({ open: false });
   };
 
-  return (
-    <div className={classes.root}>
-      <Router>
-        <CssBaseline />
-        <AppBar
-          position="fixed"
-          className={clsx(classes.appBar, {
-            [classes.appBarShift]: open,
-          })}
-        >
-          <Toolbar>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={handleDrawerOpen}
-              edge="start"
-              className={clsx(classes.menuButton, open && classes.hide)}
-            >
-              <MenuIcon />
-            </IconButton>
-            <div className="row">
-              <div className="col-sm-7">
-                <Typography variant="button" noWrap>
-                  My Classroom
-                </Typography>
+  render() {
+    return (
+      <div className={this.props.classes.root}>
+        <Router>
+          <CssBaseline />
+          <AppBar
+            position="fixed"
+            className={clsx(this.props.classes.appBar, {
+              [this.props.classes.appBarShift]: this.state.open,
+            })}
+          >
+            <Toolbar>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                onClick={this.handleDrawerOpen}
+                edge="start"
+                className={clsx(
+                  this.props.classes.menuButton,
+                  this.state.open && this.props.classes.hide
+                )}
+              >
+                <MenuIcon />
+              </IconButton>
+              <div className="row">
+                <div className="col-sm-7">
+                  <Typography variant="button" noWrap>
+                    My Classroom
+                  </Typography>
+                </div>
+                <div className="col-sm"></div>
               </div>
-              <div className="col-sm">
-              </div>
+            </Toolbar>
+          </AppBar>
+          <Drawer
+            className={this.props.classes.drawer}
+            variant="persistent"
+            anchor="left"
+            open={this.state.open}
+            classes={{
+              paper: this.props.classes.drawerPaper,
+            }}
+          >
+            <div className={this.props.classes.drawerHeader}>
+              <IconButton onClick={this.handleDrawerClose}>
+                {this.props.theme.direction === "ltr" ? (
+                  <ChevronLeftIcon />
+                ) : (
+                  <ChevronRightIcon />
+                )}
+              </IconButton>
             </div>
-          </Toolbar>
-        </AppBar>
-        <Drawer
-          className={classes.drawer}
-          variant="persistent"
-          anchor="left"
-          open={open}
-          classes={{
-            paper: classes.drawerPaper,
-          }}
-        >
-          <div className={classes.drawerHeader}>
-            <IconButton onClick={handleDrawerClose}>
-              {theme.direction === "ltr" ? (
-                <ChevronLeftIcon />
-              ) : (
-                <ChevronRightIcon />
-              )}
-            </IconButton>
-          </div>
-          <Divider />
-          <List>
-            <Link to="/dashboard" style={{ textDecoration: "none", color: "black" }}>
+            <Divider />
+            <List>
+              <Link
+                to="/dashboard"
+                style={{ textDecoration: "none", color: "black" }}
+              >
+                <ListItem button>
+                  <ListItemText>Dashboard</ListItemText>
+                </ListItem>
+              </Link>
+              <Link to="/" style={{ textDecoration: "none", color: "black" }}>
+                <ListItem button>
+                  <ListItemText>Home</ListItemText>
+                </ListItem>
+              </Link>
+              <Link
+                to="/attendance"
+                style={{ textDecoration: "none", color: "black" }}
+              >
+                <ListItem button>
+                  <ListItemText>Attendance</ListItemText>
+                </ListItem>
+              </Link>
+              <Link
+                to="/students"
+                style={{ textDecoration: "none", color: "black" }}
+              >
+                <ListItem button>
+                  <ListItemText>Students</ListItemText>
+                </ListItem>
+              </Link>
+              <Link
+                to="/instructors"
+                style={{ textDecoration: "none", color: "black" }}
+              >
+                <ListItem button>
+                  <ListItemText>Instructors</ListItemText>
+                </ListItem>
+              </Link>
+              <Link
+                to="/classes"
+                style={{ textDecoration: "none", color: "black" }}
+              >
+                <ListItem button>
+                  <ListItemText>Classes</ListItemText>
+                </ListItem>
+              </Link>
+              <Link
+                to="/login"
+                style={{ textDecoration: "none", color: "black" }}
+              >
+                <ListItem button>
+                  <ListItemText>Login</ListItemText>
+                </ListItem>
+              </Link>
               <ListItem button>
-                <ListItemText>Dashboard</ListItemText>
+                <ListItemText>Logout</ListItemText>
               </ListItem>
-            </Link>
-            <Link
-              to="/"
-              style={{ textDecoration: "none", color: "black" }}
-            >
-              <ListItem button>
-                <ListItemText>Home</ListItemText>
-              </ListItem>
-            </Link>
-            <Link
-              to="/attendance"
-              style={{ textDecoration: "none", color: "black" }}
-            >
-              <ListItem button>
-                <ListItemText>Attendance</ListItemText>
-              </ListItem>
-            </Link>
-            <Link
-              to="/students"
-              style={{ textDecoration: "none", color: "black" }}
-            >
-              <ListItem button>
-                <ListItemText>Students</ListItemText>
-              </ListItem>
-            </Link>
-            <Link
-              to="/instructors"
-              style={{ textDecoration: "none", color: "black" }}
-            >
-              <ListItem button>
-                <ListItemText>Instructors</ListItemText>
-              </ListItem>
-            </Link>
-            <Link
-              to="/classes"
-              style={{ textDecoration: "none", color: "black" }}
-            >
-              <ListItem button>
-                <ListItemText>Classes</ListItemText>
-              </ListItem>
-            </Link>
-            <Link
-              to="/login"
-              style={{ textDecoration: "none", color: "black" }}
-            >
-              <ListItem button>
-                <ListItemText>Login</ListItemText>
-              </ListItem>
-            </Link>
-            <ListItem button>
-              <ListItemText>Logout</ListItemText>
-            </ListItem>
-          </List>
-          <Divider />
-        </Drawer>
-        <main
-          className={clsx(classes.content, {
-            [classes.contentShift]: open,
-          })}
-        >
-          <div className={classes.drawerHeader} />
-          {/* react router starts here */}
-          <Switch>
-            <Route path="/attendance">
-              <Attendance />
-            </Route>
-            <Route path="/students">
-              <Students />
-            </Route>
-            <Route path="/classes">
-              <Classes />
-            </Route>
-            <Route path="/instructors">
-              <Instructors />
-            </Route>
-            <Route path="/login">
-              <Login />
-            </Route>
-            <Route path="/dashboard">
-              <Dashboard />
-            </Route>
-            <Route path="/">
-              <Calendar />
-            </Route>
-          </Switch>
-        </main>
-      </Router>
-    </div>
-  );
+            </List>
+            <Divider />
+          </Drawer>
+          <main
+            className={clsx(this.props.classes.content, {
+              [this.props.classes.contentShift]: this.state.open,
+            })}
+          >
+            <div className={this.props.classes.drawerHeader} />
+            {/* react router starts here */}
+            <Switch>
+              <Route path="/attendance">
+                <Attendance />
+              </Route>
+              <Route path="/students">
+                <Students />
+              </Route>
+              <Route path="/classes">
+                <Classes />
+              </Route>
+              <Route path="/instructors">
+                <Instructors />
+              </Route>
+              <Route path="/login">
+                <Login />
+              </Route>
+              <Route path="/dashboard">
+                <Dashboard />
+              </Route>
+              <Route path="/">
+                <Calendar />
+              </Route>
+            </Switch>
+          </main>
+        </Router>
+      </div>
+    );
+  }
 }
+
+export default withStyles(useStyles, { withTheme: true })(Navigation);
