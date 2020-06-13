@@ -56,17 +56,16 @@ class LoginBody extends React.Component {
       found.email === email &&
       found.password === password
     ) {
-      // prepare local storage item
+      // prepare and set local storage item
       let banana = {};
       banana.id = found.id;
       banana.name = found.name;
       banana = JSON.stringify(banana);
-      // set local storage item
       localStorage.setItem("banana", banana);
-      // pass data back to navigation to change options displayed
+      // pass data back to navigation component to change options displayed
       let data = {
         isLogin: true,
-        isLogout: false
+        isLogout: false,
       };
       this.props.callback(data);
       // redirect to dashboard

@@ -104,6 +104,15 @@ module.exports = (db) => {
     db.sessions.getAllSessionsQuery(callback);
   }
 
+  const getSessionsForDashboard = (request, response) => {
+    console.log(request.query);
+    let instructorId = parseInt(request.query.instructorId);
+    let callback = (result) => {
+      response.send(result);
+    };
+    db.sessions.sessionsForDashboard(callback, instructorId);
+  }
+
   return {
     newSession,
     getSessions,
@@ -111,5 +120,6 @@ module.exports = (db) => {
     deleteSession,
     getAttendanceByClass,
     getAllSessions,
+    getSessionsForDashboard,
   };
 };

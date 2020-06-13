@@ -54,5 +54,7 @@ module.exports = (app, allModels) => {
   app.post('/instructors/edit', instructors.editInstructor);
 
   app.post('/instructors/delete', instructors.deleteInstructor);
+
+  app.get('/dashboard/get', sessions.getSessionsForDashboard);
   
 };

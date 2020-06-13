@@ -102,7 +102,7 @@ class Navigation extends React.Component {
     };
   }
 
-  componentDidMount= () => {
+  componentDidMount = () => {
     let banana = localStorage.getItem("banana");
     if (!!banana) {
       this.setState({ isLogin: true, isLogout: false });
@@ -117,8 +117,8 @@ class Navigation extends React.Component {
   };
 
   callback = (result) => {
-    this.setState({isLogin: result.isLogin, isLogout: result.isLogout });
-  }
+    this.setState({ isLogin: result.isLogin, isLogout: result.isLogout });
+  };
 
   handleDrawerOpen = () => {
     this.setState({ open: true });
@@ -271,7 +271,7 @@ class Navigation extends React.Component {
                 <Instructors />
               </Route>
               <Route path="/login">
-                <Login callback={this.callback}/>
+                <Login callback={this.callback} />
               </Route>
               <Route path="/dashboard">
                 <Dashboard />

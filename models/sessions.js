@@ -160,6 +160,22 @@ module.exports = (pool) => {
     });
   };
 
+  const sessionsForDashboard = async (callback, instructorId) => {
+    let queryText = `select instructors_classes.session_id, instructors_classes.class_id, classes.title, classes.description, classes.image, sessions.start_datetime, sessions.end_datetime, sessions.location from instructors_classes join classes on (instructors_classes.class_id = classes.id) join sessions on (instructors_classes.session_id = sessions.id) where sessions.is_delete = false and instructors_classes.instructor_id = ${instructorId}`;
+    await pool.query(queryText).then(async (result) => {
+      console.log("TESTING ~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+      console.log(result.rows);
+      let sessions = result.rows;
+      for (let i = 0; i < sessions.length; i++) {
+        queryText = `select attendance.student_id, attendance.is_present, attendance.is_late, attendance.remarks, attendance.document, students.name, students.image, students.notes, students.birthday, students.gender from attendance join students on (attendance.student_id = students.id) where attendance.session_id = ${sessions[i].session_id} and students.is_delete = false`;
+        await pool.query(queryText).then(async (result) => {
+          sessions[i].students = result.rows;
+        });
+      }
+      callback(sessions);
+    });
+  };
+
   return {
     writeNewSession,
     querySessionsByDateRange,
@@ -167,5 +183,6 @@ module.exports = (pool) => {
     removeSession,
     getAttendanceData,
     getAllSessionsQuery,
+    sessionsForDashboard,
   };
 };
