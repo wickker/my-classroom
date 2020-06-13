@@ -16,6 +16,7 @@ export default class BodyInstructors extends React.Component {
       instructors: [],
       searchMsg: "",
       hide: false,
+      loggedId: "",
     };
   }
 
@@ -36,7 +37,6 @@ export default class BodyInstructors extends React.Component {
   };
 
   getInstructors = async () => {
-    console.log("instructor call made");
     let url = "/instructors/get";
     let response = await fetch(url);
     let data = await response.json();
@@ -49,6 +49,9 @@ export default class BodyInstructors extends React.Component {
     let banana = localStorage.getItem("banana");
     if (!banana) {
       this.setState({ hide: true });
+    } else {
+      banana = JSON.parse(banana);
+      this.setState({ loggedId: parseInt(banana.id) });
     }
     this.state.loading = true;
     let classes = await this.getClasses();
@@ -67,6 +70,13 @@ export default class BodyInstructors extends React.Component {
     if (this.state.instructors.length > 0) {
       let instructors = this.state.instructors;
       let HTML = instructors.map((element, index) => {
+        let loggedId = this.state.loggedId;
+        let hide = false;
+        if (loggedId === "") {
+          hide = this.state.hide;
+        } else if (loggedId !== element.id) {
+          hide = true;
+        }
         return (
           <div className="col-sm-3">
             <InstructorCard
@@ -74,7 +84,7 @@ export default class BodyInstructors extends React.Component {
               index={index}
               classesArr={this.state.classes}
               sessions={this.state.sessions}
-              hide={this.state.hide}
+              hide={hide}
             />
           </div>
         );
