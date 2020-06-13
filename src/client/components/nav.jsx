@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
-import Home from "./home";
+import Dashboard from "./dashboard";
 import Calendar from "./calendar";
 import Attendance from "./attendance";
 import Students from "./students";
@@ -126,9 +126,6 @@ export default function Navigation() {
                 </Typography>
               </div>
               <div className="col-sm">
-                {/* <Typography variant="button" noWrap>
-                  Logout
-                </Typography> */}
               </div>
             </div>
           </Toolbar>
@@ -153,17 +150,17 @@ export default function Navigation() {
           </div>
           <Divider />
           <List>
-            <Link to="/" style={{ textDecoration: "none", color: "black" }}>
+            <Link to="/dashboard" style={{ textDecoration: "none", color: "black" }}>
               <ListItem button>
-                <ListItemText>Home</ListItemText>
+                <ListItemText>Dashboard</ListItemText>
               </ListItem>
             </Link>
             <Link
-              to="/calendar"
+              to="/"
               style={{ textDecoration: "none", color: "black" }}
             >
               <ListItem button>
-                <ListItemText>Calendar</ListItemText>
+                <ListItemText>Home</ListItemText>
               </ListItem>
             </Link>
             <Link
@@ -220,9 +217,6 @@ export default function Navigation() {
           <div className={classes.drawerHeader} />
           {/* react router starts here */}
           <Switch>
-            <Route path="/calendar">
-              <Calendar />
-            </Route>
             <Route path="/attendance">
               <Attendance />
             </Route>
@@ -238,8 +232,11 @@ export default function Navigation() {
             <Route path="/login">
               <Login />
             </Route>
+            <Route path="/dashboard">
+              <Dashboard />
+            </Route>
             <Route path="/">
-              <Home />
+              <Calendar />
             </Route>
           </Switch>
         </main>

@@ -1,11 +1,11 @@
 import React from "react";
 
-export default class Home extends React.Component {
+export default class Dashboard extends React.Component {
   render() {
     return (
       <div className="row">
         <div className="col-sm">
-          <h1>HOME</h1>
+          <h1>DASHBOARD</h1>
         </div>
       </div>
     );
