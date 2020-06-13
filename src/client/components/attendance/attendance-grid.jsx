@@ -18,9 +18,12 @@ export class AttendanceGrid extends React.Component {
       isHidden: true,
       classSelected: "",
       classObjSelected: {},
+      isLogin: true,
+      hide: false,
     };
   }
 
+  // get classes data
   initClasses = async () => {
     let url = "/classes/get";
     const response = await fetch(url);
@@ -28,6 +31,7 @@ export class AttendanceGrid extends React.Component {
     this.setState({ classes: data.classes });
   };
 
+  // sort by name asc
   compareName = (a, b) => {
     const itemA = a.name.toUpperCase();
     const itemB = b.name.toUpperCase();
@@ -41,44 +45,42 @@ export class AttendanceGrid extends React.Component {
     return comparison;
   };
 
+  // sort by time asc
   compareTime = (a, b) => {
     return a.start_datetime - b.start_datetime;
   };
 
+  // find class that matches id selected from dropdown list
   findClassIdMatch = (event) => {
-    console.log(event.target.value);
     let classId = event.target.value;
-    this.setState({classSelected: classId});
+    this.setState({ classSelected: classId });
     this.setClassObjSelected(classId);
     this.initSelectedClassForId(classId);
   };
 
+  // save class object that matches id
   setClassObjSelected = (classId) => {
     let classes = this.state.classes;
-    console.log(classId);
-    console.log('getting classes from state:', classes);
     let obj = classes.find((element) => element.id === parseInt(classId, 10));
-    console.log("FIND CLASS OBJECT YOOOOO", obj);
     this.setState({ classObjSelected: obj });
-  }
+  };
 
+  // get class object from end point
   initSelectedClassForId = async (classId) => {
     const params = { classId: classId };
-    console.log(params);
     let url = new URL("http://localhost:3000/sessions/attendance");
     url.search = new URLSearchParams(params).toString();
-
     let response = await fetch(url);
     let data = await response.json();
-
+    // sort students by name and sessions by time in class object
     let studentsByName = data.students.sort(this.compareName);
     data.students = studentsByName;
     let sessionsByTime = data.sessions.sort(this.compareTime);
     data.sessions = sessionsByTime;
-
     this.initAttendanceArray(data);
   };
 
+  // generate attendance array grid
   initAttendanceArray = (data) => {
     let attendance = data;
     let array = [];
@@ -92,7 +94,8 @@ export class AttendanceGrid extends React.Component {
         array[x].push(string);
       }
     }
-    console.log(array);
+    console.log("raw array:", array);
+    // determine whether or not to hide attendance error message
     if (array.length === 0 || array[0].length === 0) {
       this.setState({ isHidden: false });
     } else {
@@ -101,6 +104,7 @@ export class AttendanceGrid extends React.Component {
     this.setState({ attendance, attendanceArray: array });
   };
 
+  // get class id from url params
   getClassFromParams = (props) => {
     const searchQuery = get(props, "location.search") || "";
     const classId = searchQuery ? searchQuery.split("?classid=")[1] : "";
@@ -108,6 +112,12 @@ export class AttendanceGrid extends React.Component {
   };
 
   componentDidMount = async () => {
+    // check for login
+    let banana = localStorage.getItem("banana");
+    console.log("BANANA: ", banana);
+    if (!banana) {
+      this.setState({ isLogin: false, hide: true });
+    }
     const classId = this.getClassFromParams(this.props);
     await this.initClasses();
     this.setClassObjSelected(classId);
@@ -115,15 +125,17 @@ export class AttendanceGrid extends React.Component {
     this.setState({ classSelected: classId });
   };
 
+  // styles
   box = cx(styles.box_row, "row", "mb-2", "mt-2");
+  boxHead = cx(styles.box_head, "row", "mb-2", "mt-4");
 
+  // render attendance html grid from raw array
   renderAttendanceGrid = () => {
     if (this.state.attendanceArray.length > 0) {
       let attendance = this.state.attendance;
       let array = this.state.attendanceArray;
       let studentId;
       let sessionId;
-
       let HTML = array.map((row, rowIndex) => {
         let count = 0;
         let box = row.map((col, colIndex) => {
@@ -189,20 +201,15 @@ export class AttendanceGrid extends React.Component {
     }
   };
 
-  boxHead = cx(styles.box_head, "row", "mb-2", "mt-4");
-
+  // render column headers
   renderColHeaders = () => {
     if (this.state.attendanceArray.length > 0) {
       let attendance = this.state.attendance;
-      console.log("---------");
-      console.log(attendance);
-      console.log("----------");
       let HTML = attendance.sessions.map((element, index) => {
-        // create obj to be passed to mark attendance button
+        // create object to be passed to mark attendance button
         let obj = {};
         obj.class = this.state.classObjSelected;
         obj.session = element;
-        console.log("OBJ FOR BUTTON~~~~", obj);
         // generate date column header label
         let date = moment(element.start_datetime, "x").format(
           "DD/MM/YY hh:mmA"
@@ -210,7 +217,9 @@ export class AttendanceGrid extends React.Component {
         return (
           <div className="col-sm" key={index}>
             {date}
-            <MarkAttendance obj={obj} />
+            <div hidden={this.state.hide}>
+              <MarkAttendance obj={obj} />
+            </div>
           </div>
         );
       });
