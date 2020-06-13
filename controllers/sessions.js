@@ -113,6 +113,19 @@ module.exports = (db) => {
     db.sessions.sessionsForDashboard(callback, instructorId);
   }
 
+  const editSession = (request, response) => {
+    console.log(request.body);
+    let sessionId = request.body.sessionId;
+    let classId = request.body.classId
+    let startDateTime = request.body.startDateTime;
+    let endDateTime = request.body.endDateTime;
+    let location = request.body.location;
+    let callback = () => {
+      response.redirect("/");
+    }
+    db.sessions.updateSession(callback, sessionId, startDateTime, endDateTime, location);
+  }
+
   return {
     newSession,
     getSessions,
@@ -121,5 +134,6 @@ module.exports = (db) => {
     getAttendanceByClass,
     getAllSessions,
     getSessionsForDashboard,
+    editSession,
   };
 };

@@ -176,6 +176,17 @@ module.exports = (pool) => {
     });
   };
 
+  const updateSession = (callback, sessionId, startDateTime, endDateTime, location) => {
+    let queryText = `update sessions set start_datetime = ${startDateTime}, end_datetime = ${endDateTime}, location = '${location}' where id = ${sessionId} returning *`;
+    pool.query(queryText, (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        callback();
+      }
+    });
+  }
+
   return {
     writeNewSession,
     querySessionsByDateRange,
@@ -184,5 +195,6 @@ module.exports = (pool) => {
     getAttendanceData,
     getAllSessionsQuery,
     sessionsForDashboard,
+    updateSession,
   };
 };

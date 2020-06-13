@@ -34,13 +34,14 @@ export default class EditSession extends React.Component {
       startTime: "",
       endTime: "",
       location: "",
+      sessionId: "",
     };
   }
 
   componentDidUpdate = (prevProps) => {
-    if ( prevProps === this.props) {
+    if (prevProps === this.props) {
       return;
-    } 
+    }
     let obj = get(this.props, "obj") || {};
     let classes = get(this.props, "classesArr") || [];
     let startDate = get(obj, "session.start_datetime") || "";
@@ -49,6 +50,7 @@ export default class EditSession extends React.Component {
       classes,
       obj,
       classId: get(obj, "class.id") || "",
+      sessionId: get(obj, "session.id") || "",
       date: moment(startDate, "x").format(),
       startTime: moment(startDate, "x").format(),
       endTime: moment(endDate, "x").format(),
@@ -56,57 +58,82 @@ export default class EditSession extends React.Component {
     });
   };
 
+  // convert time picker format to mS
+  convertTimeToMS = (time) => {
+    let dateStr = moment(this.state.date).format("D-M-YYYY");
+    let timeStr = moment(time).format("HH:mm");
+    let dtStr = dateStr + " " + timeStr;
+    let mS = moment(dtStr, "D-M-YYYY HH:mm").valueOf();
+    return mS;
+  }
+
   submit = () => {
     this.setState({ isClick: !this.state.isClick });
-
-    // let data = {
-    //   id: this.state.id,
-    //   title: this.state.title,
-    //   description: this.state.description,
-    //   frequency: this.state.frequency,
-    //   image: this.state.image,
-    // };
-    // console.log(data);
-
-    // let url = "/classes/edit";
-    // fetch(url, {
-    //   method: "POST", // or 'PUT'
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify(data),
-    // })
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     console.log("Success:", data);
-    //     window.location.reload(false);
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error:", error);
-    //     window.location.reload(false);
-    //   });
+    // create data object to send to server
+    let data = {
+      classId: this.state.classId,
+      sessionId: this.state.sessionId,
+      startDateTime: this.convertTimeToMS(this.state.startTime),
+      endDateTime: this.convertTimeToMS(this.state.endTime),
+      location: this.state.location,
+    };
+    console.log("DATA TO SEND: ", data);
+    // post session details update
+    let url = "/sessions/edit";
+    fetch(url, {
+      method: "POST", 
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+        window.location.reload(false);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        window.location.reload(false);
+      });
   };
 
-  setStartTime = (event) => {
-
+  // round time to quarter
+  roundTimeQuarterHour(time) {
+    var timeToReturn = new Date(time);
+    timeToReturn.setMilliseconds(
+      Math.round(timeToReturn.getMilliseconds() / 1000) * 1000
+    );
+    timeToReturn.setSeconds(Math.round(timeToReturn.getSeconds() / 60) * 60);
+    timeToReturn.setMinutes(Math.round(timeToReturn.getMinutes() / 15) * 15);
+    return timeToReturn;
   }
 
+  // input control functions
   setStartTime = (event) => {
+    let time = this.roundTimeQuarterHour(event);
+    this.setState({ startTime: time });
+  };
 
-  }
+  setEndTime = (event) => {
+    let time = this.roundTimeQuarterHour(event);
+    this.setState({ endTime: time });
+  };
 
   setLocation = (event) => {
-
-  }
+    this.setState({ location: event.target.value });
+  };
 
   setClassId = (event) => {
+    this.setState({ classId: event.target.value });
+  };
 
-  }
-
+  // open or close edit form page
   clickEdit = () => {
     this.setState({ isClick: !this.state.isClick });
   };
 
+  // render select class options
   renderClassDropdown = () => {
     let classesHTML = this.state.classes.map((element, index) => {
       return (
@@ -118,7 +145,7 @@ export default class EditSession extends React.Component {
     return (
       <FormControl fullWidth>
         <InputLabel>Select Class</InputLabel>
-        <Select onChange={this.setClassId} defaultValue={this.state.classId}>
+        <Select onChange={this.setClassId} value={this.state.classId} disabled>
           <MenuItem value="" disabled>
             Select Class
           </MenuItem>
@@ -146,56 +173,55 @@ export default class EditSession extends React.Component {
             <div className="col-sm">
               <DialogTitle>Edit Session</DialogTitle>
               <DialogContent>
-
-              {selectClass}
-
-              <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <KeyboardDatePicker
-                  disabled
+                {/* select class; disabled for edit */}
+                {selectClass}
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  {/* select date; is disabled permanently */}
+                  <KeyboardDatePicker
+                    disabled
+                    fullWidth
+                    variant="inline"
+                    format="dd/MM/yyyy"
+                    margin="normal"
+                    label="Start Date"
+                    value={this.state.date}
+                    KeyboardButtonProps={{
+                      "aria-label": "change date",
+                    }}
+                  />
+                  <div className="row">
+                    <div className="col-sm">
+                      {/* select start time */}
+                      <KeyboardTimePicker
+                        label="Start Time"
+                        value={this.state.startTime}
+                        onChange={this.setStartTime}
+                        KeyboardButtonProps={{
+                          "aria-label": "change time",
+                        }}
+                      />
+                    </div>
+                    <div className="col-sm">
+                      {/* select end time */}
+                      <KeyboardTimePicker
+                        label="Time picker"
+                        value={this.state.endTime}
+                        onChange={this.setEndTime}
+                        KeyboardButtonProps={{
+                          "aria-label": "change time",
+                        }}
+                      />
+                    </div>
+                  </div>
+                </MuiPickersUtilsProvider>
+                {/* input location */}
+                <TextField
+                  margin="dense"
+                  label="Location"
+                  onChange={this.setLocation}
+                  value={this.state.location}
                   fullWidth
-                  variant="inline"
-                  format="dd/MM/yyyy"
-                  margin="normal"
-                  label="Start Date"
-                  value={this.state.date}
-                  KeyboardButtonProps={{
-                    "aria-label": "change date",
-                  }}
                 />
-                <div className="row">
-                  <div className="col-sm">
-                    <KeyboardTimePicker
-                      label="Start Time"
-                      value={this.state.startTime}
-                      onChange={this.setStartTime}
-                      KeyboardButtonProps={{
-                        "aria-label": "change time",
-                      }}
-                    />
-                  </div>
-                  <div className="col-sm">
-                    <KeyboardTimePicker
-                      label="Time picker"
-                      value={this.state.endTime}
-                      onChange={this.setEndTime}
-                      KeyboardButtonProps={{
-                        "aria-label": "change time",
-                      }}
-                    />
-                  </div>
-                </div>
-              </MuiPickersUtilsProvider>
-              
-              <TextField
-                margin="dense"
-                label="Location"
-                onChange={this.setLocation}
-                value={this.state.location}
-                fullWidth
-              />       
-
-               
-              
               </DialogContent>
             </div>
           </div>

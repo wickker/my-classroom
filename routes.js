@@ -39,6 +39,8 @@ module.exports = (app, allModels) => {
 
   app.post('/sessions/delete', sessions.deleteSession);
 
+  app.post('/sessions/edit', sessions.editSession);
+
   app.get('/students/get', students.getStudents);
 
   app.post('/students/post', students.newStudent);
