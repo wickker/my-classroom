@@ -7,6 +7,7 @@ var classNames = require("classnames");
 const cx = classNames.bind(styles);
 var moment = require("moment");
 import MarkAttendance from "./mark-attendance-att";
+import { Document } from "react-pdf";
 
 export class AttendanceGrid extends React.Component {
   constructor() {
@@ -20,6 +21,7 @@ export class AttendanceGrid extends React.Component {
       classObjSelected: {},
       isLogin: true,
       hide: false,
+      url: "",
     };
   }
 
@@ -129,6 +131,28 @@ export class AttendanceGrid extends React.Component {
   box = cx(styles.box_row, "row", "mb-2", "mt-2");
   boxHead = cx(styles.box_head, "row", "mb-2", "mt-4");
 
+  // set url of supporting document if exists; convert pdf files to jpg
+  setURL = (event) => {
+    let url = event.target.id;
+    let result = url.replace("pdf", "jpg");
+    this.setState({ url: result });
+  };
+
+  // render supporting document
+  displayImage = () => {
+    let url = this.state.url;
+    if (url !== "") {
+      return (
+        <div className="row">
+          <div className="col-sm">
+            <div>Supporting Document</div>
+            <img src={url} style={{maxWidth:"70%"}}/>
+          </div>
+        </div>
+      );
+    }
+  };
+
   // render attendance html grid from raw array
   renderAttendanceGrid = () => {
     if (this.state.attendanceArray.length > 0) {
@@ -158,9 +182,10 @@ export class AttendanceGrid extends React.Component {
           if (obj.document !== "") {
             marker = (
               <div>
-                <a className={textStyle} href={obj.document} target="_blank">
-                  {text}
-                </a>
+                <span className={textStyle}>{text}</span>
+                <span id={obj.document} onClick={this.setURL}>
+                  link
+                </span>
               </div>
             );
           } else {
@@ -237,6 +262,7 @@ export class AttendanceGrid extends React.Component {
   render() {
     let grid = this.renderAttendanceGrid() || "";
     let head = this.renderColHeaders() || "";
+    let display = this.displayImage() || "";
 
     return (
       <div className="row">
@@ -264,6 +290,7 @@ export class AttendanceGrid extends React.Component {
           </div>
           {head}
           {grid}
+          {display}
         </div>
       </div>
     );
