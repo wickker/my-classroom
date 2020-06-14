@@ -10,6 +10,7 @@ var moment = require("moment");
 import styles from "./students.scss";
 import EditStudent from "./edit-student";
 import { get, isEmpty } from "lodash";
+import PropTypes from "prop-types";
 
 // styles
 const useStyles = makeStyles({
@@ -28,7 +29,7 @@ export default function MediaCard({ student, isHidden, classesArr, hide }) {
 
   // define variables
   let name = get(student, "name") || "";
-  let image = get(student, "image") || "";
+  let image = get(student, "image") || "#";
   let notes = get(student, "notes") || "";
   let birth_date = get(student, "birthday") || "";
   let bday = moment(birth_date, "x").format("DD MMMM YYYY");
@@ -97,3 +98,10 @@ export default function MediaCard({ student, isHidden, classesArr, hide }) {
     </div>
   );
 }
+
+MediaCard.propTypes = {
+  student: PropTypes.object,
+  isHidden: PropTypes.bool,
+  classesArr: PropTypes.array,
+  hide: PropTypes.bool,
+};

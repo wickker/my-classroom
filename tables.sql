@@ -1,10 +1,3 @@
-create table if not exists users (
-id serial primary key,
-username text,
-email text, 
-password text
-);
-
 create table if not exists classes (
   id serial primary key,
   title text,
