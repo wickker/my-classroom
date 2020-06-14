@@ -207,9 +207,10 @@ export default class CalendarGrid extends React.Component {
               let classObj = this.state.classes.find((classEle) => {
                 return classEle.id == element.class_id;
               });
+              let color = element.color;
               return (
                 <div className="row" key={index}>
-                  <div className={sessionBox}>
+                  <div className={sessionBox} style={{background: color}}>
                     <div
                       className={styles.session}
                       id={element.id}
@@ -234,8 +235,14 @@ export default class CalendarGrid extends React.Component {
         } else {
           hiding = this.state.hide;
         }
+        // change box background color for today 
+        let todayStr = moment(today).format("D-M-YYYY");
+        let todayColor = "white";
+        if (col === todayStr) {
+          todayColor = "pink";
+        }
         return (
-          <div key={colIndex} className={box}>
+          <div key={colIndex} className={box} style={{ background: todayColor }}>
             <div>
               <span>{col} </span>
               <span hidden={hiding}>

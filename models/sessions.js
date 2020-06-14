@@ -66,7 +66,8 @@ module.exports = (pool) => {
   };
 
   const querySessionsByDateRange = async (callback, startDate, endDate) => {
-    let queryText = `select * from sessions where start_datetime >= ${startDate} and start_datetime <= ${endDate} order by start_datetime asc`;
+    // let queryText = `select * from sessions where start_datetime >= ${startDate} and start_datetime <= ${endDate} order by start_datetime asc`;
+    let queryText = `select sessions.start_datetime, sessions.end_datetime, sessions.location, sessions.id, sessions.class_id, classes.color from sessions join classes on (classes.id = sessions.class_id) where sessions.start_datetime >= ${startDate} and sessions.start_datetime <= ${endDate} and sessions.is_delete = false order by sessions.start_datetime asc`;
     await pool.query(queryText).then(async (result) => {
       let sessions = result.rows;
       console.log("SESSIONS~~~~", sessions);

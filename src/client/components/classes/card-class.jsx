@@ -27,7 +27,7 @@ export default function MediaCard({ classCard, hide }) {
 
   // declare variables
   let title = get(classCard, "title") || "";
-  let description = get(classCard, "title") || "";
+  let description = get(classCard, "description") || "";
   let frequency = get(classCard, "frequency") || "";
   let image = get(classCard, "image") || "";
   let id = get(classCard, "id") || "";

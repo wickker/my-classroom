@@ -11,7 +11,8 @@ create table if not exists classes (
   description text,
   is_delete boolean,
   frequency text,
-  image text
+  image text,
+  color text
   );
 
 create table if not exists instructors (

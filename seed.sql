@@ -7,12 +7,13 @@ insert into instructors (name, image, about, is_delete, email, password) values 
 
 
 
+-- classes
+insert into classes (title, description, is_delete, frequency, image, color) values ('Recreation', 'Atque et saepe id magnam. Distinctio et omnis magni. Minima facilis quod reprehenderit debitis. Quaerat nostrum aliquid eos voluptatum numquam. Omnis quam veritatis iusto nobis voluptatem soluta. Soluta aspernatur nisi qui et voluptatibus at voluptates quam.', false, 'Deserunt deserunt nesciunt sint.', 'http://via.placeholder.com/300/CCCCCC/969696/?text=Sample%20Image', '#AAB3AB');
+insert into classes (title, description, is_delete, frequency, image, color) values ('Novice', 'Qui quibusdam ex et dolores deleniti. Quas est neque cumque et. Dolorem nemo eius facilis autem saepe aperiam earum veritatis recusandae. Nihil sit itaque at. Reiciendis deleniti optio placeat quasi. Corrupti nemo cum debitis.', false, 'Et voluptatem totam ullam facilis.', 'http://via.placeholder.com/300/CCCCCC/969696/?text=Sample%20Image', '#C4CBB7');
+insert into classes (title, description, is_delete, frequency, image, color) values ('Intermediate', 'Ducimus unde reprehenderit quae temporibus iste. Aut ex impedit. Natus eum nihil ut ut est libero quod est magnam. Non commodi et eum in sequi voluptatum voluptatem eos placeat.', false, 'Sequi cum voluptate porro aut enim voluptatem impedit quod est.', 'http://via.placeholder.com/300/CCCCCC/969696/?text=Sample%20Image', '#EBEFC9');
+insert into classes (title, description, is_delete, frequency, image, color) values ('Advanced', 'Animi unde ut quia commodi architecto molestiae odio doloremque temporibus. Ipsam quia voluptas voluptas amet dignissimos dolor ea quia. A nihil aspernatur eum ut et ut earum. Atque qui sed aut error rerum.', false, 'Voluptates quia vitae.', 'http://via.placeholder.com/300/CCCCCC/969696/?text=Sample%20Image', '#EEE0B7');
+insert into classes (title, description, is_delete, frequency, image, color) values ('Adult', 'Qui fugit magnam rerum magnam facere labore ad aut voluptas. A voluptatem consequatur. Magnam impedit ipsam et id recusandae dolorum. Consequatur rerum quia impedit ut dolorem. Optio necessitatibus soluta expedita animi repellendus aliquam. Sequi nisi distinctio.', false, 'Illo ducimus tempore quibusdam necessitatibus.', 'http://via.placeholder.com/300/CCCCCC/969696/?text=Sample%20Image', '#E8CAAF');
 
-insert into classes (title, description, is_delete, frequency, image) values ('Legros and Sons', 'Consequatur laudantium dolor voluptatum qui.', false, 'Non quisquam earum iste.', 'https://via.placeholder.com/300');
-insert into classes (title, description, is_delete, frequency, image) values ('Nienow, Tremblay and Schaden', 'Dolores animi sapiente perferendis et error accusantium.', false, 'Impedit quasi debitis cumque dolor.', 'https://via.placeholder.com/300');
-insert into classes (title, description, is_delete, frequency, image) values ('Hansen - Shanahan', 'Excepturi est voluptas.', false, 'Animi aut repellendus iste est tenetur officia ea numquam.', 'https://via.placeholder.com/300');
-insert into classes (title, description, is_delete, frequency, image) values ('Legros - Cummings', 'Mollitia provident autem laboriosam.', false, 'Voluptate dignissimos quia omnis accusantium expedita.', 'https://via.placeholder.com/300');
-insert into classes (title, description, is_delete, frequency, image) values ('Flatley - Herzog', 'Dolorem omnis modi eum aut.', false, 'Fugit ratione quaerat officia repellendus placeat vero.', 'https://via.placeholder.com/300');
 
 
 

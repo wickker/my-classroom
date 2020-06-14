@@ -8,16 +8,16 @@ function randomIntFromInterval(min, max) {
 }
 
 // instructors
-for (let i = 1; i < 6; i++) {
-  let name = faker.name.findName();
-  let image = `https://picsum.photos/id/${i}/300`;
-  let about = faker.lorem.sentence();
-  let email = "admin" + i + "@mail.com";
-  let password = sha256("123456");
-  console.log(
-    `insert into instructors (name, image, about, is_delete, email, password) values ('${name}', '${image}', '${about}', false, '${email}', '${password}');`
-  );
-}
+// for (let i = 1; i < 6; i++) {
+//   let name = faker.name.findName();
+//   let image = `https://picsum.photos/id/${i}/300`;
+//   let about = faker.lorem.sentence();
+//   let email = "admin" + i + "@mail.com";
+//   let password = sha256("123456");
+//   console.log(
+//     `insert into instructors (name, image, about, is_delete, email, password) values ('${name}', '${image}', '${about}', false, '${email}', '${password}');`
+//   );
+// }
 
 // attendance
 // for (let i = 1; i < 31; i++) {
@@ -48,13 +48,20 @@ for (let i = 1; i < 6; i++) {
 // }
 
 // classes
-// for (let i = 0; i < 5; i++) {
-//   let title = faker.company.companyName();
-//   let description = faker.lorem.sentence();
-//   let isDelete = false;
-//   let frequency = faker.lorem.sentence();
-//   let image = "https://via.placeholder.com/300";
-//   console.log(
-//     `insert into classes (title, description, is_delete, frequency, image) values ('${title}', '${description}', ${isDelete}, '${frequency}', '${image}');`
-//   );
-// }
+for (let i = 0; i < 5; i++) {
+  let classTitles = [
+    "Recreation",
+    "Novice",
+    "Intermediate",
+    "Advanced",
+    "Adult",
+  ];
+  let colors = ["#AAB3AB", "#C4CBB7", "#EBEFC9", "#EEE0B7", "#E8CAAF"];
+  let description = faker.lorem.paragraph();
+  let isDelete = false;
+  let frequency = faker.lorem.sentence();
+  let image = "http://via.placeholder.com/300/CCCCCC/969696/?text=Sample%20Image";
+  console.log(
+    `insert into classes (title, description, is_delete, frequency, image, color) values ('${classTitles[i]}', '${description}', ${isDelete}, '${frequency}', '${image}', '${colors[i]}');`
+  );
+}
