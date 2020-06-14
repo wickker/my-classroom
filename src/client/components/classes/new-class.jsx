@@ -31,23 +31,22 @@ export default class NewClass extends React.Component {
       title: "",
       description: "",
       frequency: "",
+      color: "",
     };
   }
 
   submit = () => {
     this.setState({ isClick: !this.state.isClick });
-
     let data = {
       title: this.state.title,
       description: this.state.description,
       frequency: this.state.frequency,
       image: this.state.image,
+      color: this.state.color,
     }
-    console.log(data);
-
     let url = '/classes/new';
     fetch(url, {
-      method: 'POST', // or 'PUT'
+      method: 'POST', 
       headers: {
         'Content-Type': 'application/json'
       },
@@ -65,18 +64,20 @@ export default class NewClass extends React.Component {
   };
 
   setTitle = (event) => {
-    console.log(event.target.value);
     this.setState({ title: event.target.value });
   };
 
   setDescription = (event) => {
-    console.log(event.target.value);
     this.setState({ description: event.target.value });
   };
 
   setFrequency = (event) => {
-    console.log(event.target.value);
     this.setState({ frequency: event.target.value });
+  };
+
+  setColor= (event) => {
+    console.log(event.target.value);
+    this.setState({ color: event.target.value });
   };
 
   callback = (result) => {
@@ -123,6 +124,13 @@ export default class NewClass extends React.Component {
                   label="Frequency"
                   onChange={this.setFrequency}
                   fullWidth
+                />
+                Color Display On Calendar
+                <input 
+                className="form-control"
+                type="color"
+                onChange={this.setColor}
+                width="100%"
                 />
                 <div className="mt-3 mb-3">
                 Select Image
