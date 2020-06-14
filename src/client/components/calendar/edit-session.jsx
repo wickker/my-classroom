@@ -32,9 +32,11 @@ export default class EditSession extends React.Component {
       classId: "",
       date: "",
       startTime: "",
+      startTimeMS: "",
       endTime: "",
       location: "",
       sessionId: "",
+      errorMsg: "",
     };
   }
 
@@ -53,6 +55,7 @@ export default class EditSession extends React.Component {
       sessionId: get(obj, "session.id") || "",
       date: moment(startDate, "x").format(),
       startTime: moment(startDate, "x").format(),
+      startTimeMS: moment(startDate, "x").valueOf(),
       endTime: moment(endDate, "x").format(),
       location: get(obj, "session.location") || "",
     });
@@ -65,10 +68,9 @@ export default class EditSession extends React.Component {
     let dtStr = dateStr + " " + timeStr;
     let mS = moment(dtStr, "D-M-YYYY HH:mm").valueOf();
     return mS;
-  }
+  };
 
   submit = () => {
-    this.setState({ isClick: !this.state.isClick });
     // create data object to send to server
     let data = {
       classId: this.state.classId,
@@ -77,11 +79,18 @@ export default class EditSession extends React.Component {
       endDateTime: this.convertTimeToMS(this.state.endTime),
       location: this.state.location,
     };
-    console.log("DATA TO SEND: ", data);
+    // validation
+    for (const key in data) {
+      if (data[key] === "") {
+        this.setState({ errorMsg: "Please complete all fields." });
+        return;
+      }
+    }
     // post session details update
+    this.setState({ isClick: !this.state.isClick });
     let url = "/sessions/edit";
     fetch(url, {
-      method: "POST", 
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
@@ -112,12 +121,18 @@ export default class EditSession extends React.Component {
   // input control functions
   setStartTime = (event) => {
     let time = this.roundTimeQuarterHour(event);
-    this.setState({ startTime: time });
+    let timeMS = moment(time).valueOf();
+    this.setState({ startTime: time, startTimeMS: timeMS });
   };
 
   setEndTime = (event) => {
     let time = this.roundTimeQuarterHour(event);
-    this.setState({ endTime: time });
+    let timeMS = moment(time).valueOf();
+    if (timeMS < this.state.startTimeMS) {
+      this.setState({ errorMsg: "End time cannot precede start time." });
+      return;
+    }
+    this.setState({ endTime: time, errorMsg: "" });
   };
 
   setLocation = (event) => {
@@ -130,7 +145,7 @@ export default class EditSession extends React.Component {
 
   // open or close edit form page
   clickEdit = () => {
-    this.setState({ isClick: !this.state.isClick });
+    this.setState({ isClick: !this.state.isClick, errorMsg: "" });
   };
 
   // render select class options
@@ -173,6 +188,7 @@ export default class EditSession extends React.Component {
             <div className="col-sm">
               <DialogTitle>Edit Session</DialogTitle>
               <DialogContent>
+                <div className="text-danger">{this.state.errorMsg}</div>
                 {/* select class; disabled for edit */}
                 {selectClass}
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
