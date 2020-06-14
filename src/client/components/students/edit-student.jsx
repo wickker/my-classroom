@@ -22,7 +22,8 @@ import Checkbox from "@material-ui/core/Checkbox";
 var moment = require("moment");
 import FileUploadEdit from "./file-upload-student-edit";
 
-export default class EditStudent2 extends React.Component {
+// main class begins here
+export default class EditStudent extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -37,6 +38,7 @@ export default class EditStudent2 extends React.Component {
       gender: "",
       notes: "",
       image: "",
+      errorMsg: "",
     };
   }
 
@@ -47,16 +49,12 @@ export default class EditStudent2 extends React.Component {
     }
     if (!isEqual(this.props.student, prevProps.student)) {
       let student = this.props.student;
-
       let classesWSessions = classes.filter((element) => {
         return element.sessions.length > 0;
       });
-
       this.initCheckboxState(classesWSessions, student);
-
       let g;
       student.gender === "Male" ? (g = 1) : (g = 2);
-
       this.setState({
         classes: classes,
         classesWSessions: classesWSessions,
@@ -72,8 +70,6 @@ export default class EditStudent2 extends React.Component {
   };
 
   submit = () => {
-    this.setState({ isClick: !this.state.isClick });
-
     let data = {
       id: this.state.id,
       name: this.state.name,
@@ -83,11 +79,17 @@ export default class EditStudent2 extends React.Component {
       notes: this.state.notes,
       image: this.state.image,
     };
-    console.log(data);
-
+    // validation
+    for (const key in data) {
+      if (data[key] === "") {
+        this.setState({ errorMsg: "Please complete all fields." });
+        return;
+      }
+    }
+    this.setState({ isClick: !this.state.isClick });
     let url = "/students/edit";
     fetch(url, {
-      method: "POST", // or 'PUT'
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
@@ -104,14 +106,12 @@ export default class EditStudent2 extends React.Component {
       });
   };
 
+  // form handlers
   setName = (event) => {
-    console.log(event.target.value);
     this.setState({ name: event.target.value });
   };
 
   setCheck = (event) => {
-    console.log(event.target.value);
-    console.log(event.target.checked);
     let value = event.target.value;
     let checkboxesState = this.state.checkboxesState;
     checkboxesState[value].current = !checkboxesState[value].current;
@@ -123,7 +123,6 @@ export default class EditStudent2 extends React.Component {
   };
 
   setGender = (event) => {
-    console.log(event.target.value);
     this.setState({ gender: event.target.value });
   };
 
@@ -132,8 +131,11 @@ export default class EditStudent2 extends React.Component {
   };
 
   callback = (result) => {
-    console.log("callback: ", result);
-    this.setState({ image: result });
+    if (result.includes("https://")) {
+      this.setState({ image: result, errorMsg: "" });
+    } else {
+      this.setState({ errorMsg: "Please input a valid URL." });
+    }
   };
 
   initCheckboxState = (classes, student) => {
@@ -160,7 +162,6 @@ export default class EditStudent2 extends React.Component {
   renderCheckboxes = () => {
     if (this.state.classesWSessions.length > 0) {
       let classes = this.state.classesWSessions;
-      console.log("CLASSES~~~~~", classes);
       let HTML = classes.map((element, index) => {
         let checkboxesState = this.state.checkboxesState;
         return (
@@ -185,7 +186,7 @@ export default class EditStudent2 extends React.Component {
   };
 
   clickEdit = () => {
-    this.setState({ isClick: !this.state.isClick });
+    this.setState({ isClick: !this.state.isClick, errorMsg: "" });
   };
 
   render() {
@@ -204,17 +205,18 @@ export default class EditStudent2 extends React.Component {
             <div className="col-sm">
               <DialogTitle>Edit Student</DialogTitle>
               <DialogContent>
+                <div className="text-danger">{this.state.errorMsg}</div>
                 <TextField
                   margin="dense"
                   label="Name"
                   onChange={this.setName}
                   fullWidth
                   defaultValue={this.state.name}
+                  required
                 />
-
+                {/* checkboxes go here */}
                 <div className="mt-3">Select Classes</div>
                 {this.renderCheckboxes()}
-
                 <div className="row mb-3">
                   <div className="col-sm">
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -226,12 +228,13 @@ export default class EditStudent2 extends React.Component {
                         label="Birthday"
                         value={this.state.birthday}
                         onChange={this.setBirthday}
+                        required
                       />
                     </MuiPickersUtilsProvider>
                   </div>
                   <div className="col-sm mt-3">
                     <FormControl fullWidth>
-                      <InputLabel>Select Gender</InputLabel>
+                      <InputLabel>Select Gender *</InputLabel>
                       <Select
                         defaultValue={this.state.gender}
                         onChange={this.setGender}
@@ -245,7 +248,6 @@ export default class EditStudent2 extends React.Component {
                     </FormControl>
                   </div>
                 </div>
-
                 <div className="row mb-2">
                   <div className="col-sm">
                     <TextField
@@ -256,10 +258,11 @@ export default class EditStudent2 extends React.Component {
                       fullWidth
                       onChange={this.setNotes}
                       defaultValue={this.state.notes}
+                      required
                     />
                   </div>
                   <div className="col-sm">
-                    Upload/ Input Display Picture
+                    Select Image *
                     <FileUploadEdit
                       callback={this.callback}
                       ogImage={this.state.image}

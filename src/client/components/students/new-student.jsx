@@ -18,11 +18,12 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import Checkbox from "@material-ui/core/Checkbox";
-
 var moment = require("moment");
 import FileUpload from "./file-upload-student";
 
+// main function starts here
 export default function NewStudent({ classes }) {
+  // handles open and close of form dialog
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -31,10 +32,21 @@ export default function NewStudent({ classes }) {
 
   const handleClose = () => {
     setOpen(false);
+    setErrorMsg("");
   };
 
+  // define variables
+  let date = moment(new Date()).valueOf();
+  const [birthday, setBirthday] = React.useState(date);
+  const [checkClasses, setCheckClasses] = React.useState([]);
+  const [name, setName] = React.useState("");
+  const [gender, setGender] = React.useState("");
+  const [notes, setNotes] = React.useState("");
+  const [file, setFile] = React.useState("");
+  const [errorMsg, setErrorMsg] = React.useState("");
+
+  // post new student
   const submit = () => {
-    setOpen(false);
     let data = {
       name,
       birthday,
@@ -43,11 +55,16 @@ export default function NewStudent({ classes }) {
       notes,
       file,
     };
-    console.log(data);
-
+    for (const key in data) {
+      if (data[key] === "") {
+        setErrorMsg("Please complete all fields.");
+        return;
+      }
+    }
+    setOpen(false);
     let url = "/students/post";
     fetch(url, {
-      method: "POST", // or 'PUT'
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
@@ -64,22 +81,13 @@ export default function NewStudent({ classes }) {
       });
   };
 
-  let date = moment(new Date()).valueOf();
-  const [birthday, setBirthday] = React.useState(date);
-  const [checkClasses, setCheckClasses] = React.useState([]);
-  const [name, setName] = React.useState("");
-  const [gender, setGender] = React.useState("");
-  const [notes, setNotes] = React.useState("");
-  const [file, setFile] = React.useState("");
-
+  // form handlers
   const birthdaySet = (event) => {
     let bday = moment(event).valueOf();
-    console.log(bday);
     setBirthday(bday);
   };
 
   const nameSet = (event) => {
-    console.log(event.target.value);
     setName(event.target.value);
   };
 
@@ -91,7 +99,6 @@ export default function NewStudent({ classes }) {
   };
 
   const genderSet = (event) => {
-    console.log(event.target.value);
     let gender;
     event.target.value === 1 ? (gender = "Male") : (gender = "Female");
     console.log(gender);
@@ -103,10 +110,15 @@ export default function NewStudent({ classes }) {
   };
 
   const callback = (string) => {
-    console.log("STRING: ", string);
-    setFile(string);
+    if (string.includes("https://")) {
+      setFile(string);
+      setErrorMsg("");
+    } else {
+      setErrorMsg("Please input a valid URL.");
+    }
   };
 
+  // render class checkboxes
   const renderSelectClass = () => {
     if (classes && classes.length > 0) {
       let HTML = classes.map((element, index) => {
@@ -149,16 +161,16 @@ export default function NewStudent({ classes }) {
           <div className="col-sm">
             <DialogTitle>New Student</DialogTitle>
             <DialogContent>
+              <div className="text-danger">{errorMsg}</div>
               <TextField
                 margin="dense"
                 label="Name"
                 onChange={nameSet}
                 fullWidth
+                required
               />
-
               <div className="mt-3">Select Classes</div>
               {checkboxes}
-
               <div className="row mb-3">
                 <div className="col-sm">
                   <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -170,13 +182,14 @@ export default function NewStudent({ classes }) {
                       label="Birthday"
                       value={birthday}
                       onChange={birthdaySet}
+                      required
                     />
                   </MuiPickersUtilsProvider>
                 </div>
                 <div className="col-sm mt-3">
                   <FormControl fullWidth>
-                    <InputLabel>Select Gender</InputLabel>
-                    <Select onChange={genderSet}>
+                    <InputLabel>Select Gender *</InputLabel>
+                    <Select defaultValue="" onChange={genderSet}>
                       <MenuItem value="" disabled>
                         Select Gender
                       </MenuItem>
@@ -186,7 +199,6 @@ export default function NewStudent({ classes }) {
                   </FormControl>
                 </div>
               </div>
-
               <div className="row mb-2">
                 <div className="col-sm">
                   <TextField
@@ -196,10 +208,11 @@ export default function NewStudent({ classes }) {
                     rows={2}
                     fullWidth
                     onChange={notesSet}
+                    required
                   />
                 </div>
                 <div className="col-sm">
-                  Upload/ Input Display Picture
+                  Select Image *
                   <FileUpload callback={callback} />
                 </div>
               </div>

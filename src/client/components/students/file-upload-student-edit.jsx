@@ -68,7 +68,7 @@ export default class FileUploadEdit extends React.Component {
             name="document_prompt"
           />
           <label className="custom-file-label" htmlFor={fileId}>
-            Choose File
+            Choose File/ Input URL
           </label>
           <div className="input-group mt-2">
             <div className="input-group-prepend">

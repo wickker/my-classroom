@@ -30,7 +30,7 @@ export default class FileUpload extends React.Component {
 
     let fileId = "inputFile";
     let fileGroup = document.getElementById(fileId);
-    console.log(fileGroup.files);
+
 
     let file = fileGroup.files[0];
     let formData = new FormData();
@@ -75,7 +75,7 @@ export default class FileUpload extends React.Component {
             name="document_prompt"
           />
           <label className="custom-file-label" htmlFor={fileId}>
-            Choose File
+            Choose File/ Input URL 
           </label>
           <div className="input-group mt-2">
             <div className="input-group-prepend">
