@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+
 import styles from "./all_styles.scss";
 import Dashboard from "./dashboard";
 import Calendar from "./calendar_home";
@@ -30,6 +31,8 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import icon from "../svg/dot-circle-regular.svg";
 
 // styles
 const drawerWidth = 240;
@@ -157,7 +160,7 @@ class Navigation extends React.Component {
               <div className="row">
                 <div className="col-sm-7">
                   <Typography variant="button" noWrap>
-                    My Classroom
+                    <span className={styles.nav_title}>My Classroom</span>
                   </Typography>
                 </div>
                 <div className="col-sm"></div>
@@ -189,12 +192,22 @@ class Navigation extends React.Component {
                 style={{ textDecoration: "none", color: "black" }}
               >
                 <ListItem button hidden={this.state.isLogout}>
-                  <ListItemText>Dashboard</ListItemText>
+                  <ListItemIcon>
+                    <img className={styles.nav_icons} src={icon} />
+                  </ListItemIcon>
+                  <ListItemText>
+                    <span className={styles.nav_items}>Dashboard</span>
+                  </ListItemText>
                 </ListItem>
               </Link>
               <Link to="/" style={{ textDecoration: "none", color: "black" }}>
                 <ListItem button>
-                  <ListItemText>Home</ListItemText>
+                  <ListItemIcon>
+                    <img className={styles.nav_icons} src={icon} />
+                  </ListItemIcon>
+                  <ListItemText>
+                    <span className={styles.nav_items}>Home: Sessions</span>
+                  </ListItemText>
                 </ListItem>
               </Link>
               <Link
@@ -202,7 +215,12 @@ class Navigation extends React.Component {
                 style={{ textDecoration: "none", color: "black" }}
               >
                 <ListItem button>
-                  <ListItemText>Attendance</ListItemText>
+                  <ListItemIcon>
+                    <img className={styles.nav_icons} src={icon} />
+                  </ListItemIcon>
+                  <ListItemText>
+                    <span className={styles.nav_items}>Attendance</span>
+                  </ListItemText>
                 </ListItem>
               </Link>
               <Link
@@ -210,7 +228,12 @@ class Navigation extends React.Component {
                 style={{ textDecoration: "none", color: "black" }}
               >
                 <ListItem button>
-                  <ListItemText>Students</ListItemText>
+                  <ListItemIcon>
+                    <img className={styles.nav_icons} src={icon} />
+                  </ListItemIcon>
+                  <ListItemText>
+                    <span className={styles.nav_items}>Students</span>
+                  </ListItemText>
                 </ListItem>
               </Link>
               <Link
@@ -218,7 +241,12 @@ class Navigation extends React.Component {
                 style={{ textDecoration: "none", color: "black" }}
               >
                 <ListItem button>
-                  <ListItemText>Instructors</ListItemText>
+                  <ListItemIcon>
+                    <img className={styles.nav_icons} src={icon} />
+                  </ListItemIcon>
+                  <ListItemText>
+                    <span className={styles.nav_items}>Instructors</span>
+                  </ListItemText>
                 </ListItem>
               </Link>
               <Link
@@ -226,7 +254,12 @@ class Navigation extends React.Component {
                 style={{ textDecoration: "none", color: "black" }}
               >
                 <ListItem button>
-                  <ListItemText>Classes</ListItemText>
+                  <ListItemIcon>
+                    <img className={styles.nav_icons} src={icon} />
+                  </ListItemIcon>
+                  <ListItemText>
+                    <span className={styles.nav_items}>Classes</span>
+                  </ListItemText>
                 </ListItem>
               </Link>
               <Link
@@ -234,7 +267,12 @@ class Navigation extends React.Component {
                 style={{ textDecoration: "none", color: "black" }}
               >
                 <ListItem button hidden={this.state.isLogin}>
-                  <ListItemText>Login</ListItemText>
+                  <ListItemIcon>
+                    <img className={styles.nav_icons} src={icon} />
+                  </ListItemIcon>
+                  <ListItemText>
+                    <span className={styles.nav_items}>Login</span>
+                  </ListItemText>
                 </ListItem>
               </Link>
               <Link
@@ -246,7 +284,12 @@ class Navigation extends React.Component {
                   hidden={this.state.isLogout}
                   onClick={this.logout}
                 >
-                  <ListItemText>Logout</ListItemText>
+                  <ListItemIcon>
+                    <img className={styles.nav_icons} src={icon} />
+                  </ListItemIcon>
+                  <ListItemText>
+                    <span className={styles.nav_items}>Logout</span>
+                  </ListItemText>
                 </ListItem>
               </Link>
             </List>
