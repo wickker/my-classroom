@@ -33,6 +33,7 @@ export default class EditClass extends React.Component {
       frequency: "",
       id: "",
       color: "",
+      errorMsg: "",
     };
   }
 
@@ -49,7 +50,6 @@ export default class EditClass extends React.Component {
   };
 
   submit = () => {
-    this.setState({ isClick: !this.state.isClick });
     let data = {
       id: this.state.id,
       title: this.state.title,
@@ -58,9 +58,17 @@ export default class EditClass extends React.Component {
       image: this.state.image,
       color: this.state.color,
     };
+    // validation
+    for (const key in data) {
+      if (data[key] === "") {
+        this.setState({ errorMsg: "Please complete all fields." });
+        return;
+      }
+    }
+    this.setState({ isClick: !this.state.isClick });
     let url = "/classes/edit";
     fetch(url, {
-      method: "POST", 
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
@@ -95,11 +103,15 @@ export default class EditClass extends React.Component {
 
   callback = (result) => {
     console.log("callback: ", result);
-    this.setState({ image: result });
+    if (result.includes("https://")) {
+      this.setState({ image: result, errorMsg: "" });
+    } else {
+      this.setState({ errorMsg: "Please input a valid URL." });
+    }
   };
 
   clickEdit = () => {
-    this.setState({ isClick: !this.state.isClick });
+    this.setState({ isClick: !this.state.isClick, errorMsg: "" });
   };
 
   render() {
@@ -118,12 +130,14 @@ export default class EditClass extends React.Component {
             <div className="col-sm">
               <DialogTitle>Edit Class</DialogTitle>
               <DialogContent>
+                <div className="text-danger">{this.state.errorMsg}</div>
                 <TextField
                   margin="dense"
                   label="Name"
                   onChange={this.setTitle}
                   defaultValue={this.state.title}
                   fullWidth
+                  required
                 />
                 <TextField
                   margin="dense"
@@ -133,6 +147,7 @@ export default class EditClass extends React.Component {
                   multiline
                   rows={2}
                   defaultValue={this.state.description}
+                  required
                 />
                 <TextField
                   margin="dense"
@@ -140,17 +155,18 @@ export default class EditClass extends React.Component {
                   onChange={this.setFrequency}
                   defaultValue={this.state.frequency}
                   fullWidth
+                  required
                 />
-                Color Display On Calendar
-                <input 
-                className="form-control"
-                type="color"
-                onChange={this.setColor}
-                width="100%"
-                defaultValue={this.state.color}
+                Color Display On Calendar *
+                <input
+                  className="form-control"
+                  type="color"
+                  onChange={this.setColor}
+                  width="100%"
+                  defaultValue={this.state.color}
                 />
                 <div className="mt-3 mb-3">
-                  Select Image
+                  Select Image *
                   <FileUploadEdit
                     callback={this.callback}
                     image={this.state.image}

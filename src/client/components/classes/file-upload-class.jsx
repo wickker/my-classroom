@@ -86,6 +86,7 @@ export default class FileUpload extends React.Component {
               className="form-control"
               name="document"
               onChange={this.saveFile}
+              required
             />
           </div>
         </span>

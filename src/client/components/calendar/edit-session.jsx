@@ -215,6 +215,7 @@ export default class EditSession extends React.Component {
                         KeyboardButtonProps={{
                           "aria-label": "change time",
                         }}
+                        required
                       />
                     </div>
                     <div className="col-sm">
@@ -226,6 +227,7 @@ export default class EditSession extends React.Component {
                         KeyboardButtonProps={{
                           "aria-label": "change time",
                         }}
+                        required
                       />
                     </div>
                   </div>
@@ -237,6 +239,7 @@ export default class EditSession extends React.Component {
                   onChange={this.setLocation}
                   value={this.state.location}
                   fullWidth
+                  required
                 />
               </DialogContent>
             </div>

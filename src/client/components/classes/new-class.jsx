@@ -32,33 +32,41 @@ export default class NewClass extends React.Component {
       description: "",
       frequency: "",
       color: "",
+      errorMsg: "",
     };
   }
 
   submit = () => {
-    this.setState({ isClick: !this.state.isClick });
     let data = {
       title: this.state.title,
       description: this.state.description,
       frequency: this.state.frequency,
       image: this.state.image,
       color: this.state.color,
+    };
+    // validation
+    for (const key in data) {
+      if (data[key] === "") {
+        this.setState({ errorMsg: "Please complete all fields." });
+        return;
+      }
     }
-    let url = '/classes/new';
+    this.setState({ isClick: !this.state.isClick });
+    let url = "/classes/new";
     fetch(url, {
-      method: 'POST', 
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log('Success:', data);
+        console.log("Success:", data);
         window.location.reload(false);
       })
       .catch((error) => {
-        console.error('Error:', error);
+        console.error("Error:", error);
         window.location.reload(false);
       });
   };
@@ -75,18 +83,22 @@ export default class NewClass extends React.Component {
     this.setState({ frequency: event.target.value });
   };
 
-  setColor= (event) => {
+  setColor = (event) => {
     console.log(event.target.value);
     this.setState({ color: event.target.value });
   };
 
   callback = (result) => {
     console.log("callback: ", result);
-    this.setState({ image: result });
+    if (result.includes("https://")) {
+      this.setState({ image: result, errorMsg: "" });
+    } else {
+      this.setState({ errorMsg: "Please input a valid URL." });
+    }
   };
 
   clickEdit = () => {
-    this.setState({ isClick: !this.state.isClick });
+    this.setState({ isClick: !this.state.isClick, errorMsg: "" });
   };
 
   render() {
@@ -105,11 +117,13 @@ export default class NewClass extends React.Component {
             <div className="col-sm">
               <DialogTitle>New Class</DialogTitle>
               <DialogContent>
+                <div className="text-danger">{this.state.errorMsg}</div>
                 <TextField
                   margin="dense"
                   label="Title"
                   onChange={this.setTitle}
                   fullWidth
+                  required
                 />
                 <TextField
                   margin="dense"
@@ -118,23 +132,27 @@ export default class NewClass extends React.Component {
                   fullWidth
                   multiline
                   rows={2}
+                  required
                 />
                 <TextField
                   margin="dense"
                   label="Frequency"
                   onChange={this.setFrequency}
                   fullWidth
+                  required
                 />
-                Color Display On Calendar
-                <input 
-                className="form-control"
-                type="color"
-                onChange={this.setColor}
-                width="100%"
+                Color Display On Calendar *
+                <input
+                  className="form-control"
+                  type="color"
+                  defaultValue="#FFFFFF"
+                  onChange={this.setColor}
+                  width="100%"
+                  required
                 />
                 <div className="mt-3 mb-3">
-                Select Image
-                <FileUpload callback={this.callback} />
+                  Select Image *
+                  <FileUpload callback={this.callback} />
                 </div>
               </DialogContent>
             </div>
