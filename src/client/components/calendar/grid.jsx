@@ -182,11 +182,8 @@ export default class CalendarGrid extends React.Component {
   render() {
     // styles
     const box = cx(styles.calendar_box, "col-sm");
-
     const boxHead = cx(styles.calendar_box_head, "col-sm");
-
     const boxAround = cx(styles.calendar_box_around, "col-sm");
-
     const sessionBox = cx(styles.session_box, "col-sm");
 
     // render calendar grid
@@ -226,11 +223,22 @@ export default class CalendarGrid extends React.Component {
             });
           }
         }
+        // don't show add new session button for dates in the past
+        let today = new Date();
+        today.setHours(0, 0, 0);
+        let ytdMS = moment(today).valueOf() - 86400000;
+        let dateInBox = moment(col, "D-M-YYYY").valueOf();
+        let hiding;
+        if (dateInBox <= ytdMS) {
+          hiding = true;
+        } else {
+          hiding = this.state.hide;
+        }
         return (
           <div key={colIndex} className={box}>
             <div>
               <span>{col} </span>
-              <span hidden={this.state.hide}>
+              <span hidden={hiding}>
                 <NewSessionDialog classes={this.state.classes} dateStr={col} />
               </span>
             </div>

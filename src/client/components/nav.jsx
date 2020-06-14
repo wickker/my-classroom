@@ -135,6 +135,8 @@ class Navigation extends React.Component {
           <CssBaseline />
           <AppBar
             position="fixed"
+            // controls color of navigation bar
+            style={{ background: "black" }}
             className={clsx(this.props.classes.appBar, {
               [this.props.classes.appBarShift]: this.state.open,
             })}
