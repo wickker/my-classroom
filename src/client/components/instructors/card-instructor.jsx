@@ -19,7 +19,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function MediaCard({ instructor, classesArr, sessions, hide }) {
+export default function MediaCard({ instructor, classesArr, sessions, hide, instructors }) {
   const classes = useStyles();
 
   const deleteInstructor = () => {
@@ -87,6 +87,7 @@ export default function MediaCard({ instructor, classesArr, sessions, hide }) {
             instructor={instructor}
             classes={classesArr}
             sessions={sessions}
+            instructors={instructors}
           />
 
           <Button

@@ -61,8 +61,8 @@ export default class BodyInstructors extends React.Component {
       loading: false,
       classes,
       sessions,
-      instructors,
       ogInstructors: instructors,
+      instructors,
     });
   };
 
@@ -84,6 +84,7 @@ export default class BodyInstructors extends React.Component {
               classesArr={this.state.classes}
               sessions={this.state.sessions}
               hide={hide}
+              instructors={this.state.ogInstructors}
             />
           </div>
         );
@@ -122,6 +123,7 @@ export default class BodyInstructors extends React.Component {
             <NewInstructor
               classes={this.state.classes}
               sessions={this.state.sessions}
+              instructors={this.state.ogInstructors}
             />
           </div>
           Search

@@ -36,6 +36,8 @@ export default class NewInstructor extends React.Component {
       password: "",
       checkedState: {},
       primaryCheckedState: {},
+      errorMsg: "",
+      instructors: [],
     };
   }
 
@@ -50,6 +52,7 @@ export default class NewInstructor extends React.Component {
       this.setState({
         sessions,
         classes,
+        instructors: this.props.instructors,
       });
     }
   };
@@ -147,7 +150,6 @@ export default class NewInstructor extends React.Component {
   };
 
   submit = () => {
-    this.setState({ isClick: !this.state.isClick });
     let data = {
       name: this.state.name,
       image: this.state.image,
@@ -156,8 +158,14 @@ export default class NewInstructor extends React.Component {
       password: this.state.password,
       checkedState: this.state.checkedState,
     }
-    console.log(data);
+    for (const key in data) {
+      if (data[key] === "") {
+        this.setState({ errorMsg: "Please complete all fields." });
+        return;
+      }
+    }
     // post new instructor to server
+    this.setState({ isClick: !this.state.isClick });
     let url = '/instructors/new';
     fetch(url, {
       method: 'POST', 
@@ -203,7 +211,17 @@ export default class NewInstructor extends React.Component {
   };
 
   setEmail = (event) => {
-    this.setState({ email: event.target.value });
+    let email = event.target.value;
+    let found = this.state.instructors.find(element => element.email === email);
+    if (!email.includes("@")) {
+      this.setState({ errorMsg: "Please input a valid email." });
+      return;
+    }
+    if (!!found) {
+      this.setState({ errorMsg: "Email already exists. Please choose another one." });
+      return;
+    }
+    this.setState({ email: email, errorMsg: "" });
   };
 
   setPassword = (event) => {
@@ -213,12 +231,16 @@ export default class NewInstructor extends React.Component {
   // gets image url from upload component
   callback = (result) => {
     console.log("callback: ", result);
-    this.setState({ image: result });
+    if (result.includes("https://")) {
+      this.setState({ image: result, errorMsg: "" });
+    } else {
+      this.setState({ errorMsg: "Please input a valid URL." });
+    }
   };
 
   // controls opening and closing of form
   clickEdit = () => {
-    this.setState({ isClick: !this.state.isClick });
+    this.setState({ isClick: !this.state.isClick, errorMsg: ""  });
   };
 
   render() {
@@ -237,11 +259,13 @@ export default class NewInstructor extends React.Component {
             <div className="col-sm">
               <DialogTitle>New Instructor</DialogTitle>
               <DialogContent>
+              <div className="text-danger">{this.state.errorMsg}</div>
                 <TextField
                   margin="dense"
                   label="Name"
                   onChange={this.setName}
                   fullWidth
+                  required
                 />
                 <TextField
                   margin="dense"
@@ -250,24 +274,27 @@ export default class NewInstructor extends React.Component {
                   fullWidth
                   multiline
                   rows={2}
+                  required
                 />
                 <TextField
                   margin="dense"
                   label="Email"
                   onChange={this.setEmail}
                   fullWidth
+                  required
                 />
                 <TextField
                   margin="dense"
                   label="Password"
                   onChange={this.setPassword}
                   fullWidth
+                  required
                 />
                 <div className="mt-4">Select Classes and Sessions</div>
                 {/* checkboxes go here */}
                 <div>{this.renderCheckboxes()}</div>
                 <div className="mt-3 mb-3">
-                  Select Image
+                  Select Image *
                   <FileUpload callback={this.callback} />
                 </div>
               </DialogContent>

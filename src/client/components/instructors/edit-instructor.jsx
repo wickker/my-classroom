@@ -38,18 +38,21 @@ export default class EditInstructor extends React.Component {
       checkedState: {},
       primaryCheckedState: {},
       instructor: {},
+      errorMsg: "",
+      instructors: [],
     };
   }
 
   componentDidMount = () => {
     this.setState({
+      instructors: this.props.instructors,
       sessions: this.props.sessions,
       classes: this.props.classes,
       instructor: this.props.instructor,
       id: this.props.instructor.id,
-      name: this.props.instructor.name, 
-      about: this.props.instructor.about, 
-      image: this.props.instructor.image, 
+      name: this.props.instructor.name,
+      about: this.props.instructor.about,
+      image: this.props.instructor.image,
       email: this.props.instructor.email,
     });
 
@@ -157,7 +160,6 @@ export default class EditInstructor extends React.Component {
   };
 
   submit = () => {
-    this.setState({ isClick: !this.state.isClick });
     let data = {
       id: this.state.id,
       name: this.state.name,
@@ -167,8 +169,14 @@ export default class EditInstructor extends React.Component {
       email: this.state.email,
       password: this.state.password,
     };
-    console.log(data);
-    // post data to server 
+    for (const key in data) {
+      if (data[key] === "") {
+        this.setState({ errorMsg: "Please complete all fields." });
+        return;
+      }
+    }
+    // post data to server
+    this.setState({ isClick: !this.state.isClick });
     let url = "/instructors/edit";
     fetch(url, {
       method: "POST", // or 'PUT'
@@ -214,21 +222,34 @@ export default class EditInstructor extends React.Component {
   };
 
   setEmail = (event) => {
-    this.setState({ email: event.target.email });
+    let email = event.target.value;
+    let found = this.props.instructors.find(element => element.email === email);
+    if (!email.includes("@")) {
+      this.setState({ errorMsg: "Please input a valid email." });
+      return;
+    }
+    if (!!found) {
+      this.setState({ errorMsg: "Email already exists. Please choose another one." });
+      return;
+    }
+    this.setState({ email: email, errorMsg: "" });
   };
 
   setPassword = (event) => {
     this.setState({ password: event.target.value });
   };
 
-
   callback = (result) => {
     console.log("callback: ", result);
-    this.setState({ image: result });
+    if (result.includes("https://")) {
+      this.setState({ image: result, errorMsg: "" });
+    } else {
+      this.setState({ errorMsg: "Please input a valid URL." });
+    }
   };
 
   clickEdit = () => {
-    this.setState({ isClick: !this.state.isClick });
+    this.setState({ isClick: !this.state.isClick, errorMsg: "" });
   };
 
   render() {
@@ -247,12 +268,14 @@ export default class EditInstructor extends React.Component {
             <div className="col-sm">
               <DialogTitle>New Instructor</DialogTitle>
               <DialogContent>
+                <div className="text-danger">{this.state.errorMsg}</div>
                 <TextField
                   margin="dense"
                   label="Name"
                   onChange={this.setName}
                   defaultValue={this.state.name}
                   fullWidth
+                  required
                 />
                 <TextField
                   margin="dense"
@@ -262,6 +285,7 @@ export default class EditInstructor extends React.Component {
                   multiline
                   rows={2}
                   defaultValue={this.state.about}
+                  required
                 />
                 <TextField
                   margin="dense"
@@ -269,19 +293,24 @@ export default class EditInstructor extends React.Component {
                   onChange={this.setEmail}
                   defaultValue={this.state.email}
                   fullWidth
+                  required
                 />
                 <TextField
                   margin="dense"
                   label="New Password"
                   onChange={this.setPassword}
                   fullWidth
+                  required
                 />
                 <div className="mt-4">Select Classes and Sessions</div>
                 {/* checkboxes go here */}
                 <div>{this.renderCheckboxes()}</div>
                 <div className="mt-3 mb-3">
-                  Select Image
-                  <FileUploadEdit callback={this.callback} image={this.state.image} />
+                  Select Image *
+                  <FileUploadEdit
+                    callback={this.callback}
+                    image={this.state.image}
+                  />
                 </div>
               </DialogContent>
               <DialogActions>
