@@ -1,6 +1,5 @@
 import React from "react";
-import styles from "./calendar.scss";
-
+import styles from "../all_styles.scss";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";

@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./calendar.scss";
+import styles from "../all_styles.scss";
 var moment = require("moment");
 import MarkAttendance from "./mark-attendance";
 import TrashIcon from "../../svg/trash-solid.svg";

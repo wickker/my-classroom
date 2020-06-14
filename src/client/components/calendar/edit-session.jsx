@@ -21,6 +21,7 @@ import Select from "@material-ui/core/Select";
 import Checkbox from "@material-ui/core/Checkbox";
 var moment = require("moment");
 import { get, isEmpty } from "lodash";
+import styles from "../all_styles.scss";
 
 export default class EditSession extends React.Component {
   constructor() {

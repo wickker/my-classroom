@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-
+import styles from "./all_styles.scss";
 import Dashboard from "./dashboard";
 import Calendar from "./calendar_home";
 import Attendance from "./attendance";
@@ -136,7 +136,7 @@ class Navigation extends React.Component {
           <AppBar
             position="fixed"
             // controls color of navigation bar
-            style={{ background: "black" }}
+            style={{ background: "#384873" }}
             className={clsx(this.props.classes.appBar, {
               [this.props.classes.appBarShift]: this.state.open,
             })}

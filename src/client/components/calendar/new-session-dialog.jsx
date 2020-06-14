@@ -18,7 +18,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import PlusCircle from "../../svg/plus-circle-solid.svg";
-import styles from "./calendar.scss";
+import styles from "../all_styles.scss";
 var moment = require("moment");
 
 // main function starts here

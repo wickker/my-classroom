@@ -1,5 +1,5 @@
 import React from "react";
-import Grid from "./calendar/grid";
+import Grid from "./calendar/body-calendar";
 
 export default class Calendar extends React.Component {
   render() {

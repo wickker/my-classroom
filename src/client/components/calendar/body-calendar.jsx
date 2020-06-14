@@ -1,5 +1,4 @@
 import React from "react";
-import styles from "./calendar.scss";
 import MonthSelector from "./month-selector";
 import YearSelector from "./year-selector";
 import NewSessionDialog from "./new-session-dialog";
@@ -7,6 +6,9 @@ import SessionDetails from "./session-details";
 var classNames = require("classnames");
 const cx = classNames.bind(styles);
 var moment = require("moment");
+import styles from "../all_styles.scss";
+
+// main class begins here
 export default class CalendarGrid extends React.Component {
   constructor() {
     super();
@@ -28,35 +30,6 @@ export default class CalendarGrid extends React.Component {
     };
   }
 
-  parseNumToMonth = (number) => {
-    switch (number) {
-      case 1:
-        return "January";
-      case 2:
-        return "February";
-      case 3:
-        return "March";
-      case 4:
-        return "April";
-      case 5:
-        return "May";
-      case 6:
-        return "June";
-      case 7:
-        return "July";
-      case 8:
-        return "August";
-      case 9:
-        return "September";
-      case 10:
-        return "October";
-      case 11:
-        return "November";
-      case 12:
-        return "December";
-    }
-  };
-
   // get number of days in a month-year
   getDaysInMonth = (month, year) => {
     return new Date(year, month, 0).getDate();
@@ -73,7 +46,6 @@ export default class CalendarGrid extends React.Component {
   // initialize raw calendar array
   initCalendarArray = (month, year) => {
     let dayNum = this.getFirstDayOfMonth(month, year);
-    console.log("day: ", dayNum);
     let daysInMonth = this.getDaysInMonth(month, year);
     let prevMonth;
     month === 1 ? (prevMonth = 12) : (prevMonth = month - 1);
@@ -107,6 +79,7 @@ export default class CalendarGrid extends React.Component {
     // get sessions that fall between selected date range
     let startDate = moment(array[0][0], "D-M-YYYY").valueOf();
     let endDate = moment(array[5][6], "D-M-YYYY").valueOf();
+    endDate = endDate + 82800000 + 3540000;
     this.getSessions(startDate, endDate);
     // set states
     this.setState({
@@ -143,7 +116,6 @@ export default class CalendarGrid extends React.Component {
   componentDidMount = () => {
     // check login
     let banana = localStorage.getItem("banana");
-    console.log("BANANA: ", banana);
     if (!banana) {
       this.setState({ hide: true });
     }
@@ -239,7 +211,7 @@ export default class CalendarGrid extends React.Component {
         let todayStr = moment(today).format("D-M-YYYY");
         let todayColor = "white";
         if (col === todayStr) {
-          todayColor = "pink";
+          todayColor = "grey";
         }
         return (
           <div key={colIndex} className={box} style={{ background: todayColor }}>

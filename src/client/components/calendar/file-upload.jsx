@@ -1,6 +1,6 @@
 import React from "react";
 import bsCustomFileInput from "bs-custom-file-input";
-import styles from "./calendar.scss";
+import styles from "../all_styles.scss";
 var classNames = require("classnames");
 const cx = classNames.bind(styles);
 

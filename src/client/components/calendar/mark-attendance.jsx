@@ -13,7 +13,7 @@ import Typography from "@material-ui/core/Typography";
 import CloseIcon from "@material-ui/icons/Close";
 import Slide from "@material-ui/core/Slide";
 var moment = require("moment");
-import styles from "./calendar.scss";
+import styles from "../all_styles.scss";
 import FileUpload from "./file-upload";
 import Checkbox from "@material-ui/core/Checkbox";
 import SaveIcon from "@material-ui/icons/Save";
