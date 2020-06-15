@@ -21,6 +21,7 @@ import Select from "@material-ui/core/Select";
 import Checkbox from "@material-ui/core/Checkbox";
 var moment = require("moment");
 import FileUpload from "./file-upload-instructor";
+import styles from "../all_styles.scss";
 
 export default class NewInstructor extends React.Component {
   constructor() {
@@ -95,10 +96,10 @@ export default class NewInstructor extends React.Component {
         let matchingSessions = sessions.filter((element) => {
           return element.class_id === classEle.id;
         });
-        // only if there are sessions that correspond to that class 
+        // only if there are sessions that correspond to that class
         if (matchingSessions.length > 0) {
           let seshChoices = matchingSessions.map((session, seshIndex) => {
-            // hide the session selection if the corresponding class is not selected 
+            // hide the session selection if the corresponding class is not selected
             let isHide;
             primaryCheckedState[classEle.id] === false
               ? (isHide = true)
@@ -157,7 +158,7 @@ export default class NewInstructor extends React.Component {
       email: this.state.email,
       password: this.state.password,
       checkedState: this.state.checkedState,
-    }
+    };
     for (const key in data) {
       if (data[key] === "") {
         this.setState({ errorMsg: "Please complete all fields." });
@@ -166,21 +167,21 @@ export default class NewInstructor extends React.Component {
     }
     // post new instructor to server
     this.setState({ isClick: !this.state.isClick });
-    let url = '/instructors/new';
+    let url = "/instructors/new";
     fetch(url, {
-      method: 'POST', 
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log('Success:', data);
+        console.log("Success:", data);
         window.location.reload(false);
       })
       .catch((error) => {
-        console.error('Error:', error);
+        console.error("Error:", error);
         window.location.reload(false);
       });
   };
@@ -212,13 +213,17 @@ export default class NewInstructor extends React.Component {
 
   setEmail = (event) => {
     let email = event.target.value;
-    let found = this.state.instructors.find(element => element.email === email);
+    let found = this.state.instructors.find(
+      (element) => element.email === email
+    );
     if (!email.includes("@")) {
       this.setState({ errorMsg: "Please input a valid email." });
       return;
     }
     if (!!found) {
-      this.setState({ errorMsg: "Email already exists. Please choose another one." });
+      this.setState({
+        errorMsg: "Email already exists. Please choose another one.",
+      });
       return;
     }
     this.setState({ email: email, errorMsg: "" });
@@ -240,15 +245,15 @@ export default class NewInstructor extends React.Component {
 
   // controls opening and closing of form
   clickEdit = () => {
-    this.setState({ isClick: !this.state.isClick, errorMsg: ""  });
+    this.setState({ isClick: !this.state.isClick, errorMsg: "" });
   };
 
   render() {
     return (
-      <div>
-        <Button variant="contained" color="primary" onClick={this.clickEdit}>
+      <div className="mt-1">
+        <button className={styles.button} onClick={this.clickEdit}>
           Add New Instructor
-        </Button>
+        </button>
         <Dialog
           open={this.state.isClick}
           onClose={this.clickEdit}
@@ -257,15 +262,21 @@ export default class NewInstructor extends React.Component {
         >
           <div className="row">
             <div className="col-sm">
-              <DialogTitle>New Instructor</DialogTitle>
               <DialogContent>
-              <div className="text-danger">{this.state.errorMsg}</div>
+                <div className={styles.form_title}>New Instructor</div>
+                <div className={styles.error}>{this.state.errorMsg}</div>
                 <TextField
                   margin="dense"
                   label="Name"
                   onChange={this.setName}
                   fullWidth
                   required
+                  InputProps={{
+                    style: {
+                      fontFamily: "Quicksand",
+                      letterSpacing: "1px",
+                    },
+                  }}
                 />
                 <TextField
                   margin="dense"
@@ -275,6 +286,12 @@ export default class NewInstructor extends React.Component {
                   multiline
                   rows={2}
                   required
+                  InputProps={{
+                    style: {
+                      fontFamily: "Quicksand",
+                      letterSpacing: "1px",
+                    },
+                  }}
                 />
                 <TextField
                   margin="dense"
@@ -282,6 +299,12 @@ export default class NewInstructor extends React.Component {
                   onChange={this.setEmail}
                   fullWidth
                   required
+                  InputProps={{
+                    style: {
+                      fontFamily: "Quicksand",
+                      letterSpacing: "1px",
+                    },
+                  }}
                 />
                 <TextField
                   margin="dense"
@@ -289,24 +312,31 @@ export default class NewInstructor extends React.Component {
                   onChange={this.setPassword}
                   fullWidth
                   required
+                  InputProps={{
+                    style: {
+                      fontFamily: "Quicksand",
+                      letterSpacing: "1px",
+                    },
+                  }}
                 />
-                <div className="mt-4">Select Classes and Sessions</div>
+                <div className="mt-4">
+                  <span className={styles.input_field}>
+                    Select Classes and Sessions
+                  </span>
+                </div>
                 {/* checkboxes go here */}
                 <div>{this.renderCheckboxes()}</div>
-                <div className="mt-3 mb-3">
-                  Select Image *
+                <div className="mt-3">
+                  <span className={styles.input_field}>Select Image *</span>
                   <FileUpload callback={this.callback} />
                 </div>
               </DialogContent>
               <DialogActions>
-                <Button
-                  className="mr-3"
-                  variant="contained"
-                  color="primary"
-                  onClick={this.submit}
-                >
-                  Submit
-                </Button>
+                <div className="mr-3">
+                  <button className={styles.button} onClick={this.submit}>
+                    Submit
+                  </button>
+                </div>
               </DialogActions>
             </div>
           </div>

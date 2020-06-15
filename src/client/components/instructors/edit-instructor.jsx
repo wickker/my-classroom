@@ -21,6 +21,7 @@ import Select from "@material-ui/core/Select";
 import Checkbox from "@material-ui/core/Checkbox";
 var moment = require("moment");
 import FileUploadEdit from "./file-upload-instructor-edit";
+import styles from "../all_styles.scss";
 
 export default class EditInstructor extends React.Component {
   constructor() {
@@ -54,6 +55,7 @@ export default class EditInstructor extends React.Component {
       about: this.props.instructor.about,
       image: this.props.instructor.image,
       email: this.props.instructor.email,
+      password: this.props.instructor.password,
     });
 
     this.initCheckedState();
@@ -223,13 +225,17 @@ export default class EditInstructor extends React.Component {
 
   setEmail = (event) => {
     let email = event.target.value;
-    let found = this.props.instructors.find(element => element.email === email);
+    let found = this.props.instructors.find(
+      (element) => element.email === email
+    );
     if (!email.includes("@")) {
       this.setState({ errorMsg: "Please input a valid email." });
       return;
     }
     if (!!found) {
-      this.setState({ errorMsg: "Email already exists. Please choose another one." });
+      this.setState({
+        errorMsg: "Email already exists. Please choose another one.",
+      });
       return;
     }
     this.setState({ email: email, errorMsg: "" });
@@ -255,9 +261,9 @@ export default class EditInstructor extends React.Component {
   render() {
     return (
       <div>
-        <Button variant="contained" color="primary" onClick={this.clickEdit}>
+        <button className={styles.button} onClick={this.clickEdit}>
           Edit
-        </Button>
+        </button>
         <Dialog
           open={this.state.isClick}
           onClose={this.clickEdit}
@@ -266,9 +272,9 @@ export default class EditInstructor extends React.Component {
         >
           <div className="row">
             <div className="col-sm">
-              <DialogTitle>New Instructor</DialogTitle>
               <DialogContent>
-                <div className="text-danger">{this.state.errorMsg}</div>
+                <div className={styles.form_title}>Edit Instructor</div>
+                <div className={styles.error}>{this.state.errorMsg}</div>
                 <TextField
                   margin="dense"
                   label="Name"
@@ -276,6 +282,12 @@ export default class EditInstructor extends React.Component {
                   defaultValue={this.state.name}
                   fullWidth
                   required
+                  InputProps={{
+                    style: {
+                      fontFamily: "Quicksand",
+                      letterSpacing: "1px",
+                    },
+                  }}
                 />
                 <TextField
                   margin="dense"
@@ -286,6 +298,12 @@ export default class EditInstructor extends React.Component {
                   rows={2}
                   defaultValue={this.state.about}
                   required
+                  InputProps={{
+                    style: {
+                      fontFamily: "Quicksand",
+                      letterSpacing: "1px",
+                    },
+                  }}
                 />
                 <TextField
                   margin="dense"
@@ -294,19 +312,31 @@ export default class EditInstructor extends React.Component {
                   defaultValue={this.state.email}
                   fullWidth
                   required
+                  InputProps={{
+                    style: {
+                      fontFamily: "Quicksand",
+                      letterSpacing: "1px",
+                    },
+                  }}
                 />
                 <TextField
                   margin="dense"
                   label="New Password"
                   onChange={this.setPassword}
+                  defaultValue={this.state.password}
                   fullWidth
                   required
+                  hidden
                 />
-                <div className="mt-4">Select Classes and Sessions</div>
+                <div className="mt-4">
+                  <span className={styles.input_field}>
+                    Select Classes and Sessions
+                  </span>
+                </div>
                 {/* checkboxes go here */}
                 <div>{this.renderCheckboxes()}</div>
                 <div className="mt-3 mb-3">
-                  Select Image *
+                  <span className={styles.input_field}>Select Image *</span>
                   <FileUploadEdit
                     callback={this.callback}
                     image={this.state.image}
@@ -314,14 +344,11 @@ export default class EditInstructor extends React.Component {
                 </div>
               </DialogContent>
               <DialogActions>
-                <Button
-                  className="mr-3"
-                  variant="contained"
-                  color="primary"
-                  onClick={this.submit}
-                >
-                  Submit
-                </Button>
+                <div className="mr-3">
+                  <button className={styles.button} onClick={this.submit}>
+                    Submit
+                  </button>
+                </div>
               </DialogActions>
             </div>
           </div>

@@ -2,7 +2,7 @@ import React from "react";
 import NewInstructor from "./new-instructor";
 // import SearchStudents from "./search-students";
 import InstructorCard from "./card-instructor";
-import styles from "./instructors.scss";
+import styles from "../all_styles.scss";
 var classNames = require("classnames");
 const cx = classNames.bind(styles);
 
@@ -126,9 +126,15 @@ export default class BodyInstructors extends React.Component {
               instructors={this.state.ogInstructors}
             />
           </div>
-          Search
-          <input className={this.input} onChange={this.search} />
-          <div>{this.state.searchMsg}</div>
+          <span className={styles.input_field}>Search</span>
+          <div className="mt-1 mb-2">
+            <input
+              className={this.input}
+              style={{ width: "40%" }}
+              onChange={this.search}
+            />
+          </div>
+          <div className={styles.input_field}>{this.state.searchMsg}</div>
           <div className="row mt-3">{cards}</div>
         </div>
       </div>

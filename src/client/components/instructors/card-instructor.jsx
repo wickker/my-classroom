@@ -7,8 +7,10 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 var moment = require("moment");
-import styles from "./instructors.scss";
+import styles from "../all_styles.scss";
 import EditInstructor from "./edit-instructor";
+var classNames = require("classnames");
+const cx = classNames.bind(styles);
 
 const useStyles = makeStyles({
   root: {
@@ -27,7 +29,6 @@ export default function MediaCard({ instructor, classesArr, sessions, hide, inst
     let data = {
       id: instructor.id,
     }
-    alert("Confirm delete?");
     // log the instructor out
     localStorage.removeItem("banana");
     // send request to server
@@ -60,46 +61,44 @@ export default function MediaCard({ instructor, classesArr, sessions, hide, inst
       <li>No class assigned yet.</li>
     );
   }
-  
 
+  const card = cx(styles.card, "h-100", "card");
+  
   return (
-    <div className={styles.card}>
-      <Card className={classes.root}>
+    <div className={card}>
         <CardMedia
           className={classes.media}
           image={instructor.image}
           alt="instructor display picture"
         />
         <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
+          <div className={styles.card_title}>
             {instructor.name}
-          </Typography>
-          <div>About: {instructor.about}</div>
-          <div>
-            Classes:
+          </div>
+          <div className={styles.card_text}>
+          <div className="mt-3"><b>About: </b>{instructor.about}</div>
+          <div className="mt-3">
+            <b>Classes:</b>
             <ul>{classesHTML}</ul>
+          </div>
           </div>
         </CardContent>
         <div hidden={hide}>
         <CardActions>
-
           <EditInstructor
             instructor={instructor}
             classes={classesArr}
             sessions={sessions}
             instructors={instructors}
           />
-
-          <Button
-            variant="contained"
-            color="primary"
+          <button
+            className={styles.button}
             onClick={deleteInstructor}
           >
             Delete
-          </Button>
+          </button>
         </CardActions>
         </div>
-      </Card>
     </div>
   );
 }

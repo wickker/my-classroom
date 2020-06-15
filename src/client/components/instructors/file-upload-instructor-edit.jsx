@@ -1,6 +1,6 @@
 import React from "react";
 import bsCustomFileInput from "bs-custom-file-input";
-import styles from "./instructors.scss";
+import styles from "../all_styles.scss";
 import { CssBaseline } from "@material-ui/core";
 var classNames = require("classnames");
 const cx = classNames.bind(styles);
@@ -16,11 +16,9 @@ export default class FileUploadEdit extends React.Component {
 
   uploadFileFetch = (event) => {
     event.preventDefault();
-
     let cloudinary_url =
       "https://api.cloudinary.com/v1_1/dwoimiuph/image/upload";
     let cloudinary_upload_preset = "wh3xm7xt";
-
     // prepare data to be uploaded
     let fileId = "inputFile";
     let fileGroup = document.getElementById(fileId);
@@ -30,13 +28,11 @@ export default class FileUploadEdit extends React.Component {
     formData.append("upload_preset", cloudinary_upload_preset);
     let myHeaders = new Headers();
     myHeaders.append("X-Requested-With", "XMLHttpRequest");
-
     let requestOptions = {
       method: "POST",
       headers: myHeaders,
       body: formData,
     };
-
     // do fetch
     fetch(cloudinary_url, requestOptions)
       .then((response) => response.json())
@@ -59,6 +55,10 @@ export default class FileUploadEdit extends React.Component {
 
     const browseButton = cx(styles.browseButton, "custom-file-input");
 
+    const label = cx(styles.browseButton, "custom-file-label");
+
+    const input = cx(styles.browseButton, "form-control");
+
     return (
       <div className="custom-file">
         <span>
@@ -68,8 +68,8 @@ export default class FileUploadEdit extends React.Component {
             className={browseButton}
             name="document_prompt"
           />
-          <label className="custom-file-label" htmlFor={fileId}>
-            Choose File / Input URL Below
+          <label className={label} htmlFor={fileId}>
+            Choose File/ Input URL Below
           </label>
           <div className="input-group mt-2">
             <div className="input-group-prepend">
@@ -83,7 +83,7 @@ export default class FileUploadEdit extends React.Component {
             <input
               id="file_name"
               type="text"
-              className="form-control"
+              className={input}
               name="document"
               onChange={this.saveFile}
               value={this.props.image}
