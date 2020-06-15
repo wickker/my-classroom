@@ -1,6 +1,6 @@
 import React from "react";
 import bsCustomFileInput from "bs-custom-file-input";
-import styles from "./dashboard.scss";
+import styles from "../all_styles.scss";
 var classNames = require("classnames");
 const cx = classNames.bind(styles);
 
@@ -60,6 +60,8 @@ export default class FileUpload extends React.Component {
 
     const browseButton = cx(styles.browseButton, "custom-file-input");
 
+    const input = cx(styles.uploadButton, "form-control");
+
     return (
       <div className="custom-file">
         <span>
@@ -70,7 +72,7 @@ export default class FileUpload extends React.Component {
             name="document_prompt"
           />
           <label className="custom-file-label" htmlFor={fileId}>
-            Choose File
+            Choose File / Input URL
           </label>
           <div className="input-group mt-2">
             <div className="input-group-prepend">
@@ -83,7 +85,7 @@ export default class FileUpload extends React.Component {
             </div>
             <input
               type="text"
-              className="form-control"
+              className={input}
               name="document"
               defaultValue={this.state.document}
             />

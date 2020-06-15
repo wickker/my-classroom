@@ -2,6 +2,9 @@ import React from "react";
 import { isEmpty } from "lodash";
 var moment = require("moment");
 import MarkAttendance from "./mark-attendance-dashboard";
+import styles from "../all_styles.scss";
+var classNames = require("classnames");
+const cx = classNames.bind(styles);
 
 export default class DashboardBody extends React.Component {
   constructor() {
@@ -55,14 +58,20 @@ export default class DashboardBody extends React.Component {
         let startTime = moment(element.start_datetime, "x").format("hh:mm A");
         let endTime = moment(element.end_datetime, "x").format("hh:mm A");
         return (
-          <div key={index}>
-            <div>{element.title}</div>
-            <div>{date}</div>
-            <div>
-              {startTime} - {endTime}
-            </div>
-            <div>
-              <MarkAttendance obj={element} />
+          <div className="row" key={index}>
+            <div className="col-sm-6">
+              <div className={styles.today_class}>
+                <div className={styles.card_title}>{element.title}</div>
+                <div className={styles.card_text}>
+                  <div>{date}</div>
+                  <div>
+                    {startTime} - {endTime}
+                  </div>
+                </div>
+                <div>
+                  <MarkAttendance obj={element} />
+                </div>
+              </div>
             </div>
           </div>
         );
@@ -70,9 +79,15 @@ export default class DashboardBody extends React.Component {
       return sessionsTodayHTML;
       // if there are no sessions commencing today
     } else {
-      return "You have no classes scheduled for today.";
+      return (
+        <div className={styles.no_class_msg}>
+          You have no classes scheduled for today.
+        </div>
+      );
     }
   };
+
+  card = cx(styles.card, "h-100");
 
   renderClassesWeek = () => {
     let sessions = this.state.sessions;
@@ -97,11 +112,15 @@ export default class DashboardBody extends React.Component {
         let endTime = moment(element.end_datetime, "x").format("hh:mm A");
         return (
           <div key={index} className="col-sm-3">
-            <div className="card h-100">
-              <img className="card-img-top" src={element.image} alt="class image" />
+            <div className={this.card}>
+              <img
+                className="card-img-top"
+                src={element.image}
+                alt="class image"
+              />
               <div className="card-body">
-                <h5 className="card-title">{element.title}</h5>
-                <div className="card-text">
+                <div className={styles.card_title}>{element.title}</div>
+                <div className={styles.card_text}>
                   <div>{date}</div>
                   <div>
                     {startTime} - {endTime}
@@ -115,7 +134,13 @@ export default class DashboardBody extends React.Component {
       return sessionsWeekHTML;
       // if there are no sessions commencing tomorrow for a week
     } else {
-      return (<div className="col-sm">You have no upcoming classes for the week.</div>);
+      return (
+        <div className="col-sm">
+          <div className={styles.no_class_msg}>
+            You have no upcoming classes for the week.
+          </div>
+        </div>
+      );
     }
   };
 
@@ -126,13 +151,11 @@ export default class DashboardBody extends React.Component {
     return (
       <div className="row">
         <div className="col-sm">
-          <h4>Hello {this.state.user.name}!</h4>
-          <h3>Today's Classes</h3>
-          <div>{sessionsTodayHTML}</div>
-          <h3>Upcoming Classes</h3>
-          <div className="row">
-            {sessionsWeekHTML}
-          </div>
+          <div className={styles.greeting}>Hello {this.state.user.name}!</div>
+          <div className={styles.subheader}>Today's Classes</div>
+          {sessionsTodayHTML}
+          <div className={styles.subheader}>Upcoming Classes</div>
+          <div className="row">{sessionsWeekHTML}</div>
         </div>
       </div>
     );

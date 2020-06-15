@@ -3,6 +3,10 @@ import TextField from "@material-ui/core/TextField";
 var sha256 = require("js-sha256");
 import { isEmpty } from "lodash";
 import { withRouter } from "react-router-dom";
+import styles from "../all_styles.scss";
+import Button from "@material-ui/core/Button";
+var classNames = require("classnames");
+const cx = classNames.bind(styles);
 
 class LoginBody extends React.Component {
   constructor() {
@@ -20,7 +24,6 @@ class LoginBody extends React.Component {
     let url = "/instructors/get";
     const response = await fetch(url);
     const data = await response.json();
-    console.log("instructors: ", data);
     this.setState({ instructors: data });
   };
 
@@ -69,34 +72,27 @@ class LoginBody extends React.Component {
       };
       this.props.callback(data);
       // redirect to dashboard
-      console.log(JSON.parse(localStorage.getItem("banana")));
       this.props.history.push("/dashboard");
     } else {
-      this.setState({ errorMsg: "Wrong email or password, please try again." });
+      this.setState({ errorMsg: "Invalid email or password, please try again." });
     }
   };
+
+  input = cx(styles.input_field, "form-control");
+  button = cx(styles.button, "mt-4");
 
   render() {
     return (
       <div className="row">
         <div className="col-sm-6">
-          <div>{this.state.errorMsg}</div>
-          <TextField
-            margin="dense"
-            label="Email"
-            fullWidth
-            onChange={this.setEmail}
-            required
-          />
-          <TextField
-            margin="dense"
-            label="Password"
-            fullWidth
-            onChange={this.setPassword}
-            required
-            type="password"
-          />
-          <button onClick={this.checkMatch}>Submit</button>
+          <div className={styles.error}>{this.state.errorMsg}</div>
+          <div className={styles.form_label}>Email</div>
+          <input className={this.input} onChange={this.setEmail} required />
+          <div className={styles.form_label}>Password</div>
+          <input className={this.input} onChange={this.setPassword} required type="password" />
+          <button className={this.button} onClick={this.checkMatch}>
+            Submit
+          </button>
         </div>
       </div>
     );

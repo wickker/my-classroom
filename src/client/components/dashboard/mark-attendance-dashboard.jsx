@@ -14,12 +14,12 @@ import Typography from "@material-ui/core/Typography";
 import CloseIcon from "@material-ui/icons/Close";
 import Slide from "@material-ui/core/Slide";
 var moment = require("moment");
-import styles from "./dashboard.scss";
 import FileUpload from "./file-upload-dashboard";
 import Checkbox from "@material-ui/core/Checkbox";
 import SaveIcon from "@material-ui/icons/Save";
 var classNames = require("classnames");
 const cx = classNames.bind(styles);
+import styles from "../all_styles.scss";
 
 // styles
 const useStyles = makeStyles((theme) => ({
@@ -51,6 +51,19 @@ export default function MarkAttendance({ obj }) {
   let students = get(obj, "students") || "";
   let sessionId = get(obj, "session_id") || "";
 
+  const compareName = (a, b) => {
+    const itemA = a.name.toUpperCase();
+    const itemB = b.name.toUpperCase();
+
+    let comparison = 0;
+    if (itemA > itemB) {
+      comparison = 1;
+    } else if (itemA < itemB) {
+      comparison = -1;
+    }
+    return comparison;
+  };
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -65,12 +78,14 @@ export default function MarkAttendance({ obj }) {
 
   // more styles
   const attenRow = cx(styles.attenRow, "col-sm", "mb-4", "mt-2");
-  const attenHead = cx(styles.attenHead, "col-sm", "mb-4", "mt-2");
+  const attenHead = cx(styles.attenHead, "col-sm", "mb-4", "mt-3");
+  const input = cx(styles.input_field, "form-control");
 
   // render main mark attendance table
   const renderTable = () => {
     if (!!students && students !== "" && students.length > 0) {
-      let studentsHTML = students.map((element, index) => {
+      let studentsSort = students.sort(compareName);
+      let studentsHTML = studentsSort.map((element, index) => {
         // define isPresent checked status
         let isPresentChecked;
         element.is_present
@@ -111,7 +126,7 @@ export default function MarkAttendance({ obj }) {
             </div>
             <div className="col-sm-3">
               <textarea
-                className="form-control"
+                className={input}
                 type="text"
                 name="remarks"
                 rows="2"
@@ -148,21 +163,16 @@ export default function MarkAttendance({ obj }) {
 
   return (
     <div>
-      <Button
-        variant="contained"
-        size="small"
-        color="primary"
-        onClick={handleClickOpen}
-      >
+      <button className={styles.button} onClick={handleClickOpen}>
         Mark Attendance
-      </Button>
+      </button>
       <Dialog
         fullScreen
         open={open}
         onClose={handleClose}
         TransitionComponent={Transition}
       >
-        <AppBar className={classes.appBar}>
+        <AppBar className={classes.appBar} style={{ background: "#1e2333" }}>
           <Toolbar>
             <IconButton
               edge="start"
@@ -172,22 +182,20 @@ export default function MarkAttendance({ obj }) {
             >
               <CloseIcon />
             </IconButton>
-            <Typography variant="h6" className={classes.title}>
-              Mark Attendance
-            </Typography>
+            <div className={styles.mark_att_header}>Mark Attendance</div>
           </Toolbar>
         </AppBar>
-
         <div className={styles.attendance}>
           <div className="row">
             <div className="col-sm">
+              {/* class and session title */}
               <div className={styles.title}>
-                <h5>Class: {title}</h5>
-                <p>
+                <div className={styles.mark_att_title}>Class: {title}</div>
+                <div className={styles.card_text}>
                   Session: {date}, {startTime} - {endTime}
-                </p>
+                </div>
               </div>
-
+              {/* table header starts here */}
               <div className={attenHead}>
                 <div className="col-sm-1"></div>
                 <div className="col-sm-2">Student Name</div>
@@ -196,26 +204,16 @@ export default function MarkAttendance({ obj }) {
                 <div className="col-sm-3">Remarks</div>
                 <div className="col-sm">Upload Document</div>
               </div>
-
+              {/* attendance form table starts here */}
               <form action="/sessions/attendance/post" method="post">
                 {studentsHTML}
-
                 <input name="classId" defaultValue={id} hidden></input>
-
                 <div className="row">
                   <div className="col-sm">
                     <div className={styles.save}>
-                      <Button
-                        variant="contained"
-                        type="submit"
-                        onClick={handleSave}
-                        size="large"
-                        color="primary"
-                        className={classes.button}
-                        startIcon={<SaveIcon />}
-                      >
+                      <button onClick={handleSave} className={styles.button}>
                         Save
-                      </Button>
+                      </button>
                     </div>
                   </div>
                 </div>
