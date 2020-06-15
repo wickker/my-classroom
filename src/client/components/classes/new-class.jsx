@@ -21,6 +21,7 @@ import Select from "@material-ui/core/Select";
 import Checkbox from "@material-ui/core/Checkbox";
 var moment = require("moment");
 import FileUpload from "./file-upload-class";
+import styles from "../all_styles.scss";
 
 export default class NewClass extends React.Component {
   constructor() {
@@ -103,10 +104,10 @@ export default class NewClass extends React.Component {
 
   render() {
     return (
-      <div>
-        <Button variant="contained" color="primary" onClick={this.clickEdit}>
+      <div className="mt-1">
+        <button className={styles.button} onClick={this.clickEdit}>
           Add New Class
-        </Button>
+        </button>
         <Dialog
           open={this.state.isClick}
           onClose={this.clickEdit}
@@ -115,15 +116,21 @@ export default class NewClass extends React.Component {
         >
           <div className="row">
             <div className="col-sm">
-              <DialogTitle>New Class</DialogTitle>
               <DialogContent>
-                <div className="text-danger">{this.state.errorMsg}</div>
+                <div className={styles.form_title}>New Class</div>
+                <div className={styles.error}>{this.state.errorMsg}</div>
                 <TextField
                   margin="dense"
                   label="Title"
                   onChange={this.setTitle}
                   fullWidth
                   required
+                  InputProps={{
+                    style: {
+                      fontFamily: "Quicksand",
+                      letterSpacing: "1px",
+                    },
+                  }}
                 />
                 <TextField
                   margin="dense"
@@ -133,6 +140,12 @@ export default class NewClass extends React.Component {
                   multiline
                   rows={2}
                   required
+                  InputProps={{
+                    style: {
+                      fontFamily: "Quicksand",
+                      letterSpacing: "1px",
+                    },
+                  }}
                 />
                 <TextField
                   margin="dense"
@@ -140,27 +153,39 @@ export default class NewClass extends React.Component {
                   onChange={this.setFrequency}
                   fullWidth
                   required
+                  InputProps={{
+                    style: {
+                      fontFamily: "Quicksand",
+                      letterSpacing: "1px",
+                    },
+                  }}
                 />
-                Color Display On Calendar *
-                <input
-                  className="form-control"
-                  type="color"
-                  defaultValue="#FFFFFF"
-                  onChange={this.setColor}
-                  width="100%"
-                  required
-                />
-                <div className="mt-3 mb-3">
-                  Select Image *
+                <div className="mt-2 mb-2">
+                  <span className={styles.input_field}>
+                    Color Display On Calendar *
+                  </span>
+                  <input
+                    className="form-control"
+                    type="color"
+                    defaultValue="#FFFFFF"
+                    onChange={this.setColor}
+                    width="100%"
+                    required
+                  />
+                </div>
+                <div className="mt-3">
+                  <span className={styles.input_field}>Select Image *</span>
                   <FileUpload callback={this.callback} />
                 </div>
               </DialogContent>
             </div>
           </div>
           <DialogActions>
-            <Button variant="contained" color="primary" onClick={this.submit}>
-              Submit
-            </Button>
+            <div className="mr-3">
+              <button className={styles.button} onClick={this.submit}>
+                Submit
+              </button>
+            </div>
           </DialogActions>
         </Dialog>
       </div>

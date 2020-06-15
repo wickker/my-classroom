@@ -78,7 +78,7 @@ export default class BodyInstructors extends React.Component {
           hide = true;
         }
         return (
-          <div className="col-sm-3" key={index}>
+          <div className="col-sm-3 mb-3" key={index}>
             <InstructorCard
               instructor={element}
               classesArr={this.state.classes}
@@ -111,7 +111,7 @@ export default class BodyInstructors extends React.Component {
         });
   };
 
-  input = cx(styles.input, "form-control");
+  input = cx(styles.input_field, "form-control");
 
   render() {
     let cards = this.renderCards() || "";
@@ -135,7 +135,7 @@ export default class BodyInstructors extends React.Component {
             />
           </div>
           <div className={styles.input_field}>{this.state.searchMsg}</div>
-          <div className="row mt-3">{cards}</div>
+          <div className="mt-3 row">{cards}</div>
         </div>
       </div>
     );

@@ -57,7 +57,7 @@ export default class FileUploadEdit extends React.Component {
 
     const label = cx(styles.browseButton, "custom-file-label");
 
-    const input = cx(styles.browseButton, "form-control");
+    const input = cx(styles.upload_input, "form-control");
 
     return (
       <div className="custom-file">

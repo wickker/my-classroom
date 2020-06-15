@@ -21,6 +21,7 @@ import Select from "@material-ui/core/Select";
 import Checkbox from "@material-ui/core/Checkbox";
 var moment = require("moment");
 import FileUploadEdit from "./file-upload-class-edit";
+import styles from "../all_styles.scss";
 
 export default class EditClass extends React.Component {
   constructor() {
@@ -117,9 +118,9 @@ export default class EditClass extends React.Component {
   render() {
     return (
       <div>
-        <Button variant="contained" color="primary" onClick={this.clickEdit}>
+        <button className={styles.button} onClick={this.clickEdit}>
           Edit
-        </Button>
+        </button>
         <Dialog
           open={this.state.isClick}
           onClose={this.clickEdit}
@@ -128,9 +129,9 @@ export default class EditClass extends React.Component {
         >
           <div className="row">
             <div className="col-sm">
-              <DialogTitle>Edit Class</DialogTitle>
               <DialogContent>
-                <div className="text-danger">{this.state.errorMsg}</div>
+                <div className={styles.form_title}>Edit Class</div>
+                <div className={styles.error}>{this.state.errorMsg}</div>
                 <TextField
                   margin="dense"
                   label="Name"
@@ -138,6 +139,12 @@ export default class EditClass extends React.Component {
                   defaultValue={this.state.title}
                   fullWidth
                   required
+                  InputProps={{
+                    style: {
+                      fontFamily: "Quicksand",
+                      letterSpacing: "1px",
+                    },
+                  }}
                 />
                 <TextField
                   margin="dense"
@@ -148,6 +155,12 @@ export default class EditClass extends React.Component {
                   rows={2}
                   defaultValue={this.state.description}
                   required
+                  InputProps={{
+                    style: {
+                      fontFamily: "Quicksand",
+                      letterSpacing: "1px",
+                    },
+                  }}
                 />
                 <TextField
                   margin="dense"
@@ -156,17 +169,27 @@ export default class EditClass extends React.Component {
                   defaultValue={this.state.frequency}
                   fullWidth
                   required
+                  InputProps={{
+                    style: {
+                      fontFamily: "Quicksand",
+                      letterSpacing: "1px",
+                    },
+                  }}
                 />
-                Color Display On Calendar *
-                <input
-                  className="form-control"
-                  type="color"
-                  onChange={this.setColor}
-                  width="100%"
-                  defaultValue={this.state.color}
-                />
-                <div className="mt-3 mb-3">
-                  Select Image *
+                <div className="mt-2 mb-2">
+                  <span className={styles.input_field}>
+                    Color Display On Calendar *
+                  </span>
+                  <input
+                    className="form-control"
+                    type="color"
+                    onChange={this.setColor}
+                    width="100%"
+                    defaultValue={this.state.color}
+                  />
+                </div>
+                <div className="mt-3">
+                  <span className={styles.input_field}>Select Image *</span>
                   <FileUploadEdit
                     callback={this.callback}
                     image={this.state.image}
@@ -176,9 +199,11 @@ export default class EditClass extends React.Component {
             </div>
           </div>
           <DialogActions>
-            <Button variant="contained" color="primary" onClick={this.submit}>
-              Submit
-            </Button>
+            <div className="mr-3">
+              <button className={styles.button} onClick={this.submit}>
+                Submit
+              </button>
+            </div>
           </DialogActions>
         </Dialog>
       </div>

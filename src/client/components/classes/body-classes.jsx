@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./classes.scss";
+import styles from "../all_styles.scss";
 var classNames = require("classnames");
 const cx = classNames.bind(styles);
 import ClassCard from "./card-class";
@@ -79,7 +79,7 @@ export default class BodyClasses extends React.Component {
   };
 
   // styles
-  input = cx(styles.input, "form-control");
+  input = cx(styles.input_field, "form-control");
 
   render() {
     let cards = this.renderCards() || "";
@@ -92,10 +92,15 @@ export default class BodyClasses extends React.Component {
             <NewClass />
           </div>
           {/* search component begins here */}
-          Search
-          <input className={this.input} onChange={this.search} />
-          <div>{this.state.searchMsg}</div>
-          {/* render all class cards */}
+          <span className={styles.input_field}>Search</span>
+          <div className="mt-1 mb-2">
+            <input
+              className={this.input}
+              style={{ width: "40%" }}
+              onChange={this.search}
+            />
+          </div>
+          <div className={styles.input_field}>{this.state.searchMsg}</div>
           <div className="mt-3 row">{cards}</div>
         </div>
       </div>

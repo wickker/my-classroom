@@ -60,7 +60,7 @@ export default class FileUpload extends React.Component {
 
     const browseButton = cx(styles.browseButton, "custom-file-input");
 
-    const input = cx(styles.uploadButton, "form-control");
+    const input = cx(styles.upload_input, "form-control");
 
     return (
       <div className="custom-file">

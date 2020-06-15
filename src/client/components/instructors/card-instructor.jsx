@@ -21,32 +21,38 @@ const useStyles = makeStyles({
   },
 });
 
-export default function MediaCard({ instructor, classesArr, sessions, hide, instructors }) {
+export default function MediaCard({
+  instructor,
+  classesArr,
+  sessions,
+  hide,
+  instructors,
+}) {
   const classes = useStyles();
 
   const deleteInstructor = () => {
     console.log(instructor.id);
     let data = {
       id: instructor.id,
-    }
+    };
     // log the instructor out
     localStorage.removeItem("banana");
     // send request to server
-    let url = '/instructors/delete';
+    let url = "/instructors/delete";
     fetch(url, {
-      method: 'POST', // or 'PUT'
+      method: "POST", // or 'PUT'
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log('Success:', data);
+        console.log("Success:", data);
         window.location.reload(false);
       })
       .catch((error) => {
-        console.error('Error:', error);
+        console.error("Error:", error);
         window.location.reload(false);
       });
   };
@@ -57,33 +63,32 @@ export default function MediaCard({ instructor, classesArr, sessions, hide, inst
       return <li key={classIndex}>{element.title}</li>;
     });
   } else {
-    classesHTML = (
-      <li>No class assigned yet.</li>
-    );
+    classesHTML = <li>No class assigned yet.</li>;
   }
 
-  const card = cx(styles.card, "h-100", "card");
-  
+  const card = cx(styles.card2, "h-100", "card");
+
   return (
     <div className={card}>
-        <CardMedia
-          className={classes.media}
-          image={instructor.image}
-          alt="instructor display picture"
-        />
-        <CardContent>
-          <div className={styles.card_title}>
-            {instructor.name}
+      <CardMedia
+        className={classes.media}
+        image={instructor.image}
+        alt="instructor display picture"
+      />
+      <CardContent>
+        <div className={styles.card_title}>{instructor.name}</div>
+        <div className={styles.card_text}>
+          <div className="mt-3">
+            <b>About: </b>
+            {instructor.about}
           </div>
-          <div className={styles.card_text}>
-          <div className="mt-3"><b>About: </b>{instructor.about}</div>
           <div className="mt-3">
             <b>Classes:</b>
             <ul>{classesHTML}</ul>
           </div>
-          </div>
-        </CardContent>
-        <div hidden={hide}>
+        </div>
+      </CardContent>
+      <div hidden={hide}>
         <CardActions>
           <EditInstructor
             instructor={instructor}
@@ -91,14 +96,11 @@ export default function MediaCard({ instructor, classesArr, sessions, hide, inst
             sessions={sessions}
             instructors={instructors}
           />
-          <button
-            className={styles.button}
-            onClick={deleteInstructor}
-          >
+          <button className={styles.button} onClick={deleteInstructor}>
             Delete
           </button>
         </CardActions>
-        </div>
+      </div>
     </div>
   );
 }

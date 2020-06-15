@@ -210,7 +210,6 @@
 
 // instructors
 
-
 // common styles
 .h1 {
   font-family: "Raleway", sans-serif;
@@ -246,6 +245,12 @@
 .card {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   margin-bottom: 10px;
+}
+
+.card2 {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  margin-bottom: 10px;
+  max-width: 300px;
 }
 
 .card_text {
@@ -316,7 +321,8 @@
 }
 
 .browseButton,
-.uploadButton {
+.uploadButton,
+.upload_input {
   font-family: "Quicksand", sans-serif;
   font-size: 14px;
   letter-spacing: 1px;
@@ -360,56 +366,4 @@
   letter-spacing: 1px;
   color: black;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-.tip {
-  text-decoration: none;
-  color: black;
-}
-
-.tip:hover {
-  text-decoration: none;
-  color: black;
-  cursor: default;
-}
-
-.paper_session {
-  width: 100%;
-}
-
-
-
-.title {
-  padding-left: 30px;
-  padding-right: 30px;
-  padding-top: 30px;
-  padding-bottom: 15px;
-}
-
-.save {
-  margin-left: 30px;
-  margin-top: 30px;
-}
-
 

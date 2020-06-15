@@ -87,7 +87,7 @@ export default class DashboardBody extends React.Component {
     }
   };
 
-  card = cx(styles.card, "h-100");
+  card = cx(styles.card2, "h-100");
 
   renderClassesWeek = () => {
     let sessions = this.state.sessions;

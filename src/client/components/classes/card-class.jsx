@@ -7,9 +7,11 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 var moment = require("moment");
-import styles from "./classes.scss";
+import styles from "../all_styles.scss";
 import EditClass from "./edit-class";
 import { get } from "lodash";
+var classNames = require("classnames");
+const cx = classNames.bind(styles);
 
 // styles
 const useStyles = makeStyles({
@@ -35,8 +37,6 @@ export default function MediaCard({ classCard, hide }) {
 
   // delete class function
   const deleteClass = () => {
-    console.log(id);
-    alert("Confirm delete?");
     let data = {
       id: id,
     };
@@ -69,37 +69,39 @@ export default function MediaCard({ classCard, hide }) {
     instructorsHTML = <li>No instructor assigned yet.</li>;
   }
 
+  const card = cx(styles.card2, "h-100", "card");
+
   return (
-    <div className={styles.card}>
-      <Card className={classes.root}>
-        {/* card image goes here */}
-        <CardMedia
-          className={classes.media}
-          image={image}
-          alt="class picture"
-        />
-        {/* main card content goes here */}
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
-            {title}
-          </Typography>
-          <div>Description: {description}</div>
-          <div>Frequency: {frequency}</div>
-          <div>
-            Instructors:
+    <div className={card}>
+      {/* card image goes here */}
+      <CardMedia className={classes.media} image={image} alt="class picture" />
+      {/* main card content goes here */}
+      <CardContent>
+      <div className={styles.card_title}>{title}</div>
+        <div className={styles.card_text}>
+          <div className="mt-3">
+            <b>Description: </b>
+            {description}
+          </div>
+          <div className="mt-3">
+            <b>Frequency: </b>
+            {frequency}
+          </div>
+          <div className="mt-3">
+            <b>Instructors:</b>
             <ul>{instructorsHTML}</ul>
           </div>
-        </CardContent>
-        {/* edit and delete buttons */}
-        <div hidden={hide}>
-          <CardActions>
-            <EditClass classCard={classCard} />
-            <Button variant="contained" color="primary" onClick={deleteClass}>
-              Delete
-            </Button>
-          </CardActions>
         </div>
-      </Card>
+      </CardContent>
+      {/* edit and delete buttons */}
+      <div hidden={hide}>
+        <CardActions>
+          <EditClass classCard={classCard} />
+          <button className={styles.button} onClick={deleteClass}>
+            Delete
+          </button>
+        </CardActions>
+      </div>
     </div>
   );
 }
