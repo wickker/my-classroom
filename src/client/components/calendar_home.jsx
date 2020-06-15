@@ -7,7 +7,7 @@ export default class Calendar extends React.Component {
     return (
       <div className="row">
         <div className="col-sm">
-          <div className={styles.h1}>CALENDAR</div>
+          <div className={styles.h1}>SCHEDULE</div>
           <Grid />
         </div>
       </div>

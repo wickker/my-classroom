@@ -177,7 +177,11 @@ export default class EditSession extends React.Component {
 
     return (
       <div>
-        <img onClick={this.clickEdit} className={styles.seshIcon} src={EditIcon}/>
+        <img
+          onClick={this.clickEdit}
+          className={styles.seshIcon}
+          src={EditIcon}
+        />
         <Dialog
           open={this.state.isClick}
           onClose={this.clickEdit}
@@ -186,9 +190,9 @@ export default class EditSession extends React.Component {
         >
           <div className="row">
             <div className="col-sm">
-              <DialogTitle>Edit Session</DialogTitle>
               <DialogContent>
-                <div className="text-danger">{this.state.errorMsg}</div>
+                <div className={styles.form_title}>Edit Session</div>
+                <div className={styles.error}>{this.state.errorMsg}</div>
                 {/* select class; disabled for edit */}
                 {selectClass}
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -205,7 +209,7 @@ export default class EditSession extends React.Component {
                       "aria-label": "change date",
                     }}
                   />
-                  <div className="row">
+                  <div className="row mt-1">
                     <div className="col-sm">
                       {/* select start time */}
                       <KeyboardTimePicker
@@ -233,21 +237,25 @@ export default class EditSession extends React.Component {
                   </div>
                 </MuiPickersUtilsProvider>
                 {/* input location */}
-                <TextField
-                  margin="dense"
-                  label="Location"
-                  onChange={this.setLocation}
-                  value={this.state.location}
-                  fullWidth
-                  required
-                />
+                <div className="mt-2">
+                  <TextField
+                    margin="dense"
+                    label="Location"
+                    onChange={this.setLocation}
+                    value={this.state.location}
+                    fullWidth
+                    required
+                  />
+                </div>
               </DialogContent>
             </div>
           </div>
           <DialogActions>
-            <Button variant="contained" color="primary" onClick={this.submit}>
-              Submit
-            </Button>
+            <div className="mr-3">
+              <button onClick={this.submit} className={styles.button}>
+                Submit
+              </button>
+            </div>
           </DialogActions>
         </Dialog>
       </div>

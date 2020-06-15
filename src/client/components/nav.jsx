@@ -206,7 +206,7 @@ class Navigation extends React.Component {
                     <img className={styles.nav_icons} src={icon} />
                   </ListItemIcon>
                   <ListItemText>
-                    <span className={styles.nav_items}>Home: Sessions</span>
+                    <span className={styles.nav_items}>Home</span>
                   </ListItemText>
                 </ListItem>
               </Link>
