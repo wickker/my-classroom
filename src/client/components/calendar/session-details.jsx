@@ -1,10 +1,12 @@
 import React from "react";
 import styles from "../all_styles.scss";
 var moment = require("moment");
-import MarkAttendance from "./mark-attendance";
-import TrashIcon from "../../svg/trash-solid.svg";
+import MarkAttendance from "../dashboard/mark-attendance-dashboard";
+import TrashIcon from "../../svg/trash-alt-regular.svg";
 import { get, isEmpty } from "lodash";
 import EditSession from "./edit-session";
+var classNames = require("classnames");
+const cx = classNames.bind(styles);
 
 export default class SessionDetails extends React.Component {
   // delete session
@@ -33,6 +35,8 @@ export default class SessionDetails extends React.Component {
       });
   };
 
+  card = cx(styles.card, "col-sm", "mx-3", "py-3");
+
   render() {
     // check if session object is empty and if not, define variables
     let obj = get(this.props, "obj") || {};
@@ -49,6 +53,8 @@ export default class SessionDetails extends React.Component {
     let location = get(obj, "session.location") || "";
     let sessionId = get(obj, "session.id") || "";
     let instructors = get(obj, "session.instructors") || "";
+    let students = get(obj, "class.students") || [];
+    let session = get(obj, "session") || {};
 
     // generate list of instructors for display
     let instructorHTML;
@@ -60,53 +66,85 @@ export default class SessionDetails extends React.Component {
       instructorHTML = <p>No instructor assigned yet.</p>;
     }
 
+    // generate obj to pass to mark attendance component
+    let sessionObj = session;
+    let studentsMatchSesh;
+    if (students.length > 0) {
+      studentsMatchSesh = students.filter(
+        (element) => element.session_id === sessionId
+      );
+    }
+    sessionObj.students = studentsMatchSesh;
+    sessionObj.session_id = sessionId;
+    sessionObj.title = title;
+    sessionObj.description = description;
+    sessionObj.image = image;
+    console.log("SESION OBJ: ", sessionObj);
+
     return (
       <div hidden={isHidden}>
-        <h4>Session</h4>
-        <div className="row mb-3">
-          <div className="col-sm-3">
-            <img
-              className={styles.session_det_image}
-              src={image}
-              alt="class image"
-            ></img>
-          </div>
-          <div className="col-sm">
-            <div className="row mb-3">
-              <div className="col-sm">
-                <h5>{title}</h5>
-              </div>
-              <div className="col-sm-3" hidden={this.props.hide}>
-                <MarkAttendance object={obj} />
-              </div>
-              <div className="col-sm-1" hidden={this.props.hide}>
-                <img
-                  className={styles.trash}
-                  src={TrashIcon}
-                  id={sessionId}
-                  onClick={this.deleteSession}
-                />
-              </div>
-              <div className="col-sm" hidden={this.props.hide}> 
-                <EditSession
-                  obj={this.props.obj}
-                  classesArr={this.props.classesArr}
-                />
-              </div>
-            </div>
+        <div className={styles.subheader}>Session</div>
+        <div className="row">
+          <div className={this.card}>
             <div className="row">
               <div className="col-sm">
-                <p>{date}</p>
-                <p>
-                  {startTime} - {endTime}
-                </p>
-                <p>{location}</p>
+                <img
+                  className={styles.session_det_image}
+                  src={image}
+                  alt="class image"
+                ></img>
               </div>
               <div className="col-sm">
-                <p>{description}</p>
-                <div>
-                  Instructors:
-                  <ul>{instructorHTML}</ul>
+                <table>
+                  <tr>
+                    <td>
+                      <div className={styles.card_title}>{title}</div>
+                    </td>
+                    <td hidden={this.props.hide}>
+                      <EditSession
+                        obj={this.props.obj}
+                        classesArr={this.props.classesArr}
+                      />
+                    </td>
+                    <td hidden={this.props.hide}>
+                      <img
+                        className={styles.seshIcon}
+                        src={TrashIcon}
+                        id={sessionId}
+                        onClick={this.deleteSession}
+                      />
+                    </td>
+                  </tr>
+                </table>
+                <div hidden={this.props.hide}>
+                  <MarkAttendance obj={sessionObj} />
+                </div>
+                <div className={styles.card_text}>
+                  <div className="mb-2 mt-1">
+                    <b>{date}</b>
+                  </div>
+                  <div className="mb-2">
+                    <b>
+                      {startTime} - {endTime}
+                    </b>
+                  </div>
+                  <div>
+                    <b>{location}</b>
+                  </div>
+                </div>
+              </div>
+              <div className="col-sm">
+                <div className={styles.card_text}>
+                  <div>
+                    <b>Description</b>
+                  </div>
+                  <div>{description}</div>
+                  <div>
+                    <div className="mt-2">
+                      <b>Instructors</b>
+                    </div>
+                    <ul>{instructorHTML}</ul>
+                  </div>
                 </div>
               </div>
             </div>

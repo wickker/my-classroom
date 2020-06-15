@@ -1,12 +1,13 @@
 import React from "react";
 import Grid from "./calendar/body-calendar";
+import styles from "./all_styles.scss";
 
 export default class Calendar extends React.Component {
   render() {
     return (
       <div className="row">
         <div className="col-sm">
-          <h1>CALENDAR</h1>
+          <div className={styles.h1}>CALENDAR</div>
           <Grid />
         </div>
       </div>

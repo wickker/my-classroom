@@ -153,10 +153,10 @@ export default class CalendarGrid extends React.Component {
 
   render() {
     // styles
-    const box = cx(styles.calendar_box, "col-sm");
-    const boxHead = cx(styles.calendar_box_head, "col-sm");
+    const box = cx(styles.calendar_box, "col-sm", "px-2", "py-1");
+    const boxHead = cx(styles.calendar_box_head, "col-sm", "px-2", "py-1");
     const boxAround = cx(styles.calendar_box_around, "col-sm");
-    const sessionBox = cx(styles.session_box, "col-sm");
+    const sessionBox = cx(styles.session_box, "col-sm", "px-2");
 
     // render calendar grid
     let calendar = this.state.datesInMonth.map((row, rowIndex) => {
@@ -211,12 +211,12 @@ export default class CalendarGrid extends React.Component {
         let todayStr = moment(today).format("D-M-YYYY");
         let todayColor = "white";
         if (col === todayStr) {
-          todayColor = "grey";
+          todayColor = "#FCFAEE";
         }
         return (
           <div key={colIndex} className={box} style={{ background: todayColor }}>
-            <div>
-              <span>{col} </span>
+            <div className={styles.dateTitle}>
+              <span>{col}</span>
               <span hidden={hiding}>
                 <NewSessionDialog classes={this.state.classes} dateStr={col} />
               </span>
@@ -234,7 +234,7 @@ export default class CalendarGrid extends React.Component {
 
     return (
       <div>
-        <div className="row mb-3">
+        <div className="row mb-3 mt-3">
           <div className="col-sm">
             <MonthSelector
               selectedMonth={this.state.selectedMonth}

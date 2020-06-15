@@ -17,7 +17,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
-import PlusCircle from "../../svg/plus-circle-solid.svg";
+import PlusCircle from "../../svg/plus-solid.svg";
 import styles from "../all_styles.scss";
 var moment = require("moment");
 
@@ -198,9 +198,9 @@ export default function FormDialog({ classes, dateStr }) {
       >
         <div className="row">
           <div className="col-sm">
-            <DialogTitle>Add New Session</DialogTitle>
             <DialogContent>
-              <div className="text-danger">{errorMsg}</div>
+              <div className={styles.form_title}>New Session</div>
+              <div className={styles.error}>{errorMsg}</div>
               {/* select class drop down */}
               {selectClass}
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -216,9 +216,10 @@ export default function FormDialog({ classes, dateStr }) {
                     "aria-label": "change date",
                   }}
                 />
-                <div className="row">
+                <div className="row mt-2">
                   <div className="col-sm">
                     <KeyboardTimePicker
+                      fullWidth
                       label="Start Time"
                       value={selectedStartTime}
                       onChange={selectStartDateTime}
@@ -230,6 +231,7 @@ export default function FormDialog({ classes, dateStr }) {
                   </div>
                   <div className="col-sm">
                     <KeyboardTimePicker
+                      fullWidth
                       label="End Time"
                       value={selectedEndTime}
                       onChange={selectEndDateTime}
@@ -284,10 +286,10 @@ export default function FormDialog({ classes, dateStr }) {
             </DialogContent>
           </div>
         </div>
-        <DialogActions>
-          <Button variant="contained" color="primary" onClick={submit}>
+        <DialogActions className="mr-3">
+          <button className={styles.button} onClick={submit}>
             Submit
-          </Button>
+          </button>
         </DialogActions>
       </Dialog>
     </span>

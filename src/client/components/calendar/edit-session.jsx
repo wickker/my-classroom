@@ -22,6 +22,7 @@ import Checkbox from "@material-ui/core/Checkbox";
 var moment = require("moment");
 import { get, isEmpty } from "lodash";
 import styles from "../all_styles.scss";
+import EditIcon from "../../svg/edit-regular.svg";
 
 export default class EditSession extends React.Component {
   constructor() {
@@ -176,9 +177,7 @@ export default class EditSession extends React.Component {
 
     return (
       <div>
-        <Button variant="contained" color="primary" onClick={this.clickEdit}>
-          Edit
-        </Button>
+        <img onClick={this.clickEdit} className={styles.seshIcon} src={EditIcon}/>
         <Dialog
           open={this.state.isClick}
           onClose={this.clickEdit}
