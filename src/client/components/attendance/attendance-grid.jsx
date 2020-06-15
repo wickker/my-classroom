@@ -1,13 +1,14 @@
 import React from "react";
 import ClassSelector from "./class-selector";
 import { get } from "lodash";
-import styles from "./attendance.scss";
+import styles from "../all_styles.scss";
 import { withRouter } from "react-router-dom";
 var classNames = require("classnames");
 const cx = classNames.bind(styles);
 var moment = require("moment");
-import MarkAttendance from "./mark-attendance-att";
+import MarkAttendance from "../dashboard/mark-attendance-dashboard";
 import { Document } from "react-pdf";
+import eyeIcon from "../../svg/eye-regular.svg";
 
 export class AttendanceGrid extends React.Component {
   constructor() {
@@ -22,6 +23,7 @@ export class AttendanceGrid extends React.Component {
       isLogin: true,
       hide: false,
       url: "",
+      attendanceIcon: true,
     };
   }
 
@@ -144,9 +146,9 @@ export class AttendanceGrid extends React.Component {
     if (url !== "") {
       return (
         <div className="row">
-          <div className="col-sm">
-            <div>Supporting Document</div>
-            <img src={url} style={{maxWidth:"70%"}}/>
+          <div className="col-sm mt-3">
+            <div className={styles.form_title}>Supporting Document</div>
+            <img className="mt-2" src={url} style={{ maxWidth: "70%" }} />
           </div>
         </div>
       );
@@ -183,8 +185,13 @@ export class AttendanceGrid extends React.Component {
             marker = (
               <div>
                 <span className={textStyle}>{text}</span>
-                <span id={obj.document} onClick={this.setURL}>
-                  link
+                <span>
+                  <img
+                    id={obj.document}
+                    onClick={this.setURL}
+                    src={eyeIcon}
+                    className={styles.viewDoc}
+                  />
                 </span>
               </div>
             );
@@ -232,18 +239,20 @@ export class AttendanceGrid extends React.Component {
       let attendance = this.state.attendance;
       let HTML = attendance.sessions.map((element, index) => {
         // create object to be passed to mark attendance button
-        let obj = {};
-        obj.class = this.state.classObjSelected;
-        obj.session = element;
+        let obj = element;
+        obj.title = this.state.classObjSelected.title;
+        obj.description = this.state.classObjSelected.description;
+        obj.image = this.state.classObjSelected.image;
+        let studentsFiltered = this.state.classObjSelected.students.filter(stu => stu.session_id === element.session_id);
+        obj.students = studentsFiltered;
+        console.log("BANANAANNA", obj);
         // generate date column header label
-        let date = moment(element.start_datetime, "x").format(
-          "DD/MM/YY hh:mmA"
-        );
+        let date = moment(element.start_datetime, "x").format("DD/MM h:mmA");
         return (
           <div className="col-sm" key={index}>
             {date}
             <div hidden={this.state.hide}>
-              <MarkAttendance obj={obj} />
+              <MarkAttendance obj={obj} attendanceIcon={this.state.attendanceIcon}/>
             </div>
           </div>
         );
@@ -268,7 +277,7 @@ export class AttendanceGrid extends React.Component {
       <div className="row">
         <div className="col-sm">
           <div className="row">
-            <div className="col-sm-6">
+            <div className="col-sm-6 mt-2">
               <ClassSelector
                 classes={this.state.classes}
                 findClassIdMatch={this.findClassIdMatch}
@@ -276,17 +285,17 @@ export class AttendanceGrid extends React.Component {
               />
             </div>
           </div>
-          <div hidden={this.state.isHidden}>
-            <p>
+          <div className={styles.card_text} hidden={this.state.isHidden}>
+            <div className="mt-3">
               Sorry, the class you have selected has no affiliated sessions or
               students yet.
-            </p>
-            <p hidden={this.state.hide}>
+            </div>
+            <div hidden={this.state.hide}>
               <a href="/students">Add a student</a>
-            </p>
-            <p hidden={this.state.hide}>
+            </div>
+            <div hidden={this.state.hide}>
               <a href="/calendar">Add a session</a>
-            </p>
+            </div>
           </div>
           {head}
           {grid}

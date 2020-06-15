@@ -14,12 +14,13 @@ import Typography from "@material-ui/core/Typography";
 import CloseIcon from "@material-ui/icons/Close";
 import Slide from "@material-ui/core/Slide";
 var moment = require("moment");
-import styles from "./attendance.scss";
+import styles from "../all_styles.scss";
 import FileUpload from "./file-upload-att";
 import Checkbox from "@material-ui/core/Checkbox";
 import SaveIcon from "@material-ui/icons/Save";
 var classNames = require("classnames");
 const cx = classNames.bind(styles);
+import editIcon from "../../svg/edit-regular.svg";
 
 // styles
 const useStyles = makeStyles((theme) => ({
@@ -156,9 +157,7 @@ export default function MarkAttendance({ obj }) {
 
   return (
     <div>
-      <Button variant="contained" size="small" color="primary" onClick={handleClickOpen}>
-        Edit
-      </Button>
+      <img src={editIcon} className={styles.viewDoc} onClick={handleClickOpen} />
       <Dialog
         fullScreen
         open={open}

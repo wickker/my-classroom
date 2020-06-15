@@ -20,6 +20,7 @@ import SaveIcon from "@material-ui/icons/Save";
 var classNames = require("classnames");
 const cx = classNames.bind(styles);
 import styles from "../all_styles.scss";
+import editIcon from "../../svg/edit-regular.svg";
 
 // styles
 const useStyles = makeStyles((theme) => ({
@@ -37,7 +38,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 // main function starts here
-export default function MarkAttendance({ obj }) {
+export default function MarkAttendance({ obj, attendanceIcon }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -164,9 +165,10 @@ export default function MarkAttendance({ obj }) {
 
   return (
     <div>
-      <button className={styles.button} onClick={handleClickOpen}>
+      <button className={styles.button} onClick={handleClickOpen} hidden={attendanceIcon}>
         Mark Attendance
       </button>
+      <img src={editIcon} className={styles.viewDoc} onClick={handleClickOpen} hidden={!attendanceIcon}/>
       <Dialog
         fullScreen
         open={open}

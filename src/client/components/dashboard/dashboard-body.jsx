@@ -69,7 +69,7 @@ export default class DashboardBody extends React.Component {
                   </div>
                 </div>
                 <div>
-                  <MarkAttendance obj={element} />
+                  <MarkAttendance obj={element} attendanceIcon={false} />
                 </div>
               </div>
             </div>

@@ -15,8 +15,6 @@ export default class SessionDetails extends React.Component {
     let seshId = event.target.id;
     const data = { seshId: seshId };
     let url = "/sessions/delete";
-    // alert to confirm
-    alert("Confirm delete?");
     fetch(url, {
       method: "POST",
       headers: {
@@ -117,7 +115,7 @@ export default class SessionDetails extends React.Component {
                   </tr>
                 </table>
                 <div hidden={this.props.hide}>
-                  <MarkAttendance obj={sessionObj} />
+                  <MarkAttendance obj={sessionObj} attendanceIcon={false} />
                 </div>
                 <div className={styles.card_text}>
                   <div className="mb-2 mt-1">
