@@ -20,6 +20,7 @@ import Select from "@material-ui/core/Select";
 import Checkbox from "@material-ui/core/Checkbox";
 var moment = require("moment");
 import FileUpload from "./file-upload-student";
+import styles from "../all_styles.scss";
 
 // main function starts here
 export default function NewStudent({ classes }) {
@@ -124,7 +125,7 @@ export default function NewStudent({ classes }) {
       let HTML = classes.map((element, index) => {
         if (element.sessions.length > 0) {
           return (
-            <span key={index}>
+            <span key={index} className={styles.input_field}>
               <FormControlLabel
                 control={
                   <Checkbox
@@ -147,10 +148,10 @@ export default function NewStudent({ classes }) {
   let checkboxes = renderSelectClass() || "";
 
   return (
-    <div>
-      <Button variant="contained" color="primary" onClick={handleClickOpen}>
+    <div className="mt-1 mb-2">
+      <button className={styles.button} onClick={handleClickOpen}>
         Add New Student
-      </Button>
+      </button>
       <Dialog
         open={open}
         onClose={handleClose}
@@ -159,17 +160,25 @@ export default function NewStudent({ classes }) {
       >
         <div className="row">
           <div className="col-sm">
-            <DialogTitle>New Student</DialogTitle>
             <DialogContent>
-              <div className="text-danger">{errorMsg}</div>
+              <div className={styles.form_title}>New Student</div>
+              <div className={styles.error}>{errorMsg}</div>
               <TextField
                 margin="dense"
                 label="Name"
                 onChange={nameSet}
                 fullWidth
                 required
+                InputProps={{
+                  style: {
+                    fontFamily: "Quicksand",
+                    letterSpacing: "1px",
+                  },
+                }}
               />
-              <div className="mt-3">Select Classes</div>
+              <div className="mt-3">
+                <span className={styles.input_field}>Select Classes</span>
+              </div>
               {checkboxes}
               <div className="row mb-3">
                 <div className="col-sm">
@@ -183,18 +192,51 @@ export default function NewStudent({ classes }) {
                       value={birthday}
                       onChange={birthdaySet}
                       required
+                      InputProps={{
+                        style: {
+                          fontFamily: "Quicksand",
+                          letterSpacing: "1px",
+                        },
+                      }}
                     />
                   </MuiPickersUtilsProvider>
                 </div>
                 <div className="col-sm mt-3">
                   <FormControl fullWidth>
                     <InputLabel>Select Gender *</InputLabel>
-                    <Select defaultValue="" onChange={genderSet}>
-                      <MenuItem value="" disabled>
+                    <Select
+                      style={{ fontFamily: "Quicksand", letterSpacing: "1px" }}
+                      defaultValue=""
+                      onChange={genderSet}
+                    >
+                      <MenuItem
+                        style={{
+                          fontFamily: "Quicksand",
+                          letterSpacing: "1px",
+                        }}
+                        value=""
+                        disabled
+                      >
                         Select Gender
                       </MenuItem>
-                      <MenuItem value="1">Male</MenuItem>
-                      <MenuItem value="2">Female</MenuItem>
+                      <MenuItem
+                        style={{
+                          fontFamily: "Quicksand",
+                          letterSpacing: "1px",
+                        }}
+                        value="1"
+                      >
+                        Male
+                      </MenuItem>
+                      <MenuItem
+                        style={{
+                          fontFamily: "Quicksand",
+                          letterSpacing: "1px",
+                        }}
+                        value="2"
+                      >
+                        Female
+                      </MenuItem>
                     </Select>
                   </FormControl>
                 </div>
@@ -209,10 +251,16 @@ export default function NewStudent({ classes }) {
                     fullWidth
                     onChange={notesSet}
                     required
+                    InputProps={{
+                      style: {
+                        fontFamily: "Quicksand",
+                        letterSpacing: "1px",
+                      },
+                    }}
                   />
                 </div>
                 <div className="col-sm">
-                  Select Image *
+                  <span className={styles.input_field}>Select Image *</span>
                   <FileUpload callback={callback} />
                 </div>
               </div>
@@ -220,9 +268,11 @@ export default function NewStudent({ classes }) {
           </div>
         </div>
         <DialogActions>
-          <Button variant="contained" color="primary" onClick={submit}>
-            Submit
-          </Button>
+          <div className="mr-3">
+            <button className={styles.button} onClick={submit}>
+              Submit
+            </button>
+          </div>
         </DialogActions>
       </Dialog>
     </div>

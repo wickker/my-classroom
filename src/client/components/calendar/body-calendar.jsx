@@ -211,7 +211,7 @@ export default class CalendarGrid extends React.Component {
         let todayStr = moment(today).format("D-M-YYYY");
         let todayColor = "white";
         if (col === todayStr) {
-          todayColor = "#FCFAEE";
+          todayColor = "#EFE7DC";
         }
         return (
           <div key={colIndex} className={box} style={{ background: todayColor }}>

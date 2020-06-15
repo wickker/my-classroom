@@ -7,10 +7,11 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 var moment = require("moment");
-import styles from "./students.scss";
+import styles from "../all_styles.scss";
 import EditStudent from "./edit-student";
 import { get, isEmpty } from "lodash";
 import PropTypes from "prop-types";
+import BdayIcon from "../../svg/birthday-cake-solid.svg";
 
 // styles
 const useStyles = makeStyles({
@@ -67,34 +68,44 @@ export default function MediaCard({ student, isHidden, classesArr, hide }) {
   };
 
   return (
-    <div className={styles.card} hidden={isHidden}>
-      <Card className={classes.root}>
-        <CardMedia
-          className={classes.media}
-          image={image}
-          alt="display picture"
-        />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
-            {name}
-          </Typography>
-          <div>Notes: {notes}</div>
-          <div>Birthday: {bday}</div>
-          <div>Gender: {gender}</div>
-          <div>
-            Class(es):
+    <div
+      className={styles.card}
+      hidden={isHidden}
+      style={{ maxWidth: "300px" }}
+    >
+      <CardMedia
+        className={classes.media}
+        image={image}
+        alt="display picture"
+        style={{ maxHeight: "300px" }}
+      />
+      <CardContent>
+        <div className={styles.card_title}>{name}</div>
+        <div className={styles.card_text}>
+          <div className="mt-2">
+            <img src={BdayIcon} className={styles.bday}/><b>{bday}</b>
+          </div>
+          <div className="mt-2">
+            <b>Gender: {gender}</b>
+          </div>
+          <div className="mt-2">
+            <b>Notes</b>
+          </div>
+          <div>{notes}</div>
+          <div className="mt-2">
+            <b>Class(es)</b>
             <ul>{classesHTML}</ul>
           </div>
-        </CardContent>
-        <div hidden={hide}>
-          <CardActions>
-            <EditStudent classes={classesArr} student={student} />
-            <Button variant="contained" color="primary" onClick={deleteStudent}>
-              Delete
-            </Button>
-          </CardActions>
         </div>
-      </Card>
+      </CardContent>
+      <div hidden={hide}>
+        <CardActions>
+          <EditStudent classes={classesArr} student={student} />
+          <button className={styles.button} onClick={deleteStudent}>
+            Delete
+          </button>
+        </CardActions>
+      </div>
     </div>
   );
 }

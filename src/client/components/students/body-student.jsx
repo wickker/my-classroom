@@ -2,7 +2,7 @@ import React from "react";
 import NewStudent from "./new-student";
 import SearchStudents from "./search-students";
 import ShowCard from "./show-card";
-import styles from "./students.scss";
+import styles from "../all_styles.scss";
 var classNames = require("classnames");
 const cx = classNames.bind(styles);
 
@@ -82,7 +82,7 @@ export default class BodyStudent extends React.Component {
     this.setState({ studentCard: obj, isHidden: false });
   };
 
-  input = cx(styles.input, "form-control");
+  input = cx(styles.input_field, "form-control", "mt-2");
 
   render() {
     return (
@@ -92,10 +92,14 @@ export default class BodyStudent extends React.Component {
             <NewStudent classes={this.state.classes} />
           </div>
           <div className="row">
-            <div className="col-sm-5">
-              Search
-              <input className={this.input} onChange={this.search} />
-              <div>{this.state.searchMsg}</div>
+            <div className="col-sm">
+              <span className={styles.input_field}>Search</span>
+              <input
+                className={this.input}
+                style={{ width: "60%" }}
+                onChange={this.search}
+              />
+              <div className={styles.input_field}>{this.state.searchMsg}</div>
               {this.state.loading ? null : (
                 <SearchStudents
                   students={this.state.students}

@@ -21,6 +21,7 @@ import Select from "@material-ui/core/Select";
 import Checkbox from "@material-ui/core/Checkbox";
 var moment = require("moment");
 import FileUploadEdit from "./file-upload-student-edit";
+import styles from "../all_styles.scss";
 
 // main class begins here
 export default class EditStudent extends React.Component {
@@ -192,9 +193,9 @@ export default class EditStudent extends React.Component {
   render() {
     return (
       <div>
-        <Button variant="contained" color="primary" onClick={this.clickEdit}>
+        <button className={styles.button} onClick={this.clickEdit}>
           Edit
-        </Button>
+        </button>
         <Dialog
           open={this.state.isClick}
           onClose={this.clickEdit}
@@ -213,9 +214,17 @@ export default class EditStudent extends React.Component {
                   fullWidth
                   defaultValue={this.state.name}
                   required
+                  InputProps={{
+                    style: {
+                      fontFamily: "Quicksand",
+                      letterSpacing: "1px",
+                    },
+                  }}
                 />
                 {/* checkboxes go here */}
-                <div className="mt-3">Select Classes</div>
+                <div className="mt-3">
+                  <span className={styles.input_field}>Select Classes</span>
+                </div>
                 {this.renderCheckboxes()}
                 <div className="row mb-3">
                   <div className="col-sm">
@@ -229,6 +238,12 @@ export default class EditStudent extends React.Component {
                         value={this.state.birthday}
                         onChange={this.setBirthday}
                         required
+                        InputProps={{
+                          style: {
+                            fontFamily: "Quicksand",
+                            letterSpacing: "1px",
+                          },
+                        }}
                       />
                     </MuiPickersUtilsProvider>
                   </div>
@@ -238,12 +253,39 @@ export default class EditStudent extends React.Component {
                       <Select
                         defaultValue={this.state.gender}
                         onChange={this.setGender}
+                        style={{
+                          fontFamily: "Quicksand",
+                          letterSpacing: "1px",
+                        }}
                       >
-                        <MenuItem value="" disabled>
+                        <MenuItem
+                          style={{
+                            fontFamily: "Quicksand",
+                            letterSpacing: "1px",
+                          }}
+                          value=""
+                          disabled
+                        >
                           Select Gender
                         </MenuItem>
-                        <MenuItem value="1">Male</MenuItem>
-                        <MenuItem value="2">Female</MenuItem>
+                        <MenuItem
+                          style={{
+                            fontFamily: "Quicksand",
+                            letterSpacing: "1px",
+                          }}
+                          value="1"
+                        >
+                          Male
+                        </MenuItem>
+                        <MenuItem
+                          style={{
+                            fontFamily: "Quicksand",
+                            letterSpacing: "1px",
+                          }}
+                          value="2"
+                        >
+                          Female
+                        </MenuItem>
                       </Select>
                     </FormControl>
                   </div>
@@ -259,10 +301,16 @@ export default class EditStudent extends React.Component {
                       onChange={this.setNotes}
                       defaultValue={this.state.notes}
                       required
+                      InputProps={{
+                        style: {
+                          fontFamily: "Quicksand",
+                          letterSpacing: "1px",
+                        },
+                      }}
                     />
                   </div>
                   <div className="col-sm">
-                    Select Image *
+                    <span className={styles.input_field}>Select Image *</span>
                     <FileUploadEdit
                       callback={this.callback}
                       ogImage={this.state.image}
@@ -273,9 +321,11 @@ export default class EditStudent extends React.Component {
             </div>
           </div>
           <DialogActions>
-            <Button variant="contained" color="primary" onClick={this.submit}>
-              Submit
-            </Button>
+            <div className="mr-3">
+              <button className={styles.button} onClick={this.submit}>
+                Submit
+              </button>
+            </div>
           </DialogActions>
         </Dialog>
       </div>
