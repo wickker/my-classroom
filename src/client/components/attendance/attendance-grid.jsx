@@ -72,8 +72,6 @@ export class AttendanceGrid extends React.Component {
   // get class object from end point
   initSelectedClassForId = async (classId) => {
     const params = { classId: classId };
-    // let url = new URL();
-    // url.search = new URLSearchParams(params).toString();
     let url = `/sessions/attendance?classId=${classId}`;
     let response = await fetch(url);
     let data = await response.json();

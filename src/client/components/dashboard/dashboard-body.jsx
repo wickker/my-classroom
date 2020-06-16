@@ -29,8 +29,6 @@ export default class DashboardBody extends React.Component {
 
   getSessionsAndAttendance = async (user) => {
     const params = { instructorId: user.id };
-    // let url = new URL("/dashboard/get");
-    // url.search = new URLSearchParams(params).toString();
     let url = `/dashboard/get?instructorId=${user.id}`;
     let response = await fetch(url);
     let data = await response.json();
