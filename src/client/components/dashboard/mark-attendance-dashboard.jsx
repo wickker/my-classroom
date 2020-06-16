@@ -52,6 +52,7 @@ export default function MarkAttendance({ obj, attendanceIcon }) {
   let students = get(obj, "students") || "";
   let sessionId = get(obj, "session_id") || "";
 
+
   const compareName = (a, b) => {
     const itemA = a.name.toUpperCase();
     const itemB = b.name.toUpperCase();
@@ -208,7 +209,7 @@ export default function MarkAttendance({ obj, attendanceIcon }) {
                 <div className="col-sm">Upload Document</div>
               </div>
               {/* attendance form table starts here */}
-              <form action="/sessions/attendance/post" method="post">
+              {/* <form action="/sessions/attendance/post" method="post"> */}
                 {studentsHTML}
                 <input name="classId" defaultValue={id} hidden></input>
                 <div className="row">
@@ -220,7 +221,7 @@ export default function MarkAttendance({ obj, attendanceIcon }) {
                     </div>
                   </div>
                 </div>
-              </form>
+              {/* </form> */}
             </div>
           </div>
         </div>

@@ -117,14 +117,15 @@ module.exports = (pool) => {
       if (err) {
         console.log(err);
       } else {
-        queryText = `delete from attendance where session_id = ${id} returning *`;
-        pool.query(queryText, (err, result) => {
-          if (err) {
-            console.log(err);
-          } else {
-            callback(result.rows);
-          }
-        });
+        callback(result.rows);
+        // queryText = `delete from attendance where session_id = ${id} returning *`;
+        // pool.query(queryText, (err, result) => {
+        //   if (err) {
+        //     console.log(err);
+        //   } else {
+        //     callback(result.rows);
+        //   }
+        // });
       }
     });
   };

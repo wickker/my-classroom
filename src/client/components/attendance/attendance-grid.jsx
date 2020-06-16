@@ -6,7 +6,7 @@ import { withRouter } from "react-router-dom";
 var classNames = require("classnames");
 const cx = classNames.bind(styles);
 var moment = require("moment");
-import MarkAttendance from "../dashboard/mark-attendance-dashboard";
+import MarkAttendance from "../dashboard/mark-attendance";
 import { Document } from "react-pdf";
 import eyeIcon from "../../svg/eye-regular.svg";
 
@@ -97,7 +97,6 @@ export class AttendanceGrid extends React.Component {
         array[x].push(string);
       }
     }
-    console.log("raw array:", array);
     // determine whether or not to hide attendance error message
     if (array.length === 0 || array[0].length === 0) {
       this.setState({ isHidden: false });
@@ -117,7 +116,6 @@ export class AttendanceGrid extends React.Component {
   componentDidMount = async () => {
     // check for login
     let banana = localStorage.getItem("banana");
-    console.log("BANANA: ", banana);
     if (!banana) {
       this.setState({ isLogin: false, hide: true });
     }
@@ -244,7 +242,6 @@ export class AttendanceGrid extends React.Component {
         obj.image = this.state.classObjSelected.image;
         let studentsFiltered = this.state.classObjSelected.students.filter(stu => stu.session_id === element.session_id);
         obj.students = studentsFiltered;
-        console.log("BANANAANNA", obj);
         // generate date column header label
         let date = moment(element.start_datetime, "x").format("DD/MM h:mmA");
         return (

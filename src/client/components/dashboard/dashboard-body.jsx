@@ -1,7 +1,7 @@
 import React from "react";
 import { isEmpty } from "lodash";
 var moment = require("moment");
-import MarkAttendance from "./mark-attendance-dashboard";
+import MarkAttendance from "./mark-attendance";
 import styles from "../all_styles.scss";
 var classNames = require("classnames");
 const cx = classNames.bind(styles);

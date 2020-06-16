@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "../all_styles.scss";
 var moment = require("moment");
-import MarkAttendance from "../dashboard/mark-attendance-dashboard";
+import MarkAttendance from "../dashboard/mark-attendance";
 import TrashIcon from "../../svg/trash-alt-regular.svg";
 import { get, isEmpty } from "lodash";
 import EditSession from "./edit-session";
