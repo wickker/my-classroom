@@ -50,7 +50,6 @@ export default function FormDialog({ classes, dateStr }) {
   // convert selected date into mS and sets default session start date
   let dateFormatted = moment(dateStr, "D-M-YYYY").format();
   let dateBigInt = moment(dateStr, "D-M-YYYY").valueOf();
-  console.log(dateFormatted);
   // set default value of time pickers to current time rounted to nearest quarter
   let d = new Date();
   let roundedTime = roundTimeQuarterHour(d);
@@ -183,9 +182,8 @@ export default function FormDialog({ classes, dateStr }) {
   let selectClass = renderClassDropdown();
 
   useEffect(() => {
-    console.log('effect happened');
     setUpTillDateDisplay(dateFormatted);
-  });
+  }, [dateFormatted]);
 
   return (
     <span>
