@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { createBrowserHistory } from "history";
 
 import styles from "./all_styles.scss";
 import Dashboard from "./dashboard";
@@ -132,9 +133,11 @@ class Navigation extends React.Component {
   };
 
   render() {
+    const history = createBrowserHistory();
+    console.log(history);
     return (
       <div className={this.props.classes.root}>
-        <Router >
+        <Router history={history}>
           <CssBaseline />
           <AppBar
             position="fixed"
