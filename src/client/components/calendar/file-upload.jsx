@@ -26,7 +26,7 @@ export default class FileUpload extends React.Component {
 
     let fileId = "inputFile" + this.props.id;
     let fileGroup = document.getElementById(fileId);
-    console.log(fileGroup.files);
+    
 
     let file = fileGroup.files[0];
     let formData = new FormData();
@@ -45,9 +45,9 @@ export default class FileUpload extends React.Component {
     fetch(cloudinary_url, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
+       
         let inputURL = result.secure_url;
-        console.log(inputURL);
+      
         this.setState({ document: inputURL });
       })
       .catch((error) => console.log("error", error));

@@ -86,7 +86,7 @@ export default function MarkAttendance({ obj, attendanceIcon }) {
   // render main mark attendance table
   const renderTable = () => {
     if (!!students && students !== "" && students.length > 0) {
-      console.log("MARK ATTENDANCE OBJ: ", obj)
+      
       let studentsSort = students.sort(compareName);
       let studentsHTML = studentsSort.map((element, index) => {
         // define isPresent checked status

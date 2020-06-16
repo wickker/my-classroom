@@ -73,9 +73,9 @@ export default class BodyStudent extends React.Component {
   };
 
   getStudent = (event) => {
-    console.log("STUDENT ID:", event.target.id);
+    
     let studentId = parseInt(event.target.id);
-    console.log(this.state.ogStudents);
+    
     let obj = this.state.ogStudents.find((element) => {
       return element.id === studentId;
     });

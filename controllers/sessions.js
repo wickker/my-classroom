@@ -81,7 +81,6 @@ module.exports = (db) => {
     console.log(request.body);
     let data = request.body;
     let classId = data.classId;
-    console.log('in postAttendance');
     let callback = () => {
       response.send({classId});
       // response.redirect("/attendance?classid=" + classId);

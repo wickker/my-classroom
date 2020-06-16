@@ -9,9 +9,10 @@ var classNames = require("classnames");
 const cx = classNames.bind(styles);
 
 export default class SessionDetails extends React.Component {
+ 
   // delete session
   deleteSession = (event) => {
-    console.log(event.target.id);
+  
     let seshId = event.target.id;
     const data = { seshId: seshId };
     let url = "/sessions/delete";
@@ -77,7 +78,7 @@ export default class SessionDetails extends React.Component {
     sessionObj.title = title;
     sessionObj.description = description;
     sessionObj.image = image;
-    console.log("SESION OBJ: ", sessionObj);
+    
 
     return (
       <div hidden={isHidden}>

@@ -135,7 +135,7 @@ export default class CalendarGrid extends React.Component {
 
   // show session details on click
   showSessionDetails = (event) => {
-    console.log("SESSION ID: ", event.target.id);
+ 
     let sessionId = parseInt(event.target.id);
     let sessionDetails = this.state.sessions.find(
       (element) => element.id === sessionId

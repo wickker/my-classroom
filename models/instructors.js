@@ -10,9 +10,9 @@ module.exports = (pool) => {
   ) => {
     let queryText = `insert into instructors (name, image, about, email, password, is_delete) values ('${name}', '${image}', '${about}', '${email}', '${password}', false) returning *`;
     await pool.query(queryText).then(async (result) => {
-      console.log(result.rows[0]);
+      // console.log(result.rows[0]);
       let instructorId = result.rows[0].id;
-      console.log(instructorId);
+      // console.log(instructorId);
       for (const key in checked) {
         let obj = checked[key]["current"];
         for (const prop in obj) {
@@ -41,7 +41,7 @@ module.exports = (pool) => {
   ) => {
     let queryText = `update instructors set name = '${name}', image = '${image}', about = '${about}', email = '${email}' where id = ${id} returning *`;
     await pool.query(queryText).then(async (result) => {
-      console.log(result.rows[0]);
+      // console.log(result.rows[0]);
       for (const key in checked) {
         let current = checked[key]["current"];
         let og = checked[key]["og"];
@@ -51,12 +51,12 @@ module.exports = (pool) => {
           if (current[prop] !== og[prop] && current[prop]) {
             queryText = `insert into instructors_classes (instructor_id, session_id, class_id) values (${id}, ${sessionId}, ${classId}) returning *`;
             await pool.query(queryText).then(async (result) => {
-              console.log(result.rows[0]);
+              // console.log(result.rows[0]);
             });
           } else if (current[prop] !== og[prop] && !current[prop]) {
             queryText = `delete from instructors_classes where instructor_id = ${id} and session_id = ${sessionId} and class_id = ${classId} returning *`;
             await pool.query(queryText).then(async (result) => {
-              console.log(result.rows[0]);
+              // console.log(result.rows[0]);
             });
           }
         }
@@ -67,9 +67,9 @@ module.exports = (pool) => {
 
   const queryInstructors = async (callback) => {
     let queryText = `select * from instructors where is_delete = false order by name asc`;
-    console.log(queryText);
+    // console.log(queryText);
     await pool.query(queryText).then(async (result) => {
-      console.log(result.rows);
+      // console.log(result.rows);
       let data = result.rows;
       for (let i = 0; i < data.length; i++) {
         queryText = `select distinct on (instructors_classes.class_id) instructors_classes.class_id, classes.title from instructors_classes join classes on (instructors_classes.class_id = classes.id) where instructors_classes.instructor_id = ${data[i].id} and classes.is_delete = false order by instructors_classes.class_id`;

@@ -43,7 +43,7 @@ export default function MediaCard({ student, isHidden, classesArr, hide }) {
 
   // delete student
   const deleteStudent = () => {
-    console.log(id);
+    
     let data = {
       id: id,
     };

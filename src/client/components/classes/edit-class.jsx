@@ -103,7 +103,7 @@ export default class EditClass extends React.Component {
   };
 
   callback = (result) => {
-    console.log("callback: ", result);
+  
     if (result.includes("https://")) {
       this.setState({ image: result, errorMsg: "" });
     } else {

@@ -31,7 +31,7 @@ export default function MediaCard({
   const classes = useStyles();
 
   const deleteInstructor = () => {
-    console.log(instructor.id);
+   
     let data = {
       id: instructor.id,
     };

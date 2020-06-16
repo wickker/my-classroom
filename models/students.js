@@ -10,20 +10,20 @@ module.exports = (pool) => {
   ) => {
     let queryText = `insert into students (name, image, notes, birthday, gender, is_delete) values ('${name}', '${image}', '${notes}', ${birthday}, '${gender}', false) returning *`;
     await pool.query(queryText).then(async (result) => {
-      console.log(result.rows[0]);
+      // console.log(result.rows[0]);
       let studentId = result.rows[0].id;
-      console.log("student id: ", studentId);
+      // console.log("student id: ", studentId);
       for (let i = 0; i < classes.length; i++) {
         let classId = parseInt(classes[i]);
         queryText = `select id from sessions where class_id = ${classId} and is_delete = false`;
         await pool.query(queryText).then(async (result) => {
           let sessions = result.rows;
-          console.log(sessions);
+          // console.log(sessions);
           for (let x = 0; x < sessions.length; x++) {
-            console.log("sessionId: ", sessions[x].id);
+            // console.log("sessionId: ", sessions[x].id);
             queryText = `insert into attendance (class_id, session_id, student_id, is_present, remarks, is_late, document) values (${classId}, ${sessions[x].id}, ${studentId}, false, '', 0, '') returning *`;
             await pool.query(queryText).then(async (result) => {
-              console.log(result.rows[0]);
+              // console.log(result.rows[0]);
             });
           }
         });
@@ -63,14 +63,14 @@ module.exports = (pool) => {
       console.log("updated ~ ", result.rows[0]);
       for (const key in classes) {
         let classId = parseInt(key);
-        console.log("class id: ", classId);
+        // console.log("class id: ", classId);
         if (
           classes[key].og !== classes[key].current &&
           classes[key].current === false
         ) {
           queryText = `delete from attendance where class_id = ${classId} and student_id = ${id} returning *`;
           await pool.query(queryText).then(async (result) => {
-            console.log(result.rows);
+            // console.log(result.rows);
           });
         } else if (
           classes[key].og !== classes[key].current &&
@@ -79,11 +79,11 @@ module.exports = (pool) => {
           queryText = `select id from sessions where class_id = ${classId} and is_delete = false`;
           await pool.query(queryText).then(async (result) => {
             let sessions = result.rows;
-            console.log("sessions array: ", sessions);
+            // console.log("sessions array: ", sessions);
             for (let x = 0; x < sessions.length; x++) {
               queryText = `insert into attendance (class_id, session_id, student_id, is_present, remarks, is_late, document) values (${classId}, ${sessions[x].id}, ${id}, false, '', 0, '') returning *`;
               await pool.query(queryText).then(async (result) => {
-                console.log(result.rows[0]);
+                // console.log(result.rows[0]);
               });
             }
           });
@@ -99,7 +99,7 @@ module.exports = (pool) => {
       if (err) {
         console.log(err);
       } else {
-        console.log(result.rows[0]);
+        // console.log(result.rows[0]);
         callback();
       }
     });

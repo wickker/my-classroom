@@ -49,7 +49,7 @@ export default class DashboardBody extends React.Component {
       let startDateTimeInt = parseInt(element.start_datetime);
       return startDateTimeInt >= todayStart && startDateTimeInt <= todayEnd;
     });
-    console.log("sessions today filtered: ", sessionsFiltered);
+    
     // if there are sessions commencing today
     if (sessionsFiltered.length > 0) {
       let sessionsTodayHTML = sessionsFiltered.map((element, index) => {
@@ -102,7 +102,6 @@ export default class DashboardBody extends React.Component {
       let startDateTimeInt = parseInt(element.start_datetime);
       return startDateTimeInt >= tmrStart && startDateTimeInt <= weekEnd;
     });
-    console.log("sessions week filtered: ", sessionsFiltered);
     // if there are sessions commencing tomorrow for a week
     if (sessionsFiltered.length > 0) {
       let sessionsWeekHTML = sessionsFiltered.map((element, index) => {

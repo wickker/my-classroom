@@ -102,7 +102,7 @@ export default function NewStudent({ classes }) {
   const genderSet = (event) => {
     let gender;
     event.target.value === 1 ? (gender = "Male") : (gender = "Female");
-    console.log(gender);
+    
     setGender(gender);
   };
 

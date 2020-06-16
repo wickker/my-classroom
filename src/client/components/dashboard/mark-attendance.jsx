@@ -61,7 +61,6 @@ class MarkAttendance extends React.Component {
       tracker,
       masterCheck: false,
     };
-    console.log(tracker);
   }
 
   // initialize
@@ -92,8 +91,6 @@ class MarkAttendance extends React.Component {
 
   initTracker = (obj) => {
     let tracker = {};
-    console.log("inside initTracker");
-    console.log(obj);
     if (obj.students) {
       obj.students.forEach((element) => {
         tracker[element.student_id] = {};
@@ -137,7 +134,6 @@ class MarkAttendance extends React.Component {
 
   handleSave = () => {
     let data = this.state.tracker;
-    console.log("TO SUBMIT", data);
     this.setState({ open: false });
     let url = "/sessions/attendance/post";
     fetch(url, {

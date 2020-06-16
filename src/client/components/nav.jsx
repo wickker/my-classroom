@@ -134,7 +134,7 @@ class Navigation extends React.Component {
 
   render() {
     const history = createBrowserHistory();
-    console.log(history);
+  
     return (
       <div className={this.props.classes.root}>
         <Router >

@@ -12,16 +12,16 @@ module.exports = (pool) => {
     let queryText = `select distinct on (student_id) student_id from attendance where class_id = ${classId}`;
     await pool.query(queryText).then(async (result) => {
       let studentIdsArr = result.rows;
-      console.log(studentIdsArr);
+      // console.log(studentIdsArr);
       if (frequency === 1) {
         let queryText = `insert into sessions (class_id, start_datetime, end_datetime, location, is_delete) values (${classId}, ${startDateTime}, ${endDateTime}, '${location}', ${isDelete}) returning *`;
         await pool.query(queryText).then(async (result) => {
           let newSession = result.rows[0];
-          console.log(newSession);
+          // console.log(newSession);
           for (let i = 0; i < studentIdsArr.length; i++) {
             let queryText = `insert into attendance (class_id, session_id, student_id, is_present, remarks, is_late, document) values (${classId}, ${newSession.id}, ${studentIdsArr[i].student_id}, false, '', 0, '') returning *`;
             await pool.query(queryText).then(async (result) => {
-              console.log(result.rows[0]);
+              // console.log(result.rows[0]);
             });
           }
         });
@@ -32,11 +32,11 @@ module.exports = (pool) => {
           let queryText = `insert into sessions (class_id, start_datetime, end_datetime, location, is_delete) values (${classId}, ${startDateTime}, ${endDateTime}, '${location}', ${isDelete}) returning *`;
           await pool.query(queryText).then(async (result) => {
             let newSession = result.rows[0];
-            console.log(newSession);
+            // console.log(newSession);
             for (let i = 0; i < studentIdsArr.length; i++) {
               let queryText = `insert into attendance (class_id, session_id, student_id, is_present, remarks, is_late, document) values (${classId}, ${newSession.id}, ${studentIdsArr[i].student_id}, false, '', 0, '') returning *`;
               await pool.query(queryText).then(async (result) => {
-                console.log(result.rows[0]);
+                // console.log(result.rows[0]);
               });
             }
           });
@@ -49,11 +49,11 @@ module.exports = (pool) => {
           let queryText = `insert into sessions (class_id, start_datetime, end_datetime, location, is_delete) values (${classId}, ${startDateTime}, ${endDateTime}, '${location}', ${isDelete}) returning *`;
           await pool.query(queryText).then(async (result) => {
             let newSession = result.rows[0];
-            console.log(newSession);
+            // console.log(newSession);
             for (let i = 0; i < studentIdsArr.length; i++) {
               let queryText = `insert into attendance (class_id, session_id, student_id, is_present, remarks, is_late, document) values (${classId}, ${newSession.id}, ${studentIdsArr[i].student_id}, false, '', 0, '') returning *`;
               await pool.query(queryText).then(async (result) => {
-                console.log(result.rows[0]);
+                // console.log(result.rows[0]);
               });
             }
           });
@@ -69,7 +69,7 @@ module.exports = (pool) => {
     let queryText = `select sessions.start_datetime, sessions.end_datetime, sessions.location, sessions.id, sessions.class_id, classes.color from sessions join classes on (classes.id = sessions.class_id) where sessions.start_datetime >= ${startDate} and sessions.start_datetime <= ${endDate} and sessions.is_delete = false order by sessions.start_datetime asc`;
     await pool.query(queryText).then(async (result) => {
       let sessions = result.rows;
-      console.log("SESSIONS~~~~", sessions);
+      // console.log("SESSIONS~~~~", sessions);
       for (let i = 0; i < sessions.length; i++) {
         queryText = `select instructors_classes.instructor_id, instructors.name, instructors.image, instructors.about from instructors_classes join instructors on (instructors_classes.instructor_id = instructors.id) where instructors.is_delete = false and instructors_classes.session_id = ${sessions[i].id}`;
         await pool.query(queryText).then(async (result) => {
@@ -120,23 +120,23 @@ module.exports = (pool) => {
         let studentId = parseInt(stuId);
         let late;
         data[stuId].isLate.current ? (late = 1) : (late = 0);
-        console.log('building query');
-        console.log('is_present: ', data[stuId].isPresent.current);
-        console.log('is_late: ', late);
-        console.log('remarks: ', data[stuId].remarks);
-        console.log('document: ', data[stuId].document);
-        console.log('classId: ', classId);
-        console.log('sessionId: ', sessionId);
-        console.log('studentId: ', studentId);
+        // console.log('building query');
+        // console.log('is_present: ', data[stuId].isPresent.current);
+        // console.log('is_late: ', late);
+        // console.log('remarks: ', data[stuId].remarks);
+        // console.log('document: ', data[stuId].document);
+        // console.log('classId: ', classId);
+        // console.log('sessionId: ', sessionId);
+        // console.log('studentId: ', studentId);
         let queryText = `update attendance set is_present = ${data[stuId].isPresent.current}, is_late = ${late}, remarks = '${data[stuId].remarks}', document = '${data[stuId].document}' where class_id = ${classId} and session_id = ${sessionId} and student_id = ${studentId} returning *`;
-        console.log('trying query');
+        // console.log('trying query');
         try {
           pool.query(queryText, (err, result) => {
             if (err) {
-              console.log('error happened!');
+              // console.log('error happened!');
               console.log(err);
             } else {
-              console.log(result.rows[0]);
+              // console.log(result.rows[0]);
             }
           });
         } catch (error) {
@@ -145,7 +145,7 @@ module.exports = (pool) => {
         }
       }
     }
-    console.log('for loop finished!');
+    // console.log('for loop finished!');
     callback();
   };
 
@@ -173,14 +173,14 @@ module.exports = (pool) => {
     await pool.query(queryText).then(async (result) => {
       let data = {};
       data.attendance = result.rows;
-      console.log(data);
+      // console.log(data);
       queryText = `select distinct on (attendance.student_id) attendance.student_id, attendance.class_id, students.name, students.image, students.notes, students.birthday, students.gender, students.is_delete from attendance join students on (attendance.student_id = students.id) where attendance.class_id = ${classId} and students.is_delete = false order by attendance.student_id`;
       await pool.query(queryText).then(async (result) => {
-        console.log(result.rows);
+        // console.log(result.rows);
         data.students = result.rows;
         queryText = `select distinct on (attendance.session_id) attendance.session_id, attendance.class_id, sessions.start_datetime, sessions.end_datetime, sessions.location, sessions.is_delete from attendance join sessions on (attendance.session_id = sessions.id) where attendance.class_id = ${classId} and sessions.is_delete = false order by attendance.session_id`;
         await pool.query(queryText).then(async (result) => {
-          console.log(result.rows);
+          // console.log(result.rows);
           data.sessions = result.rows;
           callback(data);
         });
@@ -202,8 +202,8 @@ module.exports = (pool) => {
   const sessionsForDashboard = async (callback, instructorId) => {
     let queryText = `select instructors_classes.session_id, instructors_classes.class_id, classes.title, classes.description, classes.image, sessions.start_datetime, sessions.end_datetime, sessions.location from instructors_classes join classes on (instructors_classes.class_id = classes.id) join sessions on (instructors_classes.session_id = sessions.id) where sessions.is_delete = false and instructors_classes.instructor_id = ${instructorId}`;
     await pool.query(queryText).then(async (result) => {
-      console.log("TESTING ~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-      console.log(result.rows);
+      // console.log("TESTING ~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+      // console.log(result.rows);
       let sessions = result.rows;
       for (let i = 0; i < sessions.length; i++) {
         queryText = `select attendance.student_id, attendance.is_present, attendance.is_late, attendance.remarks, attendance.document, students.name, students.image, students.notes, students.birthday, students.gender from attendance join students on (attendance.student_id = students.id) where attendance.session_id = ${sessions[i].session_id} and students.is_delete = false`;

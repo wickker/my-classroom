@@ -40,7 +40,7 @@ export default class BodyInstructors extends React.Component {
     let url = "/instructors/get";
     let response = await fetch(url);
     let data = await response.json();
-    console.log("instructors: ", data);
+  
     return data;
   };
 
@@ -94,7 +94,7 @@ export default class BodyInstructors extends React.Component {
   };
 
   search = (event) => {
-    console.log(event.target.value);
+    
     let str = event.target.value.toUpperCase();
     let ogInstructors = this.state.ogInstructors;
     let searched = [];
