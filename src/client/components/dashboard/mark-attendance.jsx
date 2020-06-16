@@ -15,6 +15,7 @@ var classNames = require("classnames");
 const cx = classNames.bind(styles);
 import styles from "../all_styles.scss";
 import EditIcon from "../../svg/edit-regular.svg";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 // styles
 const useStyles = (theme) => ({
@@ -58,6 +59,7 @@ class MarkAttendance extends React.Component {
       attendanceIcon: props.attendanceIcon,
       obj,
       tracker,
+      masterCheck: false,
     };
     console.log(tracker);
   }
@@ -90,7 +92,7 @@ class MarkAttendance extends React.Component {
 
   initTracker = (obj) => {
     let tracker = {};
-    console.log('inside initTracker');
+    console.log("inside initTracker");
     console.log(obj);
     if (obj.students) {
       obj.students.forEach((element) => {
@@ -98,7 +100,8 @@ class MarkAttendance extends React.Component {
         tracker[element.student_id]["isPresent"] = {};
         tracker[element.student_id]["isLate"] = {};
         tracker[element.student_id]["isPresent"]["og"] = element.is_present;
-        tracker[element.student_id]["isPresent"]["current"] = element.is_present;
+        tracker[element.student_id]["isPresent"]["current"] =
+          element.is_present;
         let late = element.is_late === 1 ? true : false;
         tracker[element.student_id]["isLate"]["og"] = late;
         tracker[element.student_id]["isLate"]["current"] = late;
@@ -184,6 +187,26 @@ class MarkAttendance extends React.Component {
     this.setState({ tracker });
   };
 
+  setMasterCheck = (event) => {
+    let checked = event.target.checked;
+    let tracker = this.state.tracker;
+    if (checked) {
+      for (const stuId in tracker) {
+        if (!isNaN(parseInt(stuId))) {
+          tracker[stuId].isPresent.current = true;
+        }
+      }
+      this.setState({ tracker, masterCheck: true });
+    } else {
+      for (const stuId in tracker) {
+        if (!isNaN(parseInt(stuId))) {
+          tracker[stuId].isPresent.current = false;
+        }
+      }
+      this.setState({ tracker, masterCheck: false });
+    }
+  };
+
   // more styles
   attenRow = cx(styles.attenRow, "col-sm", "mb-4", "mt-2");
   attenHead = cx(styles.attenHead, "col-sm", "mb-4", "mt-3");
@@ -218,7 +241,10 @@ class MarkAttendance extends React.Component {
               <Checkbox
                 name="is_present"
                 value={element.student_id}
-                checked={get(tracker, `${element.student_id}.isPresent.current`)}
+                checked={get(
+                  tracker,
+                  `${element.student_id}.isPresent.current`
+                )}
                 // defaultChecked={isPresentChecked}
                 color="primary"
                 inputProps={{ "aria-label": "primary checkbox" }}
@@ -333,7 +359,20 @@ class MarkAttendance extends React.Component {
                 <div className={this.attenHead}>
                   <div className="col-sm-1"></div>
                   <div className="col-sm-2">Student Name</div>
-                  <div className="col-sm-1">Present</div>
+                  <div className="col-sm-1">
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          name="master_check"
+                          color="primary"
+                          onChange={this.setMasterCheck}
+                          checked={this.state.masterCheck}
+                        />
+                      }
+                      label="PRESENT"
+                      style={{margin: "0px", letterSpacing: "1px"}}
+                    />
+                  </div>
                   <div className="col-sm-1">Late</div>
                   <div className="col-sm-3">Remarks</div>
                   <div className="col-sm">Upload Document</div>
