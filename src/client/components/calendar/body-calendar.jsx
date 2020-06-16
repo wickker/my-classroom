@@ -44,7 +44,7 @@ export default class CalendarGrid extends React.Component {
   };
 
   // initialize raw calendar array
-  initCalendarArray = (month, year) => {
+  initCalendarArray = async (month, year) => {
     let dayNum = this.getFirstDayOfMonth(month, year);
     let daysInMonth = this.getDaysInMonth(month, year);
     let prevMonth;
@@ -75,12 +75,12 @@ export default class CalendarGrid extends React.Component {
       }
     }
     // get classes
-    this.getClasses();
+    await this.getClasses();
     // get sessions that fall between selected date range
     let startDate = moment(array[0][0], "D-M-YYYY").valueOf();
     let endDate = moment(array[5][6], "D-M-YYYY").valueOf();
     endDate = endDate + 82800000 + 3540000;
-    this.getSessions(startDate, endDate);
+    await this.getSessions(startDate, endDate);
     // set states
     this.setState({
       datesInMonth: array,
@@ -90,26 +90,22 @@ export default class CalendarGrid extends React.Component {
   };
 
   // query sessions that fall between selected date range
-  getSessions = (startDate, endDate) => {
+  getSessions = async (startDate, endDate) => {
     const params = { startDate: startDate, endDate: endDate };
     let url = `/sessions?startDate=${startDate}&endDate=${endDate}`;
-    fetch(url)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("sessions: ", data.sessions);
-        this.setState({ sessions: data.sessions });
-      });
+    let response = await fetch(url);
+    let data = await response.json();
+    console.log("sessions: ", data.sessions);
+    this.setState({ sessions: data.sessions });
   };
 
   // query classes
-  getClasses = () => {
+  getClasses = async () => {
     let url = "/classes/get";
-    fetch(url)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("classes: ", data.classes);
-        this.setState({ classes: data.classes });
-      });
+    let response = await fetch(url);
+    let data = await response.json();
+    console.log("classes: ", data.classes);
+    this.setState({ classes: data.classes });
   };
 
   componentDidMount = () => {
