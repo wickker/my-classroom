@@ -4,7 +4,10 @@ module.exports = (pool) => {
     await pool.query(queryText).then(async (result) => {
       let data = {};
       data.classes = result.rows;
-      console.log(data);
+      // console.log(data);
+      console.log('\n\n');
+      console.log('queryAllClasses');
+      console.log('\n\n');
       for (let i = 0; i < data.classes.length; i++) {
         queryText = `select students.id, students.name, students.image, students.is_delete, attendance.class_id, attendance.session_id,attendance.student_id, attendance.is_present, attendance.remarks, attendance.is_late, attendance.document from students join attendance on (students.id = attendance.student_id) where attendance.class_id = ${data.classes[i].id} and students.is_delete = false order by students.name asc`;
         console.log(queryText);

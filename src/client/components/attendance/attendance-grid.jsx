@@ -72,15 +72,18 @@ export class AttendanceGrid extends React.Component {
   // get class object from end point
   initSelectedClassForId = async (classId) => {
     const params = { classId: classId };
-    let url = `/sessions/attendance?classId=${classId}`;
-    let response = await fetch(url);
-    let data = await response.json();
-    // sort students by name and sessions by time in class object
-    let studentsByName = data.students.sort(this.compareName);
-    data.students = studentsByName;
-    let sessionsByTime = data.sessions.sort(this.compareTime);
-    data.sessions = sessionsByTime;
-    this.initAttendanceArray(data);
+    console.log('classId: ', parseInt(classId, 10));
+    if (!isNaN(parseInt(classId, 10))) {
+      let url = `/sessions/attendance?classId=${classId}`;
+      let response = await fetch(url);
+      let data = await response.json();
+      // sort students by name and sessions by time in class object
+      let studentsByName = data.students.sort(this.compareName);
+      data.students = studentsByName;
+      let sessionsByTime = data.sessions.sort(this.compareTime);
+      data.sessions = sessionsByTime;
+      this.initAttendanceArray(data);
+    }
   };
 
   // generate attendance array grid

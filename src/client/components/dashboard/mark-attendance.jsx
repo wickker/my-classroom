@@ -1,5 +1,6 @@
 import React from "react";
 import { get, isEmpty } from "lodash";
+import { withRouter } from "react-router-dom";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Dialog from "@material-ui/core/Dialog";
 import AppBar from "@material-ui/core/AppBar";
@@ -34,7 +35,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 class MarkAttendance extends React.Component {
   constructor(props) {
     super();
-    const obj = get(props, 'obj');
+    const obj = get(props, "obj");
     const tracker = this.initTracker(obj);
     const title = get(obj, "title") || "";
     const startDateTime = get(obj, "start_datetime") || "";
@@ -58,26 +59,19 @@ class MarkAttendance extends React.Component {
       obj,
       tracker,
     };
+    console.log(tracker);
   }
-
-  // componentDidMount = () => {
-  //   this.setState({
-  //     tracker: this.initTracker(this.props.obj),
-  //   })
-  // }
 
   // initialize
   componentDidUpdate = (prevProps) => {
     if (this.props === prevProps) {
       return;
     }
-    console.log('inside component did update');
     let tracker = this.state.tracker;
     let obj = this.props.obj;
     let startDateTime = get(obj, "start_datetime") || "";
     let endDateTime = get(obj, "end_datetime") || "";
     if (!isEmpty(obj)) {
-      console.log("INIT TRACKER RUNS");
       tracker = this.initTracker(obj);
     }
     this.setState({
@@ -96,24 +90,25 @@ class MarkAttendance extends React.Component {
 
   initTracker = (obj) => {
     let tracker = {};
+    console.log('inside initTracker');
+    console.log(obj);
     if (obj.students) {
       obj.students.forEach((element) => {
-        tracker[element.id] = {};
-        tracker[element.id]["isPresent"] = {};
-        tracker[element.id]["isLate"] = {};
-        tracker[element.id]["isPresent"]["og"] = element.is_present;
-        tracker[element.id]["isPresent"]["current"] = element.is_present;
+        tracker[element.student_id] = {};
+        tracker[element.student_id]["isPresent"] = {};
+        tracker[element.student_id]["isLate"] = {};
+        tracker[element.student_id]["isPresent"]["og"] = element.is_present;
+        tracker[element.student_id]["isPresent"]["current"] = element.is_present;
         let late = element.is_late === 1 ? true : false;
-        tracker[element.id]["isLate"]["og"] = late;
-        tracker[element.id]["isLate"]["current"] = late;
-        tracker[element.id]["remarks"] = element.remarks;
-        tracker[element.id]["document"] = element.document;
+        tracker[element.student_id]["isLate"]["og"] = late;
+        tracker[element.student_id]["isLate"]["current"] = late;
+        tracker[element.student_id]["remarks"] = element.remarks;
+        tracker[element.student_id]["document"] = element.document;
       });
     }
     tracker.classId = obj.class_id;
     tracker.sessionId = obj.session_id;
     return tracker;
-    // this.setState({ tracker });
   };
 
   // sort helper function
@@ -138,18 +133,56 @@ class MarkAttendance extends React.Component {
   };
 
   handleSave = () => {
+    let data = this.state.tracker;
+    console.log("TO SUBMIT", data);
     this.setState({ open: false });
+    let url = "/sessions/attendance/post";
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+        this.props.history.push(`/attendance?classid=${get(data, "classId")}`);
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        // window.location.reload(false);
+      });
   };
 
   setIsPresent = (event) => {
-    console.log(event.target.checked);
-    console.log(event.target.value);
     let stuId = event.target.value;
     let tracker = this.state.tracker;
     tracker[stuId].isPresent.current = event.target.checked;
-    console.log(tracker);
-    
-  }
+    this.setState({ tracker });
+  };
+
+  setIsLate = (event) => {
+    let stuId = event.target.value;
+    let tracker = this.state.tracker;
+    tracker[stuId].isLate.current = event.target.checked;
+    this.setState({ tracker });
+  };
+
+  setRemarks = (event) => {
+    let remarks = event.target.value;
+    let stuId = event.target.id;
+    let tracker = this.state.tracker;
+    tracker[stuId].remarks = remarks;
+    this.setState({ tracker });
+  };
+
+  callback = (result, id) => {
+    let tracker = this.state.tracker;
+    tracker[id].document = result;
+    this.setState({ tracker });
+  };
 
   // more styles
   attenRow = cx(styles.attenRow, "col-sm", "mb-4", "mt-2");
@@ -162,14 +195,14 @@ class MarkAttendance extends React.Component {
     if (!!students && students !== "" && students.length > 0) {
       let studentsSort = students.sort(this.compareName);
       let studentsHTML = studentsSort.map((element, index) => {
-        let isPresentChecked;
-        element.is_present
-          ? (isPresentChecked = true)
-          : (isPresentChecked = false);
-        let isLateChecked;
-        element.is_late === 1
-          ? (isLateChecked = true)
-          : (isLateChecked = false);
+        // let isPresentChecked;
+        // element.is_present
+        //   ? (isPresentChecked = true)
+        //   : (isPresentChecked = false);
+        // let isLateChecked;
+        // element.is_late === 1
+        //   ? (isLateChecked = true)
+        //   : (isLateChecked = false);
         let tracker = this.state.tracker;
         return (
           <div className={this.attenRow} key={index}>
@@ -185,7 +218,7 @@ class MarkAttendance extends React.Component {
               <Checkbox
                 name="is_present"
                 value={element.student_id}
-                checked={get(tracker, `${element.id}.isPresent.current`)}
+                checked={get(tracker, `${element.student_id}.isPresent.current`)}
                 // defaultChecked={isPresentChecked}
                 color="primary"
                 inputProps={{ "aria-label": "primary checkbox" }}
@@ -196,9 +229,10 @@ class MarkAttendance extends React.Component {
               <Checkbox
                 name="is_late"
                 value={element.student_id}
-                defaultChecked={isLateChecked}
+                checked={get(tracker, `${element.student_id}.isLate.current`)}
                 color="primary"
                 inputProps={{ "aria-label": "primary checkbox" }}
+                onChange={this.setIsLate}
               />
             </div>
             <div className="col-sm-3">
@@ -207,11 +241,17 @@ class MarkAttendance extends React.Component {
                 type="text"
                 name="remarks"
                 rows="2"
-                defaultValue={element.remarks}
+                id={element.student_id}
+                defaultValue={get(tracker, `${element.student_id}.remarks`)}
+                onChange={this.setRemarks}
               />
             </div>
             <div className="col-sm">
-              <FileUpload document={element.document} id={element.student_id} />
+              <FileUpload
+                document={get(tracker, `${element.student_id}.document`)}
+                id={element.student_id}
+                callback={this.callback}
+              />
             </div>
             {/* <div className="col-sm" hidden>
               <input
@@ -328,4 +368,4 @@ class MarkAttendance extends React.Component {
   }
 }
 
-export default withStyles(useStyles)(MarkAttendance);
+export default withStyles(useStyles)(withRouter(MarkAttendance));

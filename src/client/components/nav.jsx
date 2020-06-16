@@ -137,7 +137,7 @@ class Navigation extends React.Component {
     console.log(history);
     return (
       <div className={this.props.classes.root}>
-        <Router history={history}>
+        <Router >
           <CssBaseline />
           <AppBar
             position="fixed"

@@ -80,34 +80,72 @@ module.exports = (pool) => {
     });
   };
 
-  const markAttendance = (
-    callback,
-    studentIdOrder,
-    isPresent,
-    isLate,
-    remarks,
-    document,
-    sessionId
-  ) => {
-    for (let i = 0; i < studentIdOrder.length; i++) {
-      let is_present;
-      isPresent.includes(studentIdOrder[i])
-        ? (is_present = true)
-        : (is_present = false);
-      let remarksInput = remarks[i];
-      let is_late;
-      isLate.includes(studentIdOrder[i]) ? (is_late = 1) : (is_late = 0);
-      let documentInput = document[i];
-      let studentId = parseInt(studentIdOrder[i]);
-      let queryText = `update attendance set is_present = ${is_present}, remarks = '${remarksInput}', is_late = ${is_late}, document = '${documentInput}' where session_id = ${sessionId} and student_id = ${studentId} returning *`;
-      pool.query(queryText, (err, result) => {
-        if (err) {
-          console.log(err);
-        } else {
-          console.log(result.rows);
+  // const markAttendance = (
+  //   callback,
+  //   studentIdOrder,
+  //   isPresent,
+  //   isLate,
+  //   remarks,
+  //   document,
+  //   sessionId
+  // ) => {
+  //   for (let i = 0; i < studentIdOrder.length; i++) {
+  //     let is_present;
+  //     isPresent.includes(studentIdOrder[i])
+  //       ? (is_present = true)
+  //       : (is_present = false);
+  //     let remarksInput = remarks[i];
+  //     let is_late;
+  //     isLate.includes(studentIdOrder[i]) ? (is_late = 1) : (is_late = 0);
+  //     let documentInput = document[i];
+  //     let studentId = parseInt(studentIdOrder[i]);
+  //     let queryText = `update attendance set is_present = ${is_present}, remarks = '${remarksInput}', is_late = ${is_late}, document = '${documentInput}' where session_id = ${sessionId} and student_id = ${studentId} returning *`;
+  //     pool.query(queryText, (err, result) => {
+  //       if (err) {
+  //         console.log(err);
+  //       } else {
+  //         console.log(result.rows);
+  //       }
+  //     });
+  //   }
+  //   callback();
+  // };
+
+  const markAttendance = (callback, data) => {
+    console.log('in markAttendance');
+    let classId = data.classId;
+    let sessionId = data.sessionId;
+    for (const stuId in data) {
+      if (!isNaN(parseInt(stuId))) {
+        let studentId = parseInt(stuId);
+        let late;
+        data[stuId].isLate.current ? (late = 1) : (late = 0);
+        console.log('building query');
+        console.log('is_present: ', data[stuId].isPresent.current);
+        console.log('is_late: ', late);
+        console.log('remarks: ', data[stuId].remarks);
+        console.log('document: ', data[stuId].document);
+        console.log('classId: ', classId);
+        console.log('sessionId: ', sessionId);
+        console.log('studentId: ', studentId);
+        let queryText = `update attendance set is_present = ${data[stuId].isPresent.current}, is_late = ${late}, remarks = '${data[stuId].remarks}', document = '${data[stuId].document}' where class_id = ${classId} and session_id = ${sessionId} and student_id = ${studentId} returning *`;
+        console.log('trying query');
+        try {
+          pool.query(queryText, (err, result) => {
+            if (err) {
+              console.log('error happened!');
+              console.log(err);
+            } else {
+              console.log(result.rows[0]);
+            }
+          });
+        } catch (error) {
+          console.log('caught error');
+          console.log(error);
         }
-      });
+      }
     }
+    console.log('for loop finished!');
     callback();
   };
 
@@ -177,7 +215,13 @@ module.exports = (pool) => {
     });
   };
 
-  const updateSession = (callback, sessionId, startDateTime, endDateTime, location) => {
+  const updateSession = (
+    callback,
+    sessionId,
+    startDateTime,
+    endDateTime,
+    location
+  ) => {
     let queryText = `update sessions set start_datetime = ${startDateTime}, end_datetime = ${endDateTime}, location = '${location}' where id = ${sessionId} returning *`;
     pool.query(queryText, (err, result) => {
       if (err) {
@@ -186,7 +230,7 @@ module.exports = (pool) => {
         callback();
       }
     });
-  }
+  };
 
   return {
     writeNewSession,

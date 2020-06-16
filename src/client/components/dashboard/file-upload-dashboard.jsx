@@ -19,36 +19,28 @@ export default class FileUpload extends React.Component {
 
   uploadFileFetch = (event) => {
     event.preventDefault();
-
     let cloudinary_url =
       "https://api.cloudinary.com/v1_1/dwoimiuph/image/upload";
     let cloudinary_upload_preset = "wh3xm7xt";
-
     let fileId = "inputFile" + this.props.id;
     let fileGroup = document.getElementById(fileId);
-    console.log(fileGroup.files);
-
     let file = fileGroup.files[0];
     let formData = new FormData();
     formData.append("file", file);
     formData.append("upload_preset", cloudinary_upload_preset);
-
     let myHeaders = new Headers();
     myHeaders.append("X-Requested-With", "XMLHttpRequest");
-
     let requestOptions = {
       method: "POST",
       headers: myHeaders,
       body: formData,
     };
-
     fetch(cloudinary_url, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         let inputURL = result.secure_url;
-        console.log(inputURL);
         this.setState({ document: inputURL });
+        this.props.callback(inputURL, this.props.id);
       })
       .catch((error) => console.log("error", error));
   };
