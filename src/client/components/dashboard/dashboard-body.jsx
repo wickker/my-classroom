@@ -29,7 +29,7 @@ export default class DashboardBody extends React.Component {
 
   getSessionsAndAttendance = async (user) => {
     const params = { instructorId: user.id };
-    let url = new URL("http://localhost:3000/dashboard/get");
+    let url = new URL("https://frozen-tor-14558.herokuapp.com/dashboard/get");
     url.search = new URLSearchParams(params).toString();
     let response = await fetch(url);
     let data = await response.json();

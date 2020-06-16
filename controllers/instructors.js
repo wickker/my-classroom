@@ -31,11 +31,10 @@ module.exports = (db) => {
     let about = request.body.about;
     let checked = request.body.checkedState;
     let email = request.body.email;
-    let password = sha256(request.body.password);
     let callback = () => {
       response.redirect("/instructors");
     }
-    db.instructors.writeEditInstructor(callback, id, name, image, about, checked, email, password);
+    db.instructors.writeEditInstructor(callback, id, name, image, about, checked, email);
   }
 
   const deleteInstructor = (request, response) => {

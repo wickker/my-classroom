@@ -72,7 +72,7 @@ export class AttendanceGrid extends React.Component {
   // get class object from end point
   initSelectedClassForId = async (classId) => {
     const params = { classId: classId };
-    let url = new URL("http://localhost:3000/sessions/attendance");
+    let url = new URL("https://frozen-tor-14558.herokuapp.com/sessions/attendance");
     url.search = new URLSearchParams(params).toString();
     let response = await fetch(url);
     let data = await response.json();

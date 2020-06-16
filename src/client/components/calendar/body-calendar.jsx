@@ -92,7 +92,7 @@ export default class CalendarGrid extends React.Component {
   // query sessions that fall between selected date range
   getSessions = (startDate, endDate) => {
     const params = { startDate: startDate, endDate: endDate };
-    let url = new URL("http://localhost:3000/sessions");
+    let url = new URL("https://frozen-tor-14558.herokuapp.com/sessions");
     url.search = new URLSearchParams(params).toString();
     fetch(url)
       .then((response) => response.json())

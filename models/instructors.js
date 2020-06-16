@@ -1,5 +1,13 @@
 module.exports = (pool) => {
-  const writeNewInstructor = async (callback, name, image, about, email, password, checked) => {
+  const writeNewInstructor = async (
+    callback,
+    name,
+    image,
+    about,
+    email,
+    password,
+    checked
+  ) => {
     let queryText = `insert into instructors (name, image, about, email, password, is_delete) values ('${name}', '${image}', '${about}', '${email}', '${password}', false) returning *`;
     await pool.query(queryText).then(async (result) => {
       console.log(result.rows[0]);
@@ -29,10 +37,9 @@ module.exports = (pool) => {
     image,
     about,
     checked,
-    email, 
-    password
+    email
   ) => {
-    let queryText = `update instructors set name = '${name}', image = '${image}', about = '${about}', email = '${email}', password = '${password}' where id = ${id} returning *`;
+    let queryText = `update instructors set name = '${name}', image = '${image}', about = '${about}', email = '${email}' where id = ${id} returning *`;
     await pool.query(queryText).then(async (result) => {
       console.log(result.rows[0]);
       for (const key in checked) {
@@ -82,12 +89,12 @@ module.exports = (pool) => {
     let queryText = `update instructors set is_delete = true where id = ${id} returning *`;
     pool.query(queryText, (err, result) => {
       if (err) {
-        console.log(err)
+        console.log(err);
       } else {
         callback();
       }
     });
-  }
+  };
 
   return {
     writeNewInstructor,
