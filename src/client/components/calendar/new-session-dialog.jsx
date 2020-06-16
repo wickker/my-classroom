@@ -183,6 +183,8 @@ export default function FormDialog({ classes, dateStr }) {
 
   useEffect(() => {
     setUpTillDateDisplay(dateFormatted);
+    setStartDateTime(millisec);
+    setEndDateTime(millisec);
   }, [dateFormatted]);
 
   return (
