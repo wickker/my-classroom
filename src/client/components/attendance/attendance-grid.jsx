@@ -66,7 +66,7 @@ export class AttendanceGrid extends React.Component {
   setClassObjSelected = (classId) => {
     let classes = this.state.classes;
     let obj = classes.find((element) => element.id === parseInt(classId, 10));
-    this.setState({ classObjSelected: obj });
+    this.setState({ classObjSelected: obj, url: "" });
   };
 
   // get class object from end point
