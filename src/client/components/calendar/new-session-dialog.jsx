@@ -19,6 +19,7 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import PlusCircle from "../../svg/plus-solid.svg";
 import styles from "../all_styles.scss";
+import { useEffect } from "react";
 var moment = require("moment");
 
 // main function starts here
@@ -49,8 +50,7 @@ export default function FormDialog({ classes, dateStr }) {
   // convert selected date into mS and sets default session start date
   let dateFormatted = moment(dateStr, "D-M-YYYY").format();
   let dateBigInt = moment(dateStr, "D-M-YYYY").valueOf();
-  const [selectedDate, setSelectedDate] = React.useState(dateFormatted);
-
+  console.log(dateFormatted);
   // set default value of time pickers to current time rounted to nearest quarter
   let d = new Date();
   let roundedTime = roundTimeQuarterHour(d);
@@ -182,6 +182,11 @@ export default function FormDialog({ classes, dateStr }) {
 
   let selectClass = renderClassDropdown();
 
+  useEffect(() => {
+    console.log('effect happened');
+    setUpTillDateDisplay(dateFormatted);
+  });
+
   return (
     <span>
       {/* plus icon to add new session */}
@@ -211,7 +216,7 @@ export default function FormDialog({ classes, dateStr }) {
                   format="dd/MM/yyyy"
                   margin="normal"
                   label="Start Date"
-                  value={selectedDate}
+                  value={dateFormatted}
                   KeyboardButtonProps={{
                     "aria-label": "change date",
                   }}

@@ -113,6 +113,7 @@ export default class CalendarGrid extends React.Component {
   };
 
   componentDidMount = () => {
+    console.log('inside component did mount');
     // check login
     let banana = localStorage.getItem("banana");
     if (!banana) {
@@ -120,6 +121,15 @@ export default class CalendarGrid extends React.Component {
     }
     this.initCalendarArray(this.state.selectedMonth, this.state.selectedYear);
   };
+
+  componentDidUpdate = prevProps => {
+    console.log('inside component did update');
+    if (this.props !== prevProps) {
+      console.log('props are different');
+      console.log(this.props);
+      console.log(prevProps);
+    }
+  }
 
   // select month from dropdown
   selectMonth = (event) => {
