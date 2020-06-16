@@ -192,7 +192,7 @@ export default function MarkAttendance({ obj, attendanceIcon }) {
           <div className="row">
             <div className="col-sm">
               {/* class and session title */}
-              <div className={styles.title}>
+              <div className="ml-4 pl-1 mt-4 mb-4">
                 <div className={styles.mark_att_title}>Class: {title}</div>
                 <div className={styles.card_text}>
                   Session: {date}, {startTime} - {endTime}
@@ -213,7 +213,7 @@ export default function MarkAttendance({ obj, attendanceIcon }) {
                 <input name="classId" defaultValue={id} hidden></input>
                 <div className="row">
                   <div className="col-sm">
-                    <div className={styles.save}>
+                    <div className="ml-4 pl-1">
                       <button onClick={handleSave} className={styles.button}>
                         Save
                       </button>
