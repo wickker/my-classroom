@@ -93,6 +93,10 @@ class LoginBody extends React.Component {
           <button className={this.button} onClick={this.checkMatch}>
             Submit
           </button>
+          <div className={styles.temp}>
+            <div className={styles.demo}>DEMO LOGIN</div>
+            <div className={styles.pw}>admin2@mail.com | 123456</div>
+          </div>
         </div>
       </div>
     );
