@@ -68,43 +68,46 @@ export default function MediaCard({ student, isHidden, classesArr, hide }) {
   };
 
   return (
-    <div
-      className={styles.card}
-      hidden={isHidden}
-      style={{ maxWidth: "300px" }}
-    >
-      <CardMedia
-        className={classes.media}
-        image={image}
-        alt="display picture"
-        style={{ maxHeight: "300px" }}
-      />
-      <CardContent>
-        <div className={styles.card_title}>{name}</div>
-        <div className={styles.card_text}>
-          <div className="mt-2">
-            <img src={BdayIcon} className={styles.bday}/><b>{bday}</b>
+    <div className={styles.sticky}>
+      <div
+        className={styles.card}
+        hidden={isHidden}
+        style={{ maxWidth: "300px" }}
+      >
+        <CardMedia
+          className={classes.media}
+          image={image}
+          alt="display picture"
+          style={{ maxHeight: "300px" }}
+        />
+        <CardContent>
+          <div className={styles.card_title}>{name}</div>
+          <div className={styles.card_text}>
+            <div className="mt-2">
+              <img src={BdayIcon} className={styles.bday} />
+              <b>{bday}</b>
+            </div>
+            <div className="mt-2">
+              <b>Gender: {gender}</b>
+            </div>
+            <div className="mt-2">
+              <b>Notes</b>
+            </div>
+            <div>{notes}</div>
+            <div className="mt-2">
+              <b>Class(es)</b>
+              <ul>{classesHTML}</ul>
+            </div>
           </div>
-          <div className="mt-2">
-            <b>Gender: {gender}</b>
-          </div>
-          <div className="mt-2">
-            <b>Notes</b>
-          </div>
-          <div>{notes}</div>
-          <div className="mt-2">
-            <b>Class(es)</b>
-            <ul>{classesHTML}</ul>
-          </div>
+        </CardContent>
+        <div hidden={hide}>
+          <CardActions>
+            <EditStudent classes={classesArr} student={student} />
+            <button className={styles.button} onClick={deleteStudent}>
+              Delete
+            </button>
+          </CardActions>
         </div>
-      </CardContent>
-      <div hidden={hide}>
-        <CardActions>
-          <EditStudent classes={classesArr} student={student} />
-          <button className={styles.button} onClick={deleteStudent}>
-            Delete
-          </button>
-        </CardActions>
       </div>
     </div>
   );
