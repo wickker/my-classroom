@@ -72,7 +72,7 @@ export class AttendanceGrid extends React.Component {
   // get class object from end point
   initSelectedClassForId = async (classId) => {
     const params = { classId: classId };
-   
+
     if (!isNaN(parseInt(classId, 10))) {
       let url = `/sessions/attendance?classId=${classId}`;
       let response = await fetch(url);
@@ -243,7 +243,9 @@ export class AttendanceGrid extends React.Component {
         obj.title = this.state.classObjSelected.title;
         obj.description = this.state.classObjSelected.description;
         obj.image = this.state.classObjSelected.image;
-        let studentsFiltered = this.state.classObjSelected.students.filter(stu => stu.session_id === element.session_id);
+        let studentsFiltered = this.state.classObjSelected.students.filter(
+          (stu) => stu.session_id === element.session_id
+        );
         obj.students = studentsFiltered;
         // generate date column header label
         let date = moment(element.start_datetime, "x").format("DD/MM h:mmA");
@@ -251,7 +253,10 @@ export class AttendanceGrid extends React.Component {
           <div className="col-sm" key={index}>
             {date}
             <div hidden={this.state.hide}>
-              <MarkAttendance obj={obj} attendanceIcon={this.state.attendanceIcon}/>
+              <MarkAttendance
+                obj={obj}
+                attendanceIcon={this.state.attendanceIcon}
+              />
             </div>
           </div>
         );
@@ -296,8 +301,10 @@ export class AttendanceGrid extends React.Component {
               <a href="/calendar">Add a session</a>
             </div>
           </div>
-          {head}
-          {grid}
+          <div>
+            {head}
+            {grid}
+          </div>
           {display}
         </div>
       </div>
