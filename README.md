@@ -26,3 +26,4 @@ Requirements / Specs:
 - Faker.js
 - Lodash.js
 - Moment.js
+- Cloudinary
