@@ -1,60 +1,28 @@
-React boilerplate with ES2015, Express.js, and Webpack
+# My Classroom
 
-## Technologies
-
-- React (v16)
-- Express.js (v4) as production and development server
-- Webpack 4 (production and development configurations)
-- SCSS support (+ sanitize.css included)
-- ES2015+
-
-## Features
-- preconfigured eslint and Prettier code formatter
-- React Hot Loader
-- Linux/MacOS/Windows
-
-## Usage
-
-### Make sure you have nodemon installed globally
-```
-npm install -g nodemon
-```
-
-### Installation
-```bash
-git clone https://github.com/wdi-sg/react-express-webpack.git
-cd react-express-webpack
-npm install
+- Centralized system for scheduling classes in addition to recording and tabulating attendance.
+- Able to track and collate supporting documentation for absences and tardiness.
+- Class sessions created and viewed via a custom built monthly scheduler. 
+- SEE DEMO: https://frozen-tor-14558.herokuapp.com/ 
 
 
-# remove boilerplate git references
-rm ./.git
-```
+## Installation Instructions
 
-### Scripts
-```bash
-# run development mode
-npm run dev
+Requirements / Specs:
 
-# run production mode
-npm run build
-npm start
+- React 16.13.0
+- PostgreSQL 10.12
+- Node-postgres 7.4.3
+- Express 4.16.4
+- Node 10.21.0
 
-# run prettier
-npm run prettier
 
-# run lint
-npm run lint
+## Other Technologies Used
 
-# run on a different port
-HTTP_PORT=3001 npm run dev
-```
-
-### Deploy
-
-Some operating systems do not copy the server files to the build directory.
-
-See the documentation here: [https://github.com/calvinmetcalf/copyfiles/blob/master/readme.md](https://github.com/calvinmetcalf/copyfiles/blob/master/readme.md)
-
-## License
-MIT License. Free use and change.
+- React Router 
+- Material UI
+- Bootstrap
+- Classnames.js
+- Faker.js
+- Lodash.js
+- Moment.js
