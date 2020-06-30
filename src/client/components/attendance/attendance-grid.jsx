@@ -7,7 +7,6 @@ var classNames = require("classnames");
 const cx = classNames.bind(styles);
 var moment = require("moment");
 import MarkAttendance from "../dashboard/mark-attendance";
-import { Document } from "react-pdf";
 import eyeIcon from "../../svg/eye-regular.svg";
 
 export class AttendanceGrid extends React.Component {
